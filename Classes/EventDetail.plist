@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>General</key>
+	<array>
+		<dict>
+			<key>placeholder</key>
+			<integer>1</integer>
+			<key>title</key>
+			<string>Record Voice</string>
+		</dict>
+		<dict>
+			<key>placeholder</key>
+			<integer>1</integer>
+			<key>title</key>
+			<string>User Timezone</string>
+		</dict>
+	</array>
+	<key>Alert</key>
+	<array>
+		<dict>
+			<key>placeholder</key>
+			<integer>1</integer>
+			<key>title</key>
+			<string>Play Vocie Memo</string>
+		</dict>
+		<dict>
+			<key>placeholder</key>
+			<integer>0</integer>
+			<key>title</key>
+			<string>Play System Sound</string>
+		</dict>
+		<dict>
+			<key>placeholder</key>
+			<integer>1</integer>
+			<key>title</key>
+			<string>Show Badget</string>
+		</dict>
+		<dict>
+			<key>placeholder</key>
+			<integer>1</integer>
+			<key>title</key>
+			<string>Show Notification</string>
+		</dict>
+	</array>
+	<key>Repeat</key>
+	<array>
+		<dict>
+			<key>placeholder</key>
+			<integer>0</integer>
+			<key>title</key>
+			<string>By Minute</string>
+		</dict>
+		<dict>
+			<key>placeholder</key>
+			<integer>0</integer>
+			<key>title</key>
+			<string>By Hour</string>
+		</dict>
+		<dict>
+			<key>placeholder</key>
+			<integer>0</integer>
+			<key>title</key>
+			<string>By Day</string>
+		</dict>
+		<dict>
+			<key>placeholder</key>
+			<integer>0</integer>
+			<key>title</key>
+			<string>By Month</string>
+		</dict>
+	</array>
+	<key>Location</key>
+	<array>
+		<dict>
+			<key>default</key>
+			<integer>0</integer>
+			<key>title</key>
+			<string>Entering </string>
+		</dict>
+		<dict>
+			<key>default</key>
+			<integer>1</integer>
+			<key>title</key>
+			<string>Leaving</string>
+		</dict>
+	</array>
+	<key>About</key>
+	<array>
+		<dict>
+			<key>title</key>
+			<string>About Us</string>
+		</dict>
+		<dict>
+			<key>title</key>
+			<string>Contact Us</string>
+		</dict>
+	</array>
+</dict>
+</plist>

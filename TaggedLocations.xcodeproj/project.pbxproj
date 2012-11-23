@@ -35,6 +35,11 @@
 		28FB88860FCCA80500EBA711 /* TagSelectionController.m in Sources */ = {isa = PBXBuildFile; fileRef = 28FB88850FCCA80500EBA711 /* TagSelectionController.m */; };
 		D6BEA9621659644A00D05AFC /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = D6BEA9611659644A00D05AFC /* Default-568h@2x.png */; };
 		D6BEA96716596B7400D05AFC /* RootViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = D6BEA96516596B7400D05AFC /* RootViewController.xib */; };
+		D6CCB3331660370400A1B361 /* ItemDetailViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = D6CCB32E1660370300A1B361 /* ItemDetailViewController.xib */; };
+		D6CCB3341660370400A1B361 /* ItemDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D6CCB32F1660370300A1B361 /* ItemDetailViewController.m */; };
+		D6CCB3351660370400A1B361 /* TextFieldTableCell.m in Sources */ = {isa = PBXBuildFile; fileRef = D6CCB3321660370300A1B361 /* TextFieldTableCell.m */; };
+		D6CCB3391660379500A1B361 /* CustomTextField.m in Sources */ = {isa = PBXBuildFile; fileRef = D6CCB3371660379500A1B361 /* CustomTextField.m */; };
+		D6CCB33B1660387500A1B361 /* EventDetail.plist in Resources */ = {isa = PBXBuildFile; fileRef = D6CCB33A1660387500A1B361 /* EventDetail.plist */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -76,6 +81,14 @@
 		8D1107310486CEB800E47090 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; plistStructureDefinitionIdentifier = "com.apple.xcode.plist.structure-definition.iphone.info-plist"; sourceTree = "<group>"; };
 		D6BEA9611659644A00D05AFC /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x.png"; sourceTree = "<group>"; };
 		D6BEA96616596B7400D05AFC /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/RootViewController.xib; sourceTree = "<group>"; };
+		D6CCB32E1660370300A1B361 /* ItemDetailViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ItemDetailViewController.xib; sourceTree = "<group>"; };
+		D6CCB32F1660370300A1B361 /* ItemDetailViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ItemDetailViewController.m; sourceTree = "<group>"; };
+		D6CCB3301660370300A1B361 /* ItemDetailViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ItemDetailViewController.h; sourceTree = "<group>"; };
+		D6CCB3311660370300A1B361 /* TextFieldTableCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TextFieldTableCell.h; sourceTree = "<group>"; };
+		D6CCB3321660370300A1B361 /* TextFieldTableCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TextFieldTableCell.m; sourceTree = "<group>"; };
+		D6CCB3371660379500A1B361 /* CustomTextField.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CustomTextField.m; sourceTree = "<group>"; };
+		D6CCB3381660379500A1B361 /* CustomTextField.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CustomTextField.h; sourceTree = "<group>"; };
+		D6CCB33A1660387500A1B361 /* EventDetail.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = EventDetail.plist; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -97,8 +110,16 @@
 		080E96DDFE201D6D7F000001 /* View Controllers */ = {
 			isa = PBXGroup;
 			children = (
+				D6CCB32E1660370300A1B361 /* ItemDetailViewController.xib */,
+				D6CCB32F1660370300A1B361 /* ItemDetailViewController.m */,
+				D6CCB3301660370300A1B361 /* ItemDetailViewController.h */,
+				D6CCB33A1660387500A1B361 /* EventDetail.plist */,
+				D6CCB3311660370300A1B361 /* TextFieldTableCell.h */,
+				D6CCB3321660370300A1B361 /* TextFieldTableCell.m */,
 				28C286DF0D94DF7D0034E888 /* RootViewController.h */,
 				28C286E00D94DF7D0034E888 /* RootViewController.m */,
+				D6CCB3371660379500A1B361 /* CustomTextField.m */,
+				D6CCB3381660379500A1B361 /* CustomTextField.h */,
 				28FB88840FCCA80500EBA711 /* TagSelectionController.h */,
 				28FB88850FCCA80500EBA711 /* TagSelectionController.m */,
 			);
@@ -268,6 +289,8 @@
 				18AD6B8711D56DAA005232E4 /* iTunesArtwork in Resources */,
 				D6BEA9621659644A00D05AFC /* Default-568h@2x.png in Resources */,
 				D6BEA96716596B7400D05AFC /* RootViewController.xib in Resources */,
+				D6CCB3331660370400A1B361 /* ItemDetailViewController.xib in Resources */,
+				D6CCB33B1660387500A1B361 /* EventDetail.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -287,6 +310,9 @@
 				28B124790FCDB70900FA3CBF /* EditableTableViewCell.m in Sources */,
 				28B1247A0FCDB70900FA3CBF /* EventTableViewCell.m in Sources */,
 				283659D00FD8513400B8A769 /* Tag.m in Sources */,
+				D6CCB3341660370400A1B361 /* ItemDetailViewController.m in Sources */,
+				D6CCB3351660370400A1B361 /* TextFieldTableCell.m in Sources */,
+				D6CCB3391660379500A1B361 /* CustomTextField.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
