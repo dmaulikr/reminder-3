@@ -251,6 +251,28 @@
 }
 
 
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+
+	Event *event;// = (Event *)eventsArray[indexPath.row];
+	
+    if (tableView == self.searchDisplayController.searchResultsTableView)
+    {
+        event = (self.filteredListContent)[indexPath.row];
+    }
+    else
+    {
+        event = (Event *)eventsArray[indexPath.row];
+    }
+    [self showEvent:event animated:YES];
+}
+
+
+#pragma mark - Show Event
+- (void)showEvent:(Event *)event animated:(BOOL)animated {
+    
+//    [self.navigationController pushViewController:detailViewController animated:animated];
+}
+
 #pragma mark -
 #pragma mark Editing
 
@@ -459,7 +481,7 @@
  	for (Event *event in self.eventsArray)
 	{
         NSString *name = event.name;
-		if ([scope isEqualToString:@"All"] || [name isEqualToString:scope])
+		if ([scope isEqualToString:@"Name"] || [name isEqualToString:scope])
 		{
             // A weak search
 			NSComparisonResult result = [name compare:searchText options:(NSCaseInsensitiveSearch|NSDiacriticInsensitiveSearch) range:NSMakeRange(0, [searchText length])];
@@ -467,14 +489,14 @@
 			{
 				[self.filteredListContent addObject:event];
             }
-		} else if ([scope isEqualToString:@"Model"])// search by model
+		} else if ([scope isEqualToString:@"Tag"])// search by model
         {
             NSRange nameRange = [name rangeOfString:searchText options:NSCaseInsensitiveSearch];
             if(nameRange.location != NSNotFound)
             {
                 [self.filteredListContent addObject:event];
             }
-        } else if ([scope isEqualToString:@"ModelYear"]){
+        } else if ([scope isEqualToString:@"Label"]){
             NSRange descriptionRange = [name rangeOfString:searchText options:NSCaseInsensitiveSearch];
             if(descriptionRange.location != NSNotFound)
             {

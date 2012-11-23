@@ -53,7 +53,7 @@
 @implementation TaggedLocationsAppDelegate
 
 @synthesize window;
-@synthesize navigationController;
+@synthesize navigationController, rootViewController;
 
 
 #pragma mark -
@@ -64,7 +64,7 @@
 	// Configure and show the window.
 //	RootViewController *rootViewController = [[RootViewController alloc] initWithStyle:UITableViewStylePlain];
     
-    RootViewController *rootViewController = [[RootViewController alloc] initWithNibName:@"RootViewController" bundle:nil];
+    rootViewController = [[RootViewController alloc] initWithNibName:@"RootViewController" bundle:nil];
 	
 	NSManagedObjectContext *context = [self managedObjectContext];
 	if (!context) {
@@ -97,7 +97,65 @@
     }
 }
 
+- (void)applicationDidEnterBackground:(UIApplication *)application {
+    /*
+     Use this method to release shared resources, save user data, invalidate timers, and store enough application state information to restore your application to its current state in case it is terminated later.
+     If your application supports background execution, called instead of applicationWillTerminate: when the user quits.
+     */
+	
+	// Reset the icon badge number to zero.
+	[UIApplication sharedApplication].applicationIconBadgeNumber = 0;
+	
+	if ([CLLocationManager significantLocationChangeMonitoringAvailable]) {
+		// Stop normal location updates and start significant location change updates for battery efficiency.
+        //		[viewController.locationManager stopUpdatingLocation];
+		[rootViewController.locationManager startMonitoringSignificantLocationChanges];
+        NSLog(@"location manager enter background:%@",rootViewController.locationManager);
+	}
+	else {
+		NSLog(@"Significant location change monitoring is not available.");
+	}
+}
 
+
+- (void)applicationWillEnterForeground:(UIApplication *)application {
+    /*
+     Called as part of  transition from the background to the inactive state: here you can undo many of the changes made on entering the background.
+     */
+}
+
+
+- (void)applicationDidBecomeActive:(UIApplication *)application {
+    /*
+     Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
+     */
+	
+	if ([CLLocationManager significantLocationChangeMonitoringAvailable]) {
+		// Stop significant location updates and start normal location updates again since the app is in the forefront.
+		[rootViewController.locationManager stopMonitoringSignificantLocationChanges];
+        //		[viewController.locationManager startUpdatingLocation];
+        NSLog(@"location manager become activie:%@",rootViewController.locationManager);
+	}
+	else {
+		NSLog(@"Significant location change monitoring is not available.");
+	}
+	
+//	if (!rootViewcontroller.updatesTableView.hidden) {
+//		// Reload the updates table view to reflect update events that were recorded in the background.
+////		[rootViewcontroller.updatesTableView reloadData];
+//        
+//		// Reset the icon badge number to zero.
+//		[UIApplication sharedApplication].applicationIconBadgeNumber = 0;
+//	}
+}
+
+
+- (void)applicationWillResignActive:(UIApplication *)application {
+	/*
+	 Sent when the application is about to move from active to inactive state. This can occur for certain types of temporary interruptions (such as an incoming phone call or SMS message) or when the user quits the application and it begins the transition to the background state.
+	 Use this method to pause ongoing tasks, disable timers, and throttle down OpenGL ES frame rates. Games should use this method to pause the game.
+	 */
+}
 #pragma mark -
 #pragma mark Saving
 

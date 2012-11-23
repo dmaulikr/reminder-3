@@ -45,7 +45,7 @@
  Copyright (C) 2010 Apple Inc. All Rights Reserved.
  
  */
-
+@class RootViewController;
 @interface TaggedLocationsAppDelegate : NSObject <UIApplicationDelegate> {
     
     UIWindow *window;
@@ -58,6 +58,7 @@
 
 @property (nonatomic, strong) IBOutlet UIWindow *window;
 @property (nonatomic, strong) UINavigationController *navigationController;
+@property (nonatomic, strong) RootViewController *rootViewController;
 
 - (IBAction)saveAction:sender;
 
