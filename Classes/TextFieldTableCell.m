@@ -27,7 +27,7 @@
         textField.borderStyle = UITextBorderStyleNone;
         textField.textColor = [UIColor blackColor];
         textField.font = [UIFont systemFontOfSize:13.0];
-        textField.textAlignment = NSTextAlignmentRight;
+        textField.textAlignment = NSTextAlignmentLeft;
         textField.contentVerticalAlignment = UIControlContentVerticalAlignmentCenter;
         textField.enabled = NO;
         textField.backgroundColor = [UIColor clearColor];
@@ -57,7 +57,7 @@
 - (void)setContentForTableCellLabel:(NSString*)title andTextField:(NSString *)placeHolder andKeyBoardType:(NSNumber *)type andEnabled:(BOOL)enabled
 {
     self.textLabel.text = title;
-    self.textField.placeholder = placeHolder;
+    self.textField.text = placeHolder;
     self.textField.keyboardType = [type intValue];
     
     self.textField.layer.cornerRadius = 4.0f;

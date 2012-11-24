@@ -6,20 +6,6 @@
 //  Copyright (c) 2012 Liangjun Jiang. All rights reserved.
 //
 
-//typedef enum {
-//    UIKeyboardTypeDefault,                // Default type for the current input method.
-//    UIKeyboardTypeASCIICapable,           // Displays a keyboard which can enter ASCII characters, non-ASCII keyboards remain active
-//    UIKeyboardTypeNumbersAndPunctuation,  // Numbers and assorted punctuation.
-//    UIKeyboardTypeURL,                    // A type optimized for URL entry (shows . / .com prominently).
-//    UIKeyboardTypeNumberPad,              // A number pad (0-9). Suitable for PIN entry.
-//    UIKeyboardTypePhonePad,               // A phone pad (1-9, *, 0, #, with letters under the numbers).
-//    UIKeyboardTypeNamePhonePad,           // A type optimized for entering a person's name or phone number.
-//    UIKeyboardTypeEmailAddress,           // A type optimized for multiple email address entry (shows space @ . prominently).
-//    
-//    UIKeyboardTypeAlphabet = UIKeyboardTypeASCIICapable, // Deprecated
-//    
-//} UIKeyboardType;
-
 #import "ItemDetailViewController.h"
 #import "CustomTextField.h"
 #import "TextFieldTableCell.h"
@@ -30,15 +16,20 @@ static NSString *kSectionTitleKey = @"sectionTitleKey";
 static NSString *kSourceKey = @"sourceKey";
 static NSString *kViewKey = @"viewKey";
 
-@interface ItemDetailViewController ()<UITextFieldDelegate> //, HPGrowingTextViewDelegate>
+@interface ItemDetailViewController ()<UITextFieldDelegate, UIPickerViewDataSource, UIPickerViewDelegate>
 @property (nonatomic, retain) NSArray *dataSourceArray;
 @property (nonatomic, assign) NSUInteger selectedCellIndex;
 @property (nonatomic, assign) BOOL isEditing;
+@property (nonatomic, strong) TextFieldTableCell *activeCell;
+@property (nonatomic, strong) NSDictionary *howDataDictionary;
+@property (nonatomic, strong) NSMutableDictionary *selectedDictionary;
+@property (nonatomic, strong) NSString *howString;
 
 @end
 
 @implementation ItemDetailViewController
-@synthesize selectedCellIndex, isEditing;
+@synthesize selectedCellIndex, isEditing, activeCell;
+@synthesize howDataDictionary, selectedDictionary, howString;
 
 
 - (id)initWithStyle:(UITableViewStyle)style
@@ -62,8 +53,23 @@ static NSString *kViewKey = @"viewKey";
     isEditing = NO;
     self.navigationItem.rightBarButtonItem = self.editButtonItem;
     
+    // Set up the how, such as entering/leaving, alert frequency
+    NSArray *repeatOptions = @[@"None",@"Every Day",@"Every Week",@"Every 2 Weeks",@"Every Month", @"Every Year"];
     
-    //    NSString *question = @"What is the weather in San Francisco?";
+    NSArray *locationOptions = @[@"Both", @"Arriving", @"Leaving"];
+    
+    NSArray *priorityOptions = @[@"None", @"Low", @"Med",@"High"];
+
+    NSArray *inAdvanceOptions = @[@"5 Mins", @"15 Mins",@"30 Mins",@"1 Hour", @"2 Hour",@"1 Day"];
+    
+    howDataDictionary = @{@"repeat":repeatOptions, @"location":locationOptions, @"inAdvance":inAdvanceOptions, @"priority":priorityOptions};
+    howString = @"";
+    
+    NSDictionary *temp = @{@"repeat":@"", @"location":@"",@"inAdvance":@"",@"prority":@""};
+    selectedDictionary = [NSMutableDictionary dictionaryWithDictionary:temp];
+    
+    
+    // Set up the content
     NSString *question = @"Remind to use coupon when entering Walmart at 5 pm, tomorrow.";
     
     NSLinguisticTaggerOptions options = NSLinguisticTaggerOmitWhitespace | NSLinguisticTaggerOmitPunctuation | NSLinguisticTaggerJoinNames;
@@ -159,7 +165,7 @@ static NSString *kViewKey = @"viewKey";
                              kViewKey: @(UIKeyboardTypeDefault)},
                             
                             @{kSectionTitleKey: @"How",
-                             kSourceKey: @"",
+                             kSourceKey: howString,
                              kViewKey: @(UIKeyboardTypeDefault)}];
 	
 	self.title = NSLocalizedString(@"Event Detail", @"Event Detail");
@@ -202,10 +208,10 @@ static NSString *kViewKey = @"viewKey";
 
 #pragma mark - Table view data source
 
-//- (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section
-//{
-//    return 60.0;
-//}
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    return 60.0;
+}
 //
 //- (UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section
 //{
@@ -226,11 +232,11 @@ static NSString *kViewKey = @"viewKey";
 //    
 //}
 
-- (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
-{
-    return self.dataSourceArray[section][kSectionTitleKey];
-    
-}
+//- (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
+//{
+//    return self.dataSourceArray[section][kSectionTitleKey];
+//    
+//}
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
@@ -249,32 +255,33 @@ static NSString *kViewKey = @"viewKey";
 {
     NSUInteger row = [indexPath row];
     NSUInteger section = [indexPath section];
-    
-    static NSString *kCellTextField_ID = @"CellTextField_ID";
-    
-    TextFieldTableCell *cell = (TextFieldTableCell*) [tableView dequeueReusableCellWithIdentifier:kCellTextField_ID];
-    
-    if (cell == nil)
-    {
-        cell = [[TextFieldTableCell alloc] initWithStyle:UITableViewCellStyleSubtitle
-                                       reuseIdentifier:kCellTextField_ID] ;
-        cell.selectionStyle = UITableViewCellSelectionStyleNone;
-    }
-    cell.textField.delegate = self;
-    cell.textField.tag = 100 + row;
+    UITableViewCell *cell;
+    NSString *title = self.dataSourceArray[section][kSectionTitleKey];
     NSString *descTitle = self.dataSourceArray[section][kSourceKey];
     NSNumber *keyboardType = self.dataSourceArray[section][kViewKey];
-//    [cell setContentForTableCellLabel:title andTextField:placeholder andKeyBoardType:keyboardType andEnabled:isEditing];
-//    cell.textLabel.text = descTitle;
-    cell.textField.text = descTitle;
-    cell.detailTextLabel.text = (section == 0)? @"Life": @"";
-    cell.textField.keyboardType =[keyboardType intValue];
-    cell.textField.enabled = isEditing;
-    if (isEditing) {
-        cell.textField.layer.cornerRadius = 4.0f;
-        cell.textField.layer.masksToBounds = YES;
-        cell.textField.layer.borderColor = [[UIColor redColor]CGColor];
-        cell.textField.layer.borderWidth = 1.0f;
+    
+    static NSString *kCellSummary = @"CellSummary";
+    static NSString *kCellTextField_ID = @"CellTextField_ID";    
+    if (section == 0) {
+        UITableViewCell *temp = [tableView dequeueReusableCellWithIdentifier:kCellSummary];
+        if (temp == nil) {
+            temp = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:kCellSummary];
+        }
+        cell = temp;
+    } else {
+        TextFieldTableCell *temp = (TextFieldTableCell*) [tableView dequeueReusableCellWithIdentifier:kCellTextField_ID];
+        
+        if (temp == nil)
+        {
+            temp = [[TextFieldTableCell alloc] initWithStyle:UITableViewCellStyleSubtitle
+                                           reuseIdentifier:kCellTextField_ID] ;
+            temp.selectionStyle = UITableViewCellSelectionStyleNone;
+        }
+        temp.textField.delegate = self;
+        temp.textField.tag = 100*section + row;
+     
+        [temp setContentForTableCellLabel:title andTextField:descTitle andKeyBoardType:keyboardType andEnabled:isEditing];
+        cell = temp;
     }
     return cell;
 }
@@ -298,6 +305,14 @@ static NSString *kViewKey = @"viewKey";
 
 - (BOOL)textFieldShouldBeginEditing:(UITextField *)textField
 {
+    // the textfield's super view is TextField Cell
+    if ([[textField superview] isKindOfClass:[TextFieldTableCell class]]) {
+        TextFieldTableCell *cell = (TextFieldTableCell *)[textField superview];
+//        activeIndexPath = [self.tableView indexPathForCell:cell];
+        activeCell = cell;
+    }
+    
+    // should this be an independent class?
     UIToolbar *keyboardToolbar = [[UIToolbar alloc] initWithFrame:CGRectMake(0, 0.0, self.view.frame.size.width, 40)];
     keyboardToolbar.barStyle = UIBarStyleBlackTranslucent;
     keyboardToolbar.tintColor = [UIColor darkGrayColor];
@@ -314,14 +329,83 @@ static NSString *kViewKey = @"viewKey";
     
     UIBarButtonItem *doneItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(onDone:)];
     
-    NSArray *itemsArray =@[prevItem, spaceItem1, nextItem, spaceItem2, doneItem];
+    NSArray *itemsArray =  @[prevItem, spaceItem1, nextItem, spaceItem2, doneItem];
     keyboardToolbar.items = itemsArray;
-    
     textField.inputAccessoryView = keyboardToolbar;
-
-    // TODO: CAN I DO BETTER THAN THIS?
-    selectedCellIndex = textField.tag;
+    
+    if (textField.tag == 100){
+        UIDatePicker *datePickerView = [[UIDatePicker alloc] initWithFrame:CGRectZero];
+        datePickerView = [[UIDatePicker alloc] initWithFrame:CGRectZero];
+        datePickerView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleTopMargin;
+        datePickerView.datePickerMode = UIDatePickerModeDate;
+       
+        [datePickerView addTarget:self
+                           action:@selector(onDatePicker:)
+                 forControlEvents:UIControlEventValueChanged];
+        
+        // this animiation was from Apple Sample Code: DateCell
+        CGRect screenRect = [[UIScreen mainScreen] applicationFrame];
+		CGSize pickerSize = [datePickerView sizeThatFits:CGSizeZero];
+		CGRect startRect = CGRectMake(0.0,
+									  screenRect.origin.y + screenRect.size.height,
+									  pickerSize.width, pickerSize.height);
+		datePickerView.frame = startRect;
+		
+      	// compute the end frame
+		CGRect pickerRect = CGRectMake(0.0,
+									   screenRect.origin.y + screenRect.size.height - pickerSize.height,
+									   pickerSize.width,
+									   pickerSize.height);
+        
+        // this animiation will leave the Toolbar alone, so I take it out for the timebeing
+        datePickerView.frame = pickerRect;
+        
+        //        NSDateFormatter *df = [[NSDateFormatter alloc] init];
+        //        df.dateStyle = NSDateFormatterMediumStyle;
+        //        textField.text = [NSString stringWithFormat:@"%@",[df stringFromDate:datePickerView.date]];
+        textField.inputView = datePickerView;
+    } else if (textField.tag == 200)  // the user is going to choose from location
+    {
+        
+        NSLog(@"this is for where");
+        
+        
+    } else if (textField.tag == 400)
+    {
+        UIPickerView *howPicker = [[UIPickerView alloc] initWithFrame:CGRectZero];
+        howPicker.showsSelectionIndicator = YES;	// note this is default to NO
+        howPicker.tag = 101;
+        
+        // this view controller is the data source and delegate
+        howPicker.delegate = self;
+        howPicker.dataSource = self;
+        [howPicker setExclusiveTouch:YES];
+        
+        // this animiation was from Apple Sample Code: DateCell
+        CGRect screenRect = [[UIScreen mainScreen] applicationFrame];
+        CGSize pickerSize = [howPicker sizeThatFits:CGSizeZero];
+        CGRect startRect = CGRectMake(0.0,
+                                      screenRect.origin.y + screenRect.size.height,
+                                      pickerSize.width, pickerSize.height);
+        howPicker.frame = startRect;
+        
+        // compute the end frame
+        CGRect pickerRect = CGRectMake(0.0,
+                                       screenRect.origin.y + screenRect.size.height - pickerSize.height,
+                                       pickerSize.width,
+                                       pickerSize.height);
+        
+        // For same reason, we take this animiation out
+        howPicker.frame = pickerRect;
+        
+        // attached this picker to textField
+        textField.inputView = howPicker;
+        
+    }
+    
+    
     return YES;
+    
 }
 
 #pragma mark - UITextField Delegate methods
@@ -336,47 +420,198 @@ static NSString *kViewKey = @"viewKey";
 
 #pragma mark - IBAction Methods
 
-- (void)onPrev:(id)sender
-{
-    NSArray *visiableCells = [self.tableView visibleCells];
-    [visiableCells enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
-        TextFieldTableCell *cell = (TextFieldTableCell *)obj;
-        if (cell.textField.tag == selectedCellIndex) {
-            [cell.textField resignFirstResponder];
-        } else if (cell.textField.tag == selectedCellIndex - 1){
-            [cell.textField becomeFirstResponder];
-            *stop = YES;
-        }
-        
-    }];
-}
-
-- (void)onNext:(id)sender
-{
-    NSArray *visiableCells = [self.tableView visibleCells];
-    [visiableCells enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
-        TextFieldTableCell *cell = (TextFieldTableCell *)obj;
-        if (cell.textField.tag == selectedCellIndex) {
-            [cell.textField resignFirstResponder];
-        } else if (cell.textField.tag == selectedCellIndex + 1){
-            [cell.textField becomeFirstResponder];
-            *stop = YES;
-        }
-     
-    }];
-}
+//- (void)onPrev:(id)sender
+//{
+//    
+//    [activeCell.textField resignFirstResponder];
+//    NSUInteger activeCellRow = activeCell.textField.tag % 100;
+//    NSUInteger activeCellSection = activeCell.textField.tag / 100;
+//    UITextField *previousTextField;
+//    if (activeCellRow > 0) {
+//        
+//        // here will be some issue if the "previousTextField" is not on screen, the keyboard will show
+//        
+//        previousTextField = (UITextField*)[self.tableView viewWithTag:(activeCellSection  * 100 + activeCellRow - 1)];
+//        [previousTextField becomeFirstResponder];
+//    } else if (activeCellRow == 0) {
+//        if (activeCellSection > 1) {
+//            activeCellSection -=1;
+//            NSString *key = [[self.contentList allKeys] objectAtIndex:activeCellSection-1]; // we need to get the real section index
+//            NSUInteger rowCount =  [[self.contentList objectForKey:key] count];
+//            activeCellRow = rowCount -1;
+//            previousTextField = (UITextField*)[self.tableView viewWithTag:(activeCellSection * 100 + activeCellRow)];
+//            [previousTextField becomeFirstResponder];
+//        }
+//        
+//    }
+//}
+//
+//- (void)onNext:(id)sender
+//{
+//    [activeCell.textField resignFirstResponder];
+//    
+//    NSUInteger activeCellRow = activeCell.textField.tag % 100;
+//    NSUInteger activeCellSection = activeCell.textField.tag / 100;
+//    NSString *key = [[self.contentList allKeys] objectAtIndex:(activeCellSection-1)];
+//    NSUInteger rowCount =  [[self.contentList objectForKey:key] count];
+//    UITextField *nextTextField;
+//    
+//    //    activeCellRow +=1;
+//    if (activeCellRow <rowCount-1) {
+//        nextTextField = (UITextField*)[self.tableView viewWithTag:(activeCellSection * 100 + (activeCellRow+1))];
+//        [nextTextField becomeFirstResponder];
+//        
+//    } else if (activeCellRow == rowCount-1) {
+//        activeCellSection +=1;
+//        if (activeCellSection <= [[self.contentList allKeys] count] - 1) {
+//            activeCellRow = 0;
+//            nextTextField = (UITextField*)[self.tableView viewWithTag:(activeCellSection * 100 + activeCellRow)];
+//            [nextTextField becomeFirstResponder];
+//            
+//        }
+//    }
+//    
+//}
 
 - (void)onDone:(id)sender
 {
     NSArray *visiableCells = [self.tableView visibleCells];
     [visiableCells enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
-        TextFieldTableCell *cell = (TextFieldTableCell *)obj;
-        if (cell.textField.tag == selectedCellIndex) {
+        if ([obj isKindOfClass:[TextFieldTableCell class]]) {
+            TextFieldTableCell *cell = (TextFieldTableCell *)obj;
             [cell.textField resignFirstResponder];
         }
         
     }];
+}
+
+
+#pragma mark - Data Picker
+- (void)onDatePicker:(id)sender
+{
+    // We need to create a thread safe data picker
+    NSDateFormatter *dateFormat = [[NSDateFormatter alloc] init];
+    [dateFormat setDateFormat:@"MM/dd/yyyy"];
     
+    UIDatePicker *datePicker = (UIDatePicker *)sender;
+    activeCell.textField.text = [NSString stringWithFormat:@"%@",[dateFormat stringFromDate:datePicker.date]];
+    
+}
+
+
+#pragma mark - how picker delegate
+- (void)pickerView:(UIPickerView *)pickerView didSelectRow:(NSInteger)row inComponent:(NSInteger)component
+{
+    NSString *key = [howDataDictionary allKeys][component];
+    NSString *selected = ((NSArray *)howDataDictionary[key])[row];
+    if (pickerView.tag == 101) {
+        
+        switch (component) {
+            case 0:
+            {
+                [selectedDictionary setValue:selected forKey:@"inAdvance"];
+                break;
+            }
+            case 1:
+            {
+//                location = selected;
+                [selectedDictionary setValue:selected forKey:@"repeat"];
+                break;
+            }
+            case 2:
+            {
+                [selectedDictionary setValue:selected forKey:@"location"];
+                break;
+            }
+            case 3:
+            {
+                [selectedDictionary setValue:selected forKey:@"priority"];
+                break;
+            }
+            default:
+                break;
+        }
+    }
+    
+    
+    UITableViewCell *cell = [self.tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:4]];
+    if ([cell isKindOfClass:[TextFieldTableCell class]]) {
+        ((TextFieldTableCell *)cell).textField.text = [NSString stringWithFormat:@"%@", selectedDictionary];;
+    }
+}
+
+
+#pragma mark -
+#pragma mark UIPickerViewDataSource
+- (NSAttributedString *)pickerView:(UIPickerView *)pickerView attributedTitleForRow:(NSInteger)row forComponent:(NSInteger)component
+{
+    NSDictionary *attributes = @{NSFontAttributeName:[UIFont systemFontOfSize:14],  NSForegroundColorAttributeName:[UIColor redColor]};
+    
+    NSString *returnStr = @"";
+    if (pickerView.tag == 101) {
+        NSString *key = [howDataDictionary allKeys][component];
+        returnStr = ((NSArray *)howDataDictionary[key])[row];
+    }
+    
+    NSAttributedString *string = [[NSAttributedString alloc] initWithString:returnStr attributes:attributes];
+    return string;
+    
+}
+
+
+- (NSString *)pickerView:(UIPickerView *)pickerView titleForRow:(NSInteger)row forComponent:(NSInteger)component
+{
+    NSString *returnStr = @"";
+    if (pickerView.tag == 101) {
+        NSString *key = [howDataDictionary allKeys][component];
+        return ((NSArray *)howDataDictionary[key])[row];
+    }
+    
+	return returnStr;
+}
+
+- (CGFloat)pickerView:(UIPickerView *)pickerView widthForComponent:(NSInteger)component
+{
+	CGFloat componentWidth = 0.0;
+    if  (pickerView.tag == 101){
+        switch (component) {
+            case 0:
+                componentWidth = 80.0;
+                break;
+            case 1:
+                componentWidth = 80.0;
+                break;
+            case 2:
+                componentWidth = 60.0;
+                break;
+            case 3:
+                componentWidth = 70.0;
+                break;
+            default:
+                break;
+        }
+        
+        
+    }
+    return componentWidth;
+}
+
+- (CGFloat)pickerView:(UIPickerView *)pickerView rowHeightForComponent:(NSInteger)component
+{
+	return 40.0;
+}
+
+- (NSInteger)pickerView:(UIPickerView *)pickerView numberOfRowsInComponent:(NSInteger)component
+{
+    NSString *key = [howDataDictionary allKeys][component];
+    
+    return ((NSArray *)howDataDictionary[key]).count;
+ 
+}
+
+- (NSInteger)numberOfComponentsInPickerView:(UIPickerView *)pickerView
+{
+    return (pickerView.tag == 101)?4:1;
 }
 
 @end
