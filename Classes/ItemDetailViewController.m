@@ -61,36 +61,117 @@ static NSString *kViewKey = @"viewKey";
     // let's make something like
     isEditing = NO;
     self.navigationItem.rightBarButtonItem = self.editButtonItem;
+    
+    
+    //    NSString *question = @"What is the weather in San Francisco?";
+    NSString *question = @"Remind to use coupon when entering Walmart at 5 pm, tomorrow.";
+    
+    NSLinguisticTaggerOptions options = NSLinguisticTaggerOmitWhitespace | NSLinguisticTaggerOmitPunctuation | NSLinguisticTaggerJoinNames;
+    NSLinguisticTagger *tagger = [[NSLinguisticTagger alloc] initWithTagSchemes: [NSLinguisticTagger availableTagSchemesForLanguage:@"en"] options:options];
+    tagger.string = question;
+    
+    // I need a better algorithm for this
+    __block NSMutableArray *tagArrays = [NSMutableArray array];
+    [tagger enumerateTagsInRange:NSMakeRange(0, [question length]) scheme:NSLinguisticTagSchemeNameTypeOrLexicalClass options:options usingBlock:^(NSString *tag, NSRange tokenRange, NSRange sentenceRange, BOOL *stop) {
+        NSString *token = [question substringWithRange:tokenRange];
+        NSDictionary *dict = @{@"tag":tag, @"token":token};
+        [tagArrays addObject:dict];
+    }];
+    
+    NSLog(@"tag array: %@",tagArrays);
+    // I know this is stupid
+    __block NSUInteger conjunctionIndex = 0;
+    __block NSUInteger particleIndex = 0;
+    __block NSUInteger prepositionIndex = 0;
+    [tagArrays enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+        NSDictionary *dict = (NSDictionary *)obj;
+        if ([dict[@"tag"] isEqualToString:@"Particle"]) {
+            particleIndex = idx;
+        }
+        if ([dict[@"tag"] isEqualToString:@"Conjunction"]) {
+            conjunctionIndex = idx;
+        }
+        if ([dict[@"tag"] isEqualToString:@"Preposition"]) {
+            prepositionIndex = idx;
+        }
+        
+    }];
+//    NSLog(@"par:%d, con:%d,  prep: %d",particleIndex, conjunctionIndex, prepositionIndex);
+//
+//
+    __block NSMutableString *whatString = [NSMutableString string];
+
+    if  (conjunctionIndex - (particleIndex+1) > 0)
+    {
+        NSRange whatRange = NSMakeRange(particleIndex+1, conjunctionIndex-(particleIndex+ 1));
+        NSArray *whatArray = [tagArrays objectsAtIndexes:[NSIndexSet indexSetWithIndexesInRange:whatRange]];
+        
+        if (whatArray.count>0) {
+            [whatArray enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+                [whatString appendString:[NSString stringWithFormat:@"%@ ",((NSDictionary *)obj)[@"token"]]];
+            }];
+        }
+        NSLog(@"what :%@",whatString);
+    }
+    
+    __block NSMutableString *whereString = [NSMutableString string];
+    if (prepositionIndex-(conjunctionIndex+1) > 0) {
+        NSRange whereRange = NSMakeRange(conjunctionIndex+1, prepositionIndex-(conjunctionIndex+ 1));
+        NSArray *whereArray = [tagArrays objectsAtIndexes:[NSIndexSet indexSetWithIndexesInRange:whereRange]];
+        if (whereArray.count>0) {
+            [whereArray enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+                [whereString appendString:[NSString stringWithFormat:@"%@ ",((NSDictionary *)obj)[@"token"]]];
+            }];
+        }
+        NSLog(@"where :%@",whereString);
+    }
+    
+    __block NSMutableString *whenString = [NSMutableString string];
+    if (tagArrays.count-(prepositionIndex+1) > 0) {
+        NSRange whenRange = NSMakeRange(prepositionIndex+1, tagArrays.count-(prepositionIndex+ 1));
+        NSArray *whenArray = [tagArrays objectsAtIndexes:[NSIndexSet indexSetWithIndexesInRange:whenRange]];
+        if (whenArray.count>0) {
+            [whenArray enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+                [whenString appendString:[NSString stringWithFormat:@"%@ ",((NSDictionary *)obj)[@"token"]]];
+            }];
+        }
+        NSLog(@"when :%@",whenString);
+    }
+    
+//    __block NSMutableString *howString = [NSMutableString string];
+
+    
+//    NSLog(@"what: %@, when: %@, where :%@",what, when, where);
     self.dataSourceArray = [NSArray arrayWithObjects:
                             [NSDictionary dictionaryWithObjectsAndKeys:
                              @"Summary", kSectionTitleKey,
-                             @"Reminder me pick up laundry at 5pm, tomorrow.", kSourceKey,
+                             question, kSourceKey,
                              [NSNumber numberWithInt:UIKeyboardTypeDefault], kViewKey,
 							 nil],
 							
 							[NSDictionary dictionaryWithObjectsAndKeys:
                              @"When", kSectionTitleKey,
-                             @"", kSourceKey,
+                             whenString, kSourceKey,
                              [NSNumber numberWithInt:UIKeyboardTypeNamePhonePad], kViewKey,
 							 nil],
 							
 							[NSDictionary dictionaryWithObjectsAndKeys:
                              @"Where", kSectionTitleKey,
-                             @"", kSourceKey,
+                             whereString, kSourceKey,
                              [NSNumber numberWithInt:UIKeyboardTypePhonePad], kViewKey,
 							 nil],
-							
-							[NSDictionary dictionaryWithObjectsAndKeys:
+						    
+                            [NSDictionary dictionaryWithObjectsAndKeys:
+                             @"What", kSectionTitleKey,
+                             whatString, kSourceKey,
+                             [NSNumber numberWithInt:UIKeyboardTypeDefault], kViewKey,
+							 nil],
+                            
+                            [NSDictionary dictionaryWithObjectsAndKeys:
                              @"How", kSectionTitleKey,
                              @"", kSourceKey,
                              [NSNumber numberWithInt:UIKeyboardTypeDefault], kViewKey,
                              nil],
-                            
-                            [NSDictionary dictionaryWithObjectsAndKeys:
-                             @"What", kSectionTitleKey,
-                             @"", kSourceKey,
-                             [NSNumber numberWithInt:UIKeyboardTypeDefault], kViewKey,
-							 nil],
                          	nil];
 	
 	self.title = NSLocalizedString(@"Event Detail", @"Event Detail");
@@ -99,16 +180,7 @@ static NSString *kViewKey = @"viewKey";
 	self.editing = NO;
     
     
-//    NSString *question = @"What is the weather in San Francisco?";
-    NSString *question = @"Remind to use coupon when entering walmart at five pm, tomorrow.";
 
-    NSLinguisticTaggerOptions options = NSLinguisticTaggerOmitWhitespace | NSLinguisticTaggerOmitPunctuation | NSLinguisticTaggerJoinNames;
-    NSLinguisticTagger *tagger = [[NSLinguisticTagger alloc] initWithTagSchemes: [NSLinguisticTagger availableTagSchemesForLanguage:@"en"] options:options];
-    tagger.string = question;
-    [tagger enumerateTagsInRange:NSMakeRange(0, [question length]) scheme:NSLinguisticTagSchemeNameTypeOrLexicalClass options:options usingBlock:^(NSString *tag, NSRange tokenRange, NSRange sentenceRange, BOOL *stop) {
-        NSString *token = [question substringWithRange:tokenRange];
-        NSLog(@"%@: %@", token, tag);
-    }];
 }
 
 - (void)setEditing:(BOOL)editing animated:(BOOL)animated
@@ -202,10 +274,11 @@ static NSString *kViewKey = @"viewKey";
     }
     cell.textField.delegate = self;
     cell.textField.tag = 100 + row;
-    NSString *descTitle = self.dataSourceArray[row][kSourceKey];
-    NSNumber *keyboardType = self.dataSourceArray[row][kViewKey];
+    NSString *descTitle = self.dataSourceArray[section][kSourceKey];
+    NSNumber *keyboardType = self.dataSourceArray[section][kViewKey];
 //    [cell setContentForTableCellLabel:title andTextField:placeholder andKeyBoardType:keyboardType andEnabled:isEditing];
-    cell.textLabel.text = descTitle;
+//    cell.textLabel.text = descTitle;
+    cell.textField.text = descTitle;
     cell.detailTextLabel.text = (section == 0)? @"Life": @"";
     cell.textField.keyboardType =[keyboardType intValue];
     cell.textField.enabled = isEditing;
