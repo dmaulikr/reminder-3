@@ -34,12 +34,11 @@ static NSString *kViewKey = @"viewKey";
 @property (nonatomic, retain) NSArray *dataSourceArray;
 @property (nonatomic, assign) NSUInteger selectedCellIndex;
 @property (nonatomic, assign) BOOL isEditing;
-@property (nonatomic, strong) TextFieldTableCell *activeCell;
 
 @end
 
 @implementation ItemDetailViewController
-@synthesize selectedCellIndex, isEditing, activeCell;
+@synthesize selectedCellIndex, isEditing;
 
 
 - (id)initWithStyle:(UITableViewStyle)style
@@ -99,7 +98,17 @@ static NSString *kViewKey = @"viewKey";
 	// we aren't editing any fields yet, it will be in edit when the user touches an edit field
 	self.editing = NO;
     
-    activeCell = nil;
+    
+//    NSString *question = @"What is the weather in San Francisco?";
+    NSString *question = @"Remind to use coupon when entering walmart at five pm, tomorrow.";
+
+    NSLinguisticTaggerOptions options = NSLinguisticTaggerOmitWhitespace | NSLinguisticTaggerOmitPunctuation | NSLinguisticTaggerJoinNames;
+    NSLinguisticTagger *tagger = [[NSLinguisticTagger alloc] initWithTagSchemes: [NSLinguisticTagger availableTagSchemesForLanguage:@"en"] options:options];
+    tagger.string = question;
+    [tagger enumerateTagsInRange:NSMakeRange(0, [question length]) scheme:NSLinguisticTagSchemeNameTypeOrLexicalClass options:options usingBlock:^(NSString *tag, NSRange tokenRange, NSRange sentenceRange, BOOL *stop) {
+        NSString *token = [question substringWithRange:tokenRange];
+        NSLog(@"%@: %@", token, tag);
+    }];
 }
 
 - (void)setEditing:(BOOL)editing animated:(BOOL)animated
@@ -200,6 +209,12 @@ static NSString *kViewKey = @"viewKey";
     cell.detailTextLabel.text = (section == 0)? @"Life": @"";
     cell.textField.keyboardType =[keyboardType intValue];
     cell.textField.enabled = isEditing;
+    if (isEditing) {
+        cell.textField.layer.cornerRadius = 4.0f;
+        cell.textField.layer.masksToBounds = YES;
+        cell.textField.layer.borderColor = [[UIColor redColor]CGColor];
+        cell.textField.layer.borderWidth = 1.0f;
+    }
     return cell;
 }
 

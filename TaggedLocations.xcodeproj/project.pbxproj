@@ -40,6 +40,19 @@
 		D6CCB3351660370400A1B361 /* TextFieldTableCell.m in Sources */ = {isa = PBXBuildFile; fileRef = D6CCB3321660370300A1B361 /* TextFieldTableCell.m */; };
 		D6CCB3391660379500A1B361 /* CustomTextField.m in Sources */ = {isa = PBXBuildFile; fileRef = D6CCB3371660379500A1B361 /* CustomTextField.m */; };
 		D6CCB33B1660387500A1B361 /* EventDetail.plist in Resources */ = {isa = PBXBuildFile; fileRef = D6CCB33A1660387500A1B361 /* EventDetail.plist */; };
+		D6CCB36216604D6600A1B361 /* HighlightingTextView.m in Sources */ = {isa = PBXBuildFile; fileRef = D6CCB35316604D6600A1B361 /* HighlightingTextView.m */; };
+		D6CCB36316604D6600A1B361 /* Play.m in Sources */ = {isa = PBXBuildFile; fileRef = D6CCB35516604D6600A1B361 /* Play.m */; };
+		D6CCB36416604D6600A1B361 /* Quotation.m in Sources */ = {isa = PBXBuildFile; fileRef = D6CCB35716604D6600A1B361 /* Quotation.m */; };
+		D6CCB36516604D6600A1B361 /* QuoteCell.m in Sources */ = {isa = PBXBuildFile; fileRef = D6CCB35916604D6600A1B361 /* QuoteCell.m */; };
+		D6CCB36616604D6600A1B361 /* SectionHeaderView.m in Sources */ = {isa = PBXBuildFile; fileRef = D6CCB35B16604D6600A1B361 /* SectionHeaderView.m */; };
+		D6CCB36716604D6600A1B361 /* SectionInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = D6CCB35D16604D6600A1B361 /* SectionInfo.m */; };
+		D6CCB36816604D6600A1B361 /* TableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D6CCB35F16604D6600A1B361 /* TableViewController.m */; };
+		D6CCB36D16604D8600A1B361 /* PlaysAndQuotations.plist in Resources */ = {isa = PBXBuildFile; fileRef = D6CCB36A16604D8600A1B361 /* PlaysAndQuotations.plist */; };
+		D6CCB36E16604D8600A1B361 /* carat-open.png in Resources */ = {isa = PBXBuildFile; fileRef = D6CCB36B16604D8600A1B361 /* carat-open.png */; };
+		D6CCB36F16604D8600A1B361 /* carat.png in Resources */ = {isa = PBXBuildFile; fileRef = D6CCB36C16604D8600A1B361 /* carat.png */; };
+		D6CCB37116604E6B00A1B361 /* MainStoryboard.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D6CCB37016604E6B00A1B361 /* MainStoryboard.storyboard */; };
+		D6CCB37316604F2200A1B361 /* MessageUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D6CCB37216604F2200A1B361 /* MessageUI.framework */; };
+		D6CCB37516604F5F00A1B361 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D6CCB37416604F5F00A1B361 /* QuartzCore.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -89,6 +102,26 @@
 		D6CCB3371660379500A1B361 /* CustomTextField.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CustomTextField.m; sourceTree = "<group>"; };
 		D6CCB3381660379500A1B361 /* CustomTextField.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CustomTextField.h; sourceTree = "<group>"; };
 		D6CCB33A1660387500A1B361 /* EventDetail.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = EventDetail.plist; sourceTree = "<group>"; };
+		D6CCB35216604D6600A1B361 /* HighlightingTextView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HighlightingTextView.h; sourceTree = "<group>"; };
+		D6CCB35316604D6600A1B361 /* HighlightingTextView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HighlightingTextView.m; sourceTree = "<group>"; };
+		D6CCB35416604D6600A1B361 /* Play.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Play.h; sourceTree = "<group>"; };
+		D6CCB35516604D6600A1B361 /* Play.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Play.m; sourceTree = "<group>"; };
+		D6CCB35616604D6600A1B361 /* Quotation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Quotation.h; sourceTree = "<group>"; };
+		D6CCB35716604D6600A1B361 /* Quotation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Quotation.m; sourceTree = "<group>"; };
+		D6CCB35816604D6600A1B361 /* QuoteCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = QuoteCell.h; sourceTree = "<group>"; };
+		D6CCB35916604D6600A1B361 /* QuoteCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = QuoteCell.m; sourceTree = "<group>"; };
+		D6CCB35A16604D6600A1B361 /* SectionHeaderView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SectionHeaderView.h; sourceTree = "<group>"; };
+		D6CCB35B16604D6600A1B361 /* SectionHeaderView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SectionHeaderView.m; sourceTree = "<group>"; };
+		D6CCB35C16604D6600A1B361 /* SectionInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SectionInfo.h; sourceTree = "<group>"; };
+		D6CCB35D16604D6600A1B361 /* SectionInfo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SectionInfo.m; sourceTree = "<group>"; };
+		D6CCB35E16604D6600A1B361 /* TableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TableViewController.h; sourceTree = "<group>"; };
+		D6CCB35F16604D6600A1B361 /* TableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TableViewController.m; sourceTree = "<group>"; };
+		D6CCB36A16604D8600A1B361 /* PlaysAndQuotations.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = PlaysAndQuotations.plist; sourceTree = "<group>"; };
+		D6CCB36B16604D8600A1B361 /* carat-open.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "carat-open.png"; sourceTree = "<group>"; };
+		D6CCB36C16604D8600A1B361 /* carat.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = carat.png; sourceTree = "<group>"; };
+		D6CCB37016604E6B00A1B361 /* MainStoryboard.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = MainStoryboard.storyboard; sourceTree = "<group>"; };
+		D6CCB37216604F2200A1B361 /* MessageUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MessageUI.framework; path = System/Library/Frameworks/MessageUI.framework; sourceTree = SDKROOT; };
+		D6CCB37416604F5F00A1B361 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -96,6 +129,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D6CCB37516604F5F00A1B361 /* QuartzCore.framework in Frameworks */,
+				D6CCB37316604F2200A1B361 /* MessageUI.framework in Frameworks */,
 				1D60589F0D05DD5A006BFB54 /* Foundation.framework in Frameworks */,
 				1DF5F4E00D08C38300B7A737 /* UIKit.framework in Frameworks */,
 				2892E4100DC94CBA00A64D0F /* CoreGraphics.framework in Frameworks */,
@@ -170,6 +205,7 @@
 		29B97314FDCFA39411CA2CEA /* CustomTemplate */ = {
 			isa = PBXGroup;
 			children = (
+				D6CCB35116604D6600A1B361 /* Detail */,
 				D6BEA9611659644A00D05AFC /* Default-568h@2x.png */,
 				283558A60F688B81002A3A38 /* ReadMe.txt */,
 				28FB887D0FCCA6C700EBA711 /* Model */,
@@ -196,6 +232,9 @@
 		29B97317FDCFA39411CA2CEA /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				D6CCB36A16604D8600A1B361 /* PlaysAndQuotations.plist */,
+				D6CCB36B16604D8600A1B361 /* carat-open.png */,
+				D6CCB36C16604D8600A1B361 /* carat.png */,
 				D6BEA96516596B7400D05AFC /* RootViewController.xib */,
 				18AD6B8611D56DAA005232E4 /* iTunesArtwork */,
 				1825964611D13136000B79F7 /* MainWindow.xib */,
@@ -216,6 +255,8 @@
 		29B97323FDCFA39411CA2CEA /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				D6CCB37416604F5F00A1B361 /* QuartzCore.framework */,
+				D6CCB37216604F2200A1B361 /* MessageUI.framework */,
 				28A9E8B90F43C7B50016529B /* CoreLocation.framework */,
 				1DF5F4DF0D08C38300B7A737 /* UIKit.framework */,
 				1D30AB110D05D00D00671497 /* Foundation.framework */,
@@ -223,6 +264,29 @@
 				28A9E88B0F43C7410016529B /* CoreData.framework */,
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		D6CCB35116604D6600A1B361 /* Detail */ = {
+			isa = PBXGroup;
+			children = (
+				D6CCB35216604D6600A1B361 /* HighlightingTextView.h */,
+				D6CCB35316604D6600A1B361 /* HighlightingTextView.m */,
+				D6CCB35416604D6600A1B361 /* Play.h */,
+				D6CCB35516604D6600A1B361 /* Play.m */,
+				D6CCB35616604D6600A1B361 /* Quotation.h */,
+				D6CCB35716604D6600A1B361 /* Quotation.m */,
+				D6CCB35816604D6600A1B361 /* QuoteCell.h */,
+				D6CCB35916604D6600A1B361 /* QuoteCell.m */,
+				D6CCB35A16604D6600A1B361 /* SectionHeaderView.h */,
+				D6CCB35B16604D6600A1B361 /* SectionHeaderView.m */,
+				D6CCB35C16604D6600A1B361 /* SectionInfo.h */,
+				D6CCB35D16604D6600A1B361 /* SectionInfo.m */,
+				D6CCB35E16604D6600A1B361 /* TableViewController.h */,
+				D6CCB35F16604D6600A1B361 /* TableViewController.m */,
+				D6CCB37016604E6B00A1B361 /* MainStoryboard.storyboard */,
+			);
+			name = Detail;
+			path = Classes/Detail;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -291,6 +355,10 @@
 				D6BEA96716596B7400D05AFC /* RootViewController.xib in Resources */,
 				D6CCB3331660370400A1B361 /* ItemDetailViewController.xib in Resources */,
 				D6CCB33B1660387500A1B361 /* EventDetail.plist in Resources */,
+				D6CCB36D16604D8600A1B361 /* PlaysAndQuotations.plist in Resources */,
+				D6CCB36E16604D8600A1B361 /* carat-open.png in Resources */,
+				D6CCB36F16604D8600A1B361 /* carat.png in Resources */,
+				D6CCB37116604E6B00A1B361 /* MainStoryboard.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -313,6 +381,13 @@
 				D6CCB3341660370400A1B361 /* ItemDetailViewController.m in Sources */,
 				D6CCB3351660370400A1B361 /* TextFieldTableCell.m in Sources */,
 				D6CCB3391660379500A1B361 /* CustomTextField.m in Sources */,
+				D6CCB36216604D6600A1B361 /* HighlightingTextView.m in Sources */,
+				D6CCB36316604D6600A1B361 /* Play.m in Sources */,
+				D6CCB36416604D6600A1B361 /* Quotation.m in Sources */,
+				D6CCB36516604D6600A1B361 /* QuoteCell.m in Sources */,
+				D6CCB36616604D6600A1B361 /* SectionHeaderView.m in Sources */,
+				D6CCB36716604D6600A1B361 /* SectionInfo.m in Sources */,
+				D6CCB36816604D6600A1B361 /* TableViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

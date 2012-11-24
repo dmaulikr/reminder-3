@@ -16,10 +16,12 @@
 #import "TaggedLocationsAppDelegate.h"
 #import "Event.h"
 #import "Tag.h"
-
+#import "Quotation.h"
+#import "Play.h"
 #import "EventTableViewCell.h"
 #import "TagSelectionController.h"
 #import "ItemDetailViewController.h"
+#import "TableViewController.h"
 
 @implementation RootViewController
 
@@ -232,6 +234,9 @@
 #pragma mark - Show Event
 - (void)showEvent:(Event *)event animated:(BOOL)animated {
     ItemDetailViewController *eventDetailViewController = [[ItemDetailViewController alloc] initWithStyle:UITableViewStyleGrouped];
+//    UIStoryboard *storyBoard = [UIStoryboard storyboardWithName:@"MainStoryboard" bundle:nil];
+//    TableViewController *eventDetailViewController = [storyBoard instantiateInitialViewController];
+//    eventDetailViewController.plays = [NSArray arrayWithArray:[self setUpPlaysArray]];
     [self.navigationController pushViewController:eventDetailViewController animated:animated];
 }
 
@@ -504,6 +509,35 @@
     return;
 }
 
-
+#pragma mark - temp
+- (NSMutableArray *)setUpPlaysArray {
+    
+    NSURL *url = [[NSBundle mainBundle] URLForResource:@"PlaysAndQuotations" withExtension:@"plist"];
+    NSArray *playDictionariesArray = [[NSArray alloc ] initWithContentsOfURL:url];
+    NSMutableArray *playsArray = [NSMutableArray arrayWithCapacity:[playDictionariesArray count]];
+    
+    for (NSDictionary *playDictionary in playDictionariesArray) {
+        
+        Play *play = [[Play alloc] init];
+        play.name = playDictionary[@"playName"];
+        
+        NSArray *quotationDictionaries = playDictionary[@"quotations"];
+        NSMutableArray *quotations = [NSMutableArray arrayWithCapacity:[quotationDictionaries count]];
+        
+        for (NSDictionary *quotationDictionary in quotationDictionaries) {
+            
+            Quotation *quotation = [[Quotation alloc] init];
+            [quotation setValuesForKeysWithDictionary:quotationDictionary];
+            
+            [quotations addObject:quotation];
+        }
+        play.quotations = quotations;
+        
+        [playsArray addObject:play];
+    }
+    
+    return playsArray;
+//    self.plays = playsArray;
+}
 @end
 
