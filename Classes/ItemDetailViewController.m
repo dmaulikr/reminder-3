@@ -142,37 +142,25 @@ static NSString *kViewKey = @"viewKey";
 
     
 //    NSLog(@"what: %@, when: %@, where :%@",what, when, where);
-    self.dataSourceArray = [NSArray arrayWithObjects:
-                            [NSDictionary dictionaryWithObjectsAndKeys:
-                             @"Summary", kSectionTitleKey,
-                             question, kSourceKey,
-                             [NSNumber numberWithInt:UIKeyboardTypeDefault], kViewKey,
-							 nil],
+    self.dataSourceArray = @[@{kSectionTitleKey: @"Summary",
+                             kSourceKey: question,
+                             kViewKey: @(UIKeyboardTypeDefault)},
 							
-							[NSDictionary dictionaryWithObjectsAndKeys:
-                             @"When", kSectionTitleKey,
-                             whenString, kSourceKey,
-                             [NSNumber numberWithInt:UIKeyboardTypeNamePhonePad], kViewKey,
-							 nil],
+							@{kSectionTitleKey: @"When",
+                             kSourceKey: whenString,
+                             kViewKey: @(UIKeyboardTypeNamePhonePad)},
 							
-							[NSDictionary dictionaryWithObjectsAndKeys:
-                             @"Where", kSectionTitleKey,
-                             whereString, kSourceKey,
-                             [NSNumber numberWithInt:UIKeyboardTypePhonePad], kViewKey,
-							 nil],
+							@{kSectionTitleKey: @"Where",
+                             kSourceKey: whereString,
+                             kViewKey: @(UIKeyboardTypePhonePad)},
 						    
-                            [NSDictionary dictionaryWithObjectsAndKeys:
-                             @"What", kSectionTitleKey,
-                             whatString, kSourceKey,
-                             [NSNumber numberWithInt:UIKeyboardTypeDefault], kViewKey,
-							 nil],
+                            @{kSectionTitleKey: @"What",
+                             kSourceKey: whatString,
+                             kViewKey: @(UIKeyboardTypeDefault)},
                             
-                            [NSDictionary dictionaryWithObjectsAndKeys:
-                             @"How", kSectionTitleKey,
-                             @"", kSourceKey,
-                             [NSNumber numberWithInt:UIKeyboardTypeDefault], kViewKey,
-                             nil],
-                         	nil];
+                            @{kSectionTitleKey: @"How",
+                             kSourceKey: @"",
+                             kViewKey: @(UIKeyboardTypeDefault)}];
 	
 	self.title = NSLocalizedString(@"Event Detail", @"Event Detail");
 	
