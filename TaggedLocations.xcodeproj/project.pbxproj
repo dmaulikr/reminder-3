@@ -22,7 +22,6 @@
 		1D60589B0D05DD56006BFB54 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 29B97316FDCFA39411CA2CEA /* main.m */; };
 		1D60589F0D05DD5A006BFB54 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1D30AB110D05D00D00671497 /* Foundation.framework */; };
 		1DF5F4E00D08C38300B7A737 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1DF5F4DF0D08C38300B7A737 /* UIKit.framework */; };
-		283558A70F688B81002A3A38 /* ReadMe.txt in Resources */ = {isa = PBXBuildFile; fileRef = 283558A60F688B81002A3A38 /* ReadMe.txt */; };
 		283659D00FD8513400B8A769 /* Tag.m in Sources */ = {isa = PBXBuildFile; fileRef = 283659CF0FD8513400B8A769 /* Tag.m */; };
 		2892E4100DC94CBA00A64D0F /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2892E40F0DC94CBA00A64D0F /* CoreGraphics.framework */; };
 		28A9E88C0F43C7410016529B /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 28A9E88B0F43C7410016529B /* CoreData.framework */; };
@@ -46,6 +45,7 @@
 		D6B52B0D1661DE21002A339D /* PlaceSearchViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D6B52AE41661DE21002A339D /* PlaceSearchViewController.m */; };
 		D6B52B0E1661DE21002A339D /* PullToRefreshTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D6B52AE61661DE21002A339D /* PullToRefreshTableViewController.m */; };
 		D6B52B1B1661DE21002A339D /* whiteArrow.png in Resources */ = {isa = PBXBuildFile; fileRef = D6B52B011661DE21002A339D /* whiteArrow.png */; };
+		D6B52B231662805B002A339D /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D6B52B221662805B002A339D /* MapKit.framework */; };
 		D6BEA9621659644A00D05AFC /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = D6BEA9611659644A00D05AFC /* Default-568h@2x.png */; };
 		D6BEA96716596B7400D05AFC /* RootViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = D6BEA96516596B7400D05AFC /* RootViewController.xib */; };
 		D6CCB3331660370400A1B361 /* ItemDetailViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = D6CCB32E1660370300A1B361 /* ItemDetailViewController.xib */; };
@@ -85,7 +85,6 @@
 		1D3623250D0F684500981E51 /* TaggedLocationsAppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TaggedLocationsAppDelegate.m; path = Classes/TaggedLocationsAppDelegate.m; sourceTree = "<group>"; };
 		1D6058910D05DD3D006BFB54 /* TaggedLocations.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TaggedLocations.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		1DF5F4DF0D08C38300B7A737 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
-		283558A60F688B81002A3A38 /* ReadMe.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = ReadMe.txt; sourceTree = "<group>"; };
 		283659CE0FD8513400B8A769 /* Tag.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Tag.h; path = Classes/Tag.h; sourceTree = "<group>"; };
 		283659CF0FD8513400B8A769 /* Tag.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Tag.m; path = Classes/Tag.m; sourceTree = "<group>"; };
 		2892E40F0DC94CBA00A64D0F /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
@@ -127,6 +126,7 @@
 		D6B52AE51661DE21002A339D /* PullToRefreshTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PullToRefreshTableViewController.h; sourceTree = "<group>"; };
 		D6B52AE61661DE21002A339D /* PullToRefreshTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PullToRefreshTableViewController.m; sourceTree = "<group>"; };
 		D6B52B011661DE21002A339D /* whiteArrow.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = whiteArrow.png; sourceTree = "<group>"; };
+		D6B52B221662805B002A339D /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
 		D6BEA9611659644A00D05AFC /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x.png"; sourceTree = "<group>"; };
 		D6BEA96616596B7400D05AFC /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/RootViewController.xib; sourceTree = "<group>"; };
 		D6CCB32E1660370300A1B361 /* ItemDetailViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ItemDetailViewController.xib; sourceTree = "<group>"; };
@@ -164,6 +164,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D6B52B231662805B002A339D /* MapKit.framework in Frameworks */,
 				D6CCB37516604F5F00A1B361 /* QuartzCore.framework in Frameworks */,
 				D6CCB37316604F2200A1B361 /* MessageUI.framework in Frameworks */,
 				1D60589F0D05DD5A006BFB54 /* Foundation.framework in Frameworks */,
@@ -243,7 +244,6 @@
 				D6B52ACB1661DE21002A339D /* GoogleLocations */,
 				D6CCB35116604D6600A1B361 /* Detail */,
 				D6BEA9611659644A00D05AFC /* Default-568h@2x.png */,
-				283558A60F688B81002A3A38 /* ReadMe.txt */,
 				28FB887D0FCCA6C700EBA711 /* Model */,
 				080E96DDFE201D6D7F000001 /* View Controllers */,
 				28B123130FCD2F5700FA3CBF /* Table View Cells */,
@@ -291,6 +291,7 @@
 		29B97323FDCFA39411CA2CEA /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				D6B52B221662805B002A339D /* MapKit.framework */,
 				D6CCB37416604F5F00A1B361 /* QuartzCore.framework */,
 				D6CCB37216604F2200A1B361 /* MessageUI.framework */,
 				28A9E8B90F43C7B50016529B /* CoreLocation.framework */,
@@ -424,7 +425,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				283558A70F688B81002A3A38 /* ReadMe.txt in Resources */,
 				1811EF0C11D0292E0068DA4C /* Icon-72.png in Resources */,
 				1811EF0D11D0292E0068DA4C /* Icon-Small-50.png in Resources */,
 				1811EF0E11D0292E0068DA4C /* Icon-Small.png in Resources */,

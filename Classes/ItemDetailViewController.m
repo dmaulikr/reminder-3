@@ -201,8 +201,11 @@ static NSString *kViewKey = @"viewKey";
     
     // Location related
     googlePlacesConnection = [[GooglePlacesConnection alloc] initWithDelegate:self];
-        
-    [self searchLocationAddress:event.where];
+    
+//    
+//    [self searchLocationAddress:event.where];
+    
+    [self searchLocationAddress:@"starbucks"];
 }
 
 - (void)setEditing:(BOOL)editing animated:(BOOL)animated
@@ -572,8 +575,10 @@ static NSString *kViewKey = @"viewKey";
                                  kMealTakeaway,
                                  kNightClub
                                  ];
+    CLLocationCoordinate2D here = CLLocationCoordinate2DMake([event.latitude doubleValue], [event.longitude doubleValue]);
+    
     [googlePlacesConnection getGoogleObjectsWithQuery:businessName
-                                       andCoordinates:CLLocationCoordinate2DMake(currentLocation.coordinate.latitude, currentLocation.coordinate.longitude)
+                                       andCoordinates:here
                                              andTypes:searchLocations];
 }
 
@@ -622,8 +627,15 @@ static NSString *kViewKey = @"viewKey";
                                               otherButtonTitles: nil];
         [alert show];
     } else {
-        NSLog(@"google search returns :%@",objects);
-        locations = objects;
+//        NSLog(@"google search returns :%@",objects);
+//        locations = objects;
+        [objects enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+            GooglePlacesObject *googlePlace = (GooglePlacesObject*)obj;
+//            NSLog(@"the name: %@, address: %@",googlePlace.name, googlePlace.formattedPhoneNumber);
+            NSLog(@"the place: %@",googlePlace);
+        }];
+        
+        
     }
 }
 
