@@ -234,10 +234,9 @@
 #pragma mark - Show Event
 - (void)showEvent:(Event *)event animated:(BOOL)animated {
     ItemDetailViewController *eventDetailViewController = [[ItemDetailViewController alloc] initWithStyle:UITableViewStyleGrouped];
-//    UIStoryboard *storyBoard = [UIStoryboard storyboardWithName:@"MainStoryboard" bundle:nil];
-//    TableViewController *eventDetailViewController = [storyBoard instantiateInitialViewController];
-//    eventDetailViewController.plays = [NSArray arrayWithArray:[self setUpPlaysArray]];
-    [self.navigationController pushViewController:eventDetailViewController animated:animated];
+    eventDetailViewController.event = event;
+    UINavigationController *navController = [[UINavigationController alloc] initWithRootViewController:eventDetailViewController];
+    [self presentViewController:navController animated:YES completion:nil];
 }
 
 #pragma mark -
@@ -509,35 +508,65 @@
     return;
 }
 
-#pragma mark - temp
-- (NSMutableArray *)setUpPlaysArray {
+#pragma mark - 
+- (void)scheduleNotificationWithItem:(Event *)event interval:(int)minutesBefore {
+    NSCalendar *calendar = [NSCalendar autoupdatingCurrentCalendar];
+    NSDateComponents *dateComps = [[NSDateComponents alloc] init];
+//    [dateComps setDay:item.day];
+//    [dateComps setMonth:item.month];
+//    [dateComps setYear:item.year];
+//    [dateComps setHour:item.hour];
+//    [dateComps setMinute:item.minute];
+    NSDate *itemDate = [calendar dateFromComponents:dateComps];
     
-    NSURL *url = [[NSBundle mainBundle] URLForResource:@"PlaysAndQuotations" withExtension:@"plist"];
-    NSArray *playDictionariesArray = [[NSArray alloc ] initWithContentsOfURL:url];
-    NSMutableArray *playsArray = [NSMutableArray arrayWithCapacity:[playDictionariesArray count]];
+    UILocalNotification *localNotif = [[UILocalNotification alloc] init];
+    if (localNotif == nil)
+        return;
+    localNotif.fireDate = [itemDate dateByAddingTimeInterval:-(minutesBefore*60)];
+    localNotif.timeZone = [NSTimeZone defaultTimeZone];
     
-    for (NSDictionary *playDictionary in playDictionariesArray) {
-        
-        Play *play = [[Play alloc] init];
-        play.name = playDictionary[@"playName"];
-        
-        NSArray *quotationDictionaries = playDictionary[@"quotations"];
-        NSMutableArray *quotations = [NSMutableArray arrayWithCapacity:[quotationDictionaries count]];
-        
-        for (NSDictionary *quotationDictionary in quotationDictionaries) {
-            
-            Quotation *quotation = [[Quotation alloc] init];
-            [quotation setValuesForKeysWithDictionary:quotationDictionary];
-            
-            [quotations addObject:quotation];
-        }
-        play.quotations = quotations;
-        
-        [playsArray addObject:play];
-    }
+    localNotif.alertBody = [NSString stringWithFormat:NSLocalizedString(@"%@ in %i minutes.", nil),
+                            event.name, minutesBefore];
+    localNotif.alertAction = NSLocalizedString(@"View Details", nil);
     
-    return playsArray;
-//    self.plays = playsArray;
+    localNotif.soundName = UILocalNotificationDefaultSoundName;
+    localNotif.applicationIconBadgeNumber = 1;
+    
+    NSDictionary *infoDict = [NSDictionary dictionaryWithObject:event.name forKey:@"ToDoItemKey"];
+    localNotif.userInfo = infoDict;
+    
+    [[UIApplication sharedApplication] scheduleLocalNotification:localNotif];
 }
+
+
+#pragma mark - temp
+//- (NSMutableArray *)setUpPlaysArray {
+//    
+//    NSURL *url = [[NSBundle mainBundle] URLForResource:@"PlaysAndQuotations" withExtension:@"plist"];
+//    NSArray *playDictionariesArray = [[NSArray alloc ] initWithContentsOfURL:url];
+//    NSMutableArray *playsArray = [NSMutableArray arrayWithCapacity:[playDictionariesArray count]];
+//    
+//    for (NSDictionary *playDictionary in playDictionariesArray) {
+//        
+//        Play *play = [[Play alloc] init];
+//        play.name = playDictionary[@"playName"];
+//        
+//        NSArray *quotationDictionaries = playDictionary[@"quotations"];
+//        NSMutableArray *quotations = [NSMutableArray arrayWithCapacity:[quotationDictionaries count]];
+//        
+//        for (NSDictionary *quotationDictionary in quotationDictionaries) {
+//            
+//            Quotation *quotation = [[Quotation alloc] init];
+//            [quotation setValuesForKeysWithDictionary:quotationDictionary];
+//            
+//            [quotations addObject:quotation];
+//        }
+//        play.quotations = quotations;
+//        
+//        [playsArray addObject:play];
+//    }
+//    
+//    return playsArray;
+//}
 @end
 

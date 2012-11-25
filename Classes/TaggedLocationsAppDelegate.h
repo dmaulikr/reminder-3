@@ -53,7 +53,9 @@
 	
     NSPersistentStoreCoordinator *persistentStoreCoordinator;
     NSManagedObjectModel *managedObjectModel;
-    NSManagedObjectContext *managedObjectContext;	    
+    NSManagedObjectContext *managedObjectContext;
+    
+    UIBackgroundTaskIdentifier bgTask;
 }
 
 @property (nonatomic, strong) IBOutlet UIWindow *window;

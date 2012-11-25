@@ -8,7 +8,8 @@
 
 #import <UIKit/UIKit.h>
 
+@class Event;
 @interface ItemDetailViewController : UITableViewController
 
-
+@property (nonatomic, strong) Event *event;
 @end

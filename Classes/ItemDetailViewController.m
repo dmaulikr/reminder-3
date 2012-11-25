@@ -10,6 +10,7 @@
 #import "CustomTextField.h"
 #import "TextFieldTableCell.h"
 #import <QuartzCore/QuartzCore.h>
+#import "Event.h"
 //#import "SSTheme.h"
 
 static NSString *kSectionTitleKey = @"sectionTitleKey";
@@ -30,8 +31,15 @@ static NSString *kViewKey = @"viewKey";
 @implementation ItemDetailViewController
 @synthesize selectedCellIndex, isEditing, activeCell;
 @synthesize howDataDictionary, selectedDictionary, howString;
+@synthesize event;
 
+#pragma mark - Private Method
+- (void)onCancel:(id)sender
+{
+    [self dismissViewControllerAnimated:YES completion:nil];
+}
 
+#pragma mark - Init & View Cycle
 - (id)initWithStyle:(UITableViewStyle)style
 {
     self = [super initWithStyle:style];
@@ -53,6 +61,9 @@ static NSString *kViewKey = @"viewKey";
     isEditing = NO;
     self.navigationItem.rightBarButtonItem = self.editButtonItem;
     
+    UIBarButtonItem *cancelItem = [[UIBarButtonItem alloc] initWithTitle:@"Cancel" style:UIBarButtonSystemItemCancel target:self action:@selector(onCancel:)];
+    self.navigationItem.leftBarButtonItem = cancelItem;
+    
     // Set up the how, such as entering/leaving, alert frequency
     NSArray *repeatOptions = @[@"None",@"Every Day",@"Every Week",@"Every 2 Weeks",@"Every Month", @"Every Year"];
     
@@ -64,6 +75,8 @@ static NSString *kViewKey = @"viewKey";
     
     howDataDictionary = @{@"repeat":repeatOptions, @"location":locationOptions, @"inAdvance":inAdvanceOptions, @"priority":priorityOptions};
     howString = @"";
+    
+    event.how = howString;
     
     NSDictionary *temp = @{@"repeat":@"", @"location":@"",@"inAdvance":@"",@"prority":@""};
     selectedDictionary = [NSMutableDictionary dictionaryWithDictionary:temp];
@@ -118,6 +131,7 @@ static NSString *kViewKey = @"viewKey";
             }];
         }
         NSLog(@"what :%@",whatString);
+        event.what = whatString;
     }
     
     __block NSMutableString *whereString = [NSMutableString string];
@@ -130,6 +144,7 @@ static NSString *kViewKey = @"viewKey";
             }];
         }
         NSLog(@"where :%@",whereString);
+        event.where = whereString;
     }
     
     __block NSMutableString *whenString = [NSMutableString string];
@@ -142,6 +157,7 @@ static NSString *kViewKey = @"viewKey";
             }];
         }
         NSLog(@"when :%@",whenString);
+        event.when = whenString;
     }
     
 //    __block NSMutableString *howString = [NSMutableString string];
@@ -149,32 +165,30 @@ static NSString *kViewKey = @"viewKey";
     
 //    NSLog(@"what: %@, when: %@, where :%@",what, when, where);
     self.dataSourceArray = @[@{kSectionTitleKey: @"Summary",
-                             kSourceKey: question,
+                             kSourceKey: event.name,
                              kViewKey: @(UIKeyboardTypeDefault)},
 							
 							@{kSectionTitleKey: @"When",
-                             kSourceKey: whenString,
+                             kSourceKey: event.when,
                              kViewKey: @(UIKeyboardTypeNamePhonePad)},
 							
 							@{kSectionTitleKey: @"Where",
-                             kSourceKey: whereString,
+                             kSourceKey: event.where,
                              kViewKey: @(UIKeyboardTypePhonePad)},
 						    
                             @{kSectionTitleKey: @"What",
-                             kSourceKey: whatString,
+                             kSourceKey: event.what,
                              kViewKey: @(UIKeyboardTypeDefault)},
                             
                             @{kSectionTitleKey: @"How",
-                             kSourceKey: howString,
+                             kSourceKey: event.how,
                              kViewKey: @(UIKeyboardTypeDefault)}];
 	
 	self.title = NSLocalizedString(@"Event Detail", @"Event Detail");
 	
 	// we aren't editing any fields yet, it will be in edit when the user touches an edit field
 	self.editing = NO;
-    
-    
-
+ 
 }
 
 - (void)setEditing:(BOOL)editing animated:(BOOL)animated
@@ -188,6 +202,11 @@ static NSString *kViewKey = @"viewKey";
     // we now need to save those data
     if (!editing) {
         isEditing = editing;
+        NSArray *cells = [self.tableView visibleCells];
+        [cells enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+            
+        }];
+        
         [self.tableView reloadData];
     }
 }
@@ -201,9 +220,7 @@ static NSString *kViewKey = @"viewKey";
 
 - (void)onCheckButton:(id)sender
 {
-    
     NSLog(@"we save the user info");
-    
 }
 
 #pragma mark - Table view data source
@@ -267,6 +284,8 @@ static NSString *kViewKey = @"viewKey";
         if (temp == nil) {
             temp = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:kCellSummary];
         }
+        cell.textLabel.text = @"Summary";
+        cell.detailTextLabel.text = event.name;
         cell = temp;
     } else {
         TextFieldTableCell *temp = (TextFieldTableCell*) [tableView dequeueReusableCellWithIdentifier:kCellTextField_ID];
@@ -514,7 +533,6 @@ static NSString *kViewKey = @"viewKey";
             }
             case 1:
             {
-//                location = selected;
                 [selectedDictionary setValue:selected forKey:@"repeat"];
                 break;
             }

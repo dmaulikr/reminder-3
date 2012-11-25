@@ -56,6 +56,11 @@
 @property (nonatomic, strong) NSDate *creationDate;
 @property (nonatomic, strong) NSNumber *latitude;
 @property (nonatomic, strong) NSNumber *longitude;
+@property (nonatomic, strong) NSString *when;
+@property (nonatomic, strong) NSString *where;
+@property (nonatomic, strong) NSString *what;
+@property (nonatomic, strong) NSString *how;
+
 
 @property (nonatomic, strong) NSSet* tags;
 

@@ -4,44 +4,6 @@
  Abstract: Application delegate to set up the Core Data stack and configure the view and navigation controllers.
   Version: 1.1
  
- Disclaimer: IMPORTANT:  This Apple software is supplied to you by Apple
- Inc. ("Apple") in consideration of your agreement to the following
- terms, and your use, installation, modification or redistribution of
- this Apple software constitutes acceptance of these terms.  If you do
- not agree with these terms, please do not use, install, modify or
- redistribute this Apple software.
- 
- In consideration of your agreement to abide by the following terms, and
- subject to these terms, Apple grants you a personal, non-exclusive
- license, under Apple's copyrights in this original Apple software (the
- "Apple Software"), to use, reproduce, modify and redistribute the Apple
- Software, with or without modifications, in source and/or binary forms;
- provided that if you redistribute the Apple Software in its entirety and
- without modifications, you must retain this notice and the following
- text and disclaimers in all such redistributions of the Apple Software.
- Neither the name, trademarks, service marks or logos of Apple Inc. may
- be used to endorse or promote products derived from the Apple Software
- without specific prior written permission from Apple.  Except as
- expressly stated in this notice, no other rights or licenses, express or
- implied, are granted by Apple herein, including but not limited to any
- patent rights that may be infringed by your derivative works or by other
- works in which the Apple Software may be incorporated.
- 
- The Apple Software is provided by Apple on an "AS IS" basis.  APPLE
- MAKES NO WARRANTIES, EXPRESS OR IMPLIED, INCLUDING WITHOUT LIMITATION
- THE IMPLIED WARRANTIES OF NON-INFRINGEMENT, MERCHANTABILITY AND FITNESS
- FOR A PARTICULAR PURPOSE, REGARDING THE APPLE SOFTWARE OR ITS USE AND
- OPERATION ALONE OR IN COMBINATION WITH YOUR PRODUCTS.
- 
- IN NO EVENT SHALL APPLE BE LIABLE FOR ANY SPECIAL, INDIRECT, INCIDENTAL
- OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
- SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
- INTERRUPTION) ARISING IN ANY WAY OUT OF THE USE, REPRODUCTION,
- MODIFICATION AND/OR DISTRIBUTION OF THE APPLE SOFTWARE, HOWEVER CAUSED
- AND WHETHER UNDER THEORY OF CONTRACT, TORT (INCLUDING NEGLIGENCE),
- STRICT LIABILITY OR OTHERWISE, EVEN IF APPLE HAS BEEN ADVISED OF THE
- POSSIBILITY OF SUCH DAMAGE.
- 
  Copyright (C) 2010 Apple Inc. All Rights Reserved.
  
  */
@@ -49,8 +11,37 @@
 #import "TaggedLocationsAppDelegate.h"
 #import "RootViewController.h"
 
+@interface ToDoItem : NSObject  {
+    NSInteger year;
+    NSInteger month;
+    NSInteger day;
+    NSInteger hour;
+    NSInteger minute;
+    NSInteger second;
+    NSString *eventName;
+}
+
+@property (nonatomic, readwrite) NSInteger year;
+@property (nonatomic, readwrite) NSInteger month;
+@property (nonatomic, readwrite) NSInteger day;
+@property (nonatomic, readwrite) NSInteger hour;
+@property (nonatomic, readwrite) NSInteger minute;
+@property (nonatomic, readwrite) NSInteger second;
+@property (nonatomic, copy) NSString *eventName;
+
+@end
+
+@implementation ToDoItem
+
+@synthesize year, month, day, hour, minute, second, eventName;
+
+@end
+
 
 @implementation TaggedLocationsAppDelegate
+
+#define ToDoItemKey @"EVENTKEY1"
+#define MessageTitleKey @"MSGKEY1"
 
 @synthesize window;
 @synthesize navigationController, rootViewController;
@@ -59,10 +50,7 @@
 #pragma mark -
 #pragma mark Application lifecycle
 
-- (void)applicationDidFinishLaunching:(UIApplication *)application {
-	
-	// Configure and show the window.
-//	RootViewController *rootViewController = [[RootViewController alloc] initWithStyle:UITableViewStylePlain];
+- (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     
     rootViewController = [[RootViewController alloc] initWithNibName:@"RootViewController" bundle:nil];
 	
@@ -79,7 +67,43 @@
 	
 	[window addSubview:[navigationController view]];
 	[window makeKeyAndVisible];
-	
+    
+    // Override point for customization after application launch
+    UILocalNotification *localNotif = [launchOptions
+                                       objectForKey:UIApplicationLaunchOptionsLocalNotificationKey];
+    
+    if (localNotif) {
+        NSString *itemName = [localNotif.userInfo objectForKey:ToDoItemKey];
+        //  [viewController displayItem:itemName]; // custom method
+        application.applicationIconBadgeNumber = localNotif.applicationIconBadgeNumber-1;
+        NSLog(@"has localNotif %@",itemName);
+    }
+    else {
+        [[UIApplication sharedApplication] cancelAllLocalNotifications];
+        NSDate *now = [NSDate date];
+        NSLog(@"now is %@",now);
+        NSDate *scheduled = [now dateByAddingTimeInterval:120] ; //get x minute after
+        NSCalendar *calendar = [NSCalendar currentCalendar];
+        
+        unsigned int unitFlags = NSYearCalendarUnit|NSMonthCalendarUnit|NSDayCalendarUnit|NSHourCalendarUnit|NSMinuteCalendarUnit;
+        NSDateComponents *comp = [calendar components:unitFlags fromDate:scheduled];
+        
+        NSLog(@"scheduled is %@",scheduled);
+        
+        ToDoItem *todoitem = [[ToDoItem alloc] init];
+        
+        todoitem.day = [comp day];
+        todoitem.month = [comp month];
+        todoitem.year = [comp year];
+        todoitem.hour = [comp hour];
+        todoitem.minute = [comp minute];
+        todoitem.eventName = @"Testing Event";
+        
+        [self scheduleNotificationWithItem:todoitem interval:1];
+        NSLog(@"scheduleNotificationWithItem");
+    }
+    [window makeKeyAndVisible];
+    return YES;
 }
 
 /**
@@ -115,6 +139,43 @@
 	else {
 		NSLog(@"Significant location change monitoring is not available.");
 	}
+    
+    // Handel local notification
+    NSLog(@"Application entered background state.");
+    // UIBackgroundTaskIdentifier bgTask is instance variable
+    // UIInvalidBackgroundTask has been renamed to UIBackgroundTaskInvalid
+    NSAssert(self->bgTask == UIBackgroundTaskInvalid, nil);
+    
+    bgTask = [application beginBackgroundTaskWithExpirationHandler: ^{
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [application endBackgroundTask:self->bgTask];
+            self->bgTask = UIBackgroundTaskInvalid;
+        });
+    }];
+    
+    dispatch_async(dispatch_get_main_queue(), ^{
+        while ([application backgroundTimeRemaining] > 1.0) {
+            NSString *friend = [self checkForIncomingChat];
+            if (friend) {
+                UILocalNotification *localNotif = [[UILocalNotification alloc] init];
+                if (localNotif) {
+                    localNotif.alertBody = [NSString stringWithFormat:
+                                            NSLocalizedString(@"%@ has a message for you.", nil), friend];
+                    localNotif.alertAction = NSLocalizedString(@"Read Msg", nil);
+                    localNotif.soundName = @"alarmsound.caf";
+                    localNotif.applicationIconBadgeNumber = 1;
+                    NSDictionary *infoDict = [NSDictionary dictionaryWithObjectsAndKeys:@"Your Background Task works",ToDoItemKey, @"Message from javacom", MessageTitleKey, nil];
+                    localNotif.userInfo = infoDict;
+                    [application presentLocalNotificationNow:localNotif];
+                    friend = nil;
+                    break;
+                }
+            }
+        }
+        [application endBackgroundTask:self->bgTask];
+        self->bgTask = UIBackgroundTaskInvalid;
+    });
+    
 }
 
 
@@ -156,6 +217,65 @@
 	 Use this method to pause ongoing tasks, disable timers, and throttle down OpenGL ES frame rates. Games should use this method to pause the game.
 	 */
 }
+
+
+- (void)application:(UIApplication *)application didReceiveLocalNotification:(UILocalNotification *)notif {
+    NSLog(@"application: didReceiveLocalNotification:");
+    NSString *itemName = [notif.userInfo objectForKey:ToDoItemKey];
+    NSString *messageTitle = [notif.userInfo objectForKey:MessageTitleKey];
+    // [viewController displayItem:itemName]; // custom method
+    [self _showAlert:itemName withTitle:messageTitle];
+    NSLog(@"Receive Local Notification while the app is still running...");
+    NSLog(@"current notification is %@",notif);
+    application.applicationIconBadgeNumber = notif.applicationIconBadgeNumber-1;
+    
+}
+
+#pragma mark - helper method
+- (void) _showAlert:(NSString*)pushmessage withTitle:(NSString*)title
+{
+    
+    UIAlertView* alertView = [[UIAlertView alloc] initWithTitle:title message:pushmessage delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
+    [alertView show];
+   
+}
+
+
+- (void)scheduleNotificationWithItem:(ToDoItem *)item interval:(int)minutesBefore {
+    NSCalendar *calendar = [NSCalendar autoupdatingCurrentCalendar];
+    NSDateComponents *dateComps = [[NSDateComponents alloc] init];
+    [dateComps setDay:item.day];
+    [dateComps setMonth:item.month];
+    [dateComps setYear:item.year];
+    [dateComps setHour:item.hour];
+    [dateComps setMinute:item.minute];
+    NSDate *itemDate = [calendar dateFromComponents:dateComps];
+    
+    UILocalNotification *localNotif = [[UILocalNotification alloc] init];
+    if (localNotif == nil)
+        return;
+    localNotif.fireDate = [itemDate dateByAddingTimeInterval:-(minutesBefore*60)];
+    NSLog(@"fireDate is %@",localNotif.fireDate);
+    localNotif.timeZone = [NSTimeZone defaultTimeZone];
+    
+    localNotif.alertBody = [NSString stringWithFormat:NSLocalizedString(@"%@ in %i minutes.", nil),
+                            item.eventName, minutesBefore];
+    localNotif.alertAction = NSLocalizedString(@"View Details", nil);
+    
+    localNotif.soundName = UILocalNotificationDefaultSoundName;
+    localNotif.applicationIconBadgeNumber = 1;
+    //  NSDictionary *infoDict = [NSDictionary dictionaryWithObject:item.eventName forKey:ToDoItemKey];
+    NSDictionary *infoDict = [NSDictionary dictionaryWithObjectsAndKeys:item.eventName,ToDoItemKey, @"Local Push received while running", MessageTitleKey, nil];
+    localNotif.userInfo = infoDict;
+    
+    [[UIApplication sharedApplication] scheduleLocalNotification:localNotif];
+    NSLog(@"scheduledLocalNotifications are %@", [[UIApplication sharedApplication] scheduledLocalNotifications]);
+}
+
+- (NSString *) checkForIncomingChat {
+    return @"javacom";
+};
+
 #pragma mark -
 #pragma mark Saving
 
