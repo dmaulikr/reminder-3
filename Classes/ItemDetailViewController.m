@@ -11,13 +11,14 @@
 #import "TextFieldTableCell.h"
 #import <QuartzCore/QuartzCore.h>
 #import "Event.h"
+
 //#import "SSTheme.h"
 
 static NSString *kSectionTitleKey = @"sectionTitleKey";
 static NSString *kSourceKey = @"sourceKey";
 static NSString *kViewKey = @"viewKey";
 
-@interface ItemDetailViewController ()<UITextFieldDelegate, UIPickerViewDataSource, UIPickerViewDelegate>
+@interface ItemDetailViewController ()<UITextFieldDelegate, UIPickerViewDataSource, UIPickerViewDelegate, GooglePlacesConnectionDelegate>
 @property (nonatomic, retain) NSArray *dataSourceArray;
 @property (nonatomic, assign) NSUInteger selectedCellIndex;
 @property (nonatomic, assign) BOOL isEditing;
@@ -26,12 +27,21 @@ static NSString *kViewKey = @"viewKey";
 @property (nonatomic, strong) NSMutableDictionary *selectedDictionary;
 @property (nonatomic, strong) NSString *howString;
 
+// Google place related
+@property (nonatomic, strong) NSString *searchString;
+
 @end
 
 @implementation ItemDetailViewController
 @synthesize selectedCellIndex, isEditing, activeCell;
 @synthesize howDataDictionary, selectedDictionary, howString;
 @synthesize event;
+@synthesize searchString;
+
+@synthesize resultsLoaded;
+@synthesize currentLocation;
+@synthesize locations;
+@synthesize locationsFilterResults;
 
 #pragma mark - Private Method
 - (void)onCancel:(id)sender
@@ -188,7 +198,11 @@ static NSString *kViewKey = @"viewKey";
 	
 	// we aren't editing any fields yet, it will be in edit when the user touches an edit field
 	self.editing = NO;
- 
+    
+    // Location related
+    googlePlacesConnection = [[GooglePlacesConnection alloc] initWithDelegate:self];
+        
+    [self searchLocationAddress:event.where];
 }
 
 - (void)setEditing:(BOOL)editing animated:(BOOL)animated
@@ -229,31 +243,6 @@ static NSString *kViewKey = @"viewKey";
 {
     return 60.0;
 }
-//
-//- (UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section
-//{
-//    UIView *footerView = [[UIView alloc] initWithFrame:CGRectMake(0.0, 0.0, self.view.frame.size.width, 44)];
-//    UIButton *checkButton = [UIButton buttonWithType:UIButtonTypeRoundedRect];
-//    [checkButton addTarget:self action:@selector(onCheckButton:) forControlEvents:UIControlEventTouchUpInside];
-//    [checkButton setTitle:@"DELETE" forState:UIControlStateNormal];
-////    [checkButton setBackgroundImage:[UIImage imageNamed:@"checkmark.png"] forState:UIControlStateNormal];
-//    checkButton.frame = CGRectMake(60.0, 5.0, 200, 30);
-//    
-////    UILabel *buttonInfoLabel = [[UILabel alloc] initWithFrame:CGRectMake(38.0, 5.0, 250.0, 30)];
-////    buttonInfoLabel.backgroundColor = [UIColor clearColor];
-////    buttonInfoLabel.text = @"Delete";
-////    [footerView addSubview:buttonInfoLabel];
-//    [footerView addSubview:checkButton];
-//    footerView.backgroundColor = [UIColor clearColor];
-//    return footerView;
-//    
-//}
-
-//- (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
-//{
-//    return self.dataSourceArray[section][kSectionTitleKey];
-//    
-//}
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
@@ -284,8 +273,8 @@ static NSString *kViewKey = @"viewKey";
         if (temp == nil) {
             temp = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:kCellSummary];
         }
-        cell.textLabel.text = @"Summary";
-        cell.detailTextLabel.text = event.name;
+        temp.textLabel.text = @"Summary";
+        temp.detailTextLabel.text = event.name;
         cell = temp;
     } else {
         TextFieldTableCell *temp = (TextFieldTableCell*) [tableView dequeueReusableCellWithIdentifier:kCellTextField_ID];
@@ -336,19 +325,9 @@ static NSString *kViewKey = @"viewKey";
     keyboardToolbar.barStyle = UIBarStyleBlackTranslucent;
     keyboardToolbar.tintColor = [UIColor darkGrayColor];
     
-    UIBarButtonItem *prevItem = [[UIBarButtonItem alloc] initWithTitle:@"Previous" style:UIBarButtonItemStyleDone target:self action:@selector(onPrev:)];
-    
-    UIBarButtonItem *spaceItem1 = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFixedSpace target:self action:nil];
-    spaceItem1.width = 10.0;
-    
-    UIBarButtonItem *nextItem = [[UIBarButtonItem alloc] initWithTitle:@"Next" style:UIBarButtonItemStyleDone target:self action:@selector(onNext:)];
-    
-    UIBarButtonItem *spaceItem2 = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFixedSpace target:self action:nil];
-    spaceItem2.width = 130.0;
-    
     UIBarButtonItem *doneItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(onDone:)];
     
-    NSArray *itemsArray =  @[prevItem, spaceItem1, nextItem, spaceItem2, doneItem];
+    NSArray *itemsArray =  @[doneItem];
     keyboardToolbar.items = itemsArray;
     textField.inputAccessoryView = keyboardToolbar;
     
@@ -436,62 +415,7 @@ static NSString *kViewKey = @"viewKey";
 	return YES;
 }
 
-
-#pragma mark - IBAction Methods
-
-//- (void)onPrev:(id)sender
-//{
-//    
-//    [activeCell.textField resignFirstResponder];
-//    NSUInteger activeCellRow = activeCell.textField.tag % 100;
-//    NSUInteger activeCellSection = activeCell.textField.tag / 100;
-//    UITextField *previousTextField;
-//    if (activeCellRow > 0) {
-//        
-//        // here will be some issue if the "previousTextField" is not on screen, the keyboard will show
-//        
-//        previousTextField = (UITextField*)[self.tableView viewWithTag:(activeCellSection  * 100 + activeCellRow - 1)];
-//        [previousTextField becomeFirstResponder];
-//    } else if (activeCellRow == 0) {
-//        if (activeCellSection > 1) {
-//            activeCellSection -=1;
-//            NSString *key = [[self.contentList allKeys] objectAtIndex:activeCellSection-1]; // we need to get the real section index
-//            NSUInteger rowCount =  [[self.contentList objectForKey:key] count];
-//            activeCellRow = rowCount -1;
-//            previousTextField = (UITextField*)[self.tableView viewWithTag:(activeCellSection * 100 + activeCellRow)];
-//            [previousTextField becomeFirstResponder];
-//        }
-//        
-//    }
-//}
-//
-//- (void)onNext:(id)sender
-//{
-//    [activeCell.textField resignFirstResponder];
-//    
-//    NSUInteger activeCellRow = activeCell.textField.tag % 100;
-//    NSUInteger activeCellSection = activeCell.textField.tag / 100;
-//    NSString *key = [[self.contentList allKeys] objectAtIndex:(activeCellSection-1)];
-//    NSUInteger rowCount =  [[self.contentList objectForKey:key] count];
-//    UITextField *nextTextField;
-//    
-//    //    activeCellRow +=1;
-//    if (activeCellRow <rowCount-1) {
-//        nextTextField = (UITextField*)[self.tableView viewWithTag:(activeCellSection * 100 + (activeCellRow+1))];
-//        [nextTextField becomeFirstResponder];
-//        
-//    } else if (activeCellRow == rowCount-1) {
-//        activeCellSection +=1;
-//        if (activeCellSection <= [[self.contentList allKeys] count] - 1) {
-//            activeCellRow = 0;
-//            nextTextField = (UITextField*)[self.tableView viewWithTag:(activeCellSection * 100 + activeCellRow)];
-//            [nextTextField becomeFirstResponder];
-//            
-//        }
-//    }
-//    
-//}
-
+#pragma mark - UIBarButton Item
 - (void)onDone:(id)sender
 {
     NSArray *visiableCells = [self.tableView visibleCells];
@@ -630,6 +554,87 @@ static NSString *kViewKey = @"viewKey";
 - (NSInteger)numberOfComponentsInPickerView:(UIPickerView *)pickerView
 {
     return (pickerView.tag == 101)?4:1;
+}
+
+
+#pragma mark - Google Place Search
+- (void)searchLocationAddress:(NSString*)businessName
+{
+    //What places to search for
+    NSString *searchLocations = [NSString stringWithFormat:@"%@|%@|%@|%@|%@|%@|%@|%@|%@",
+                                 kBar,
+                                 kRestaurant,
+                                 kCafe,
+                                 kBakery,
+                                 kFood,
+                                 kLodging,
+                                 kMealDelivery,
+                                 kMealTakeaway,
+                                 kNightClub
+                                 ];
+    [googlePlacesConnection getGoogleObjectsWithQuery:businessName
+                                       andCoordinates:CLLocationCoordinate2DMake(currentLocation.coordinate.latitude, currentLocation.coordinate.longitude)
+                                             andTypes:searchLocations];
+}
+
+
+//NEW - to handle filtering
+//Create an array by applying the search string
+
+- (void) buildSearchArrayFrom: (NSString *) matchString
+{
+	NSString *upString = [matchString uppercaseString];
+	
+	locationsFilterResults = [[NSMutableArray alloc] init];
+    
+	for (GooglePlacesObject *location in locations)
+	{
+		if ([matchString length] == 0)
+		{
+			[locationsFilterResults addObject:location];
+			continue;
+		}
+		
+		NSRange range = [[location.name uppercaseString] rangeOfString:upString];
+		
+        if (range.location != NSNotFound)
+        {
+            NSLog(@"Hit");
+            
+            NSLog(@"Location Name %@", location.name);
+            NSLog(@"Search String %@", upString);
+            
+            [locationsFilterResults addObject:location];
+        }
+	}
+}
+
+#pragma mark - Google Place Delegate Method
+
+- (void)googlePlacesConnection:(GooglePlacesConnection *)conn didFinishLoadingWithGooglePlacesObjects:(NSMutableArray *)objects
+{
+    
+    if ([objects count] == 0) {
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"No matches found near this location"
+                                                        message:@"Try another place name or address"
+                                                       delegate:nil
+                                              cancelButtonTitle:@"OK"
+                                              otherButtonTitles: nil];
+        [alert show];
+    } else {
+        NSLog(@"google search returns :%@",objects);
+        locations = objects;
+    }
+}
+
+- (void) googlePlacesConnection:(GooglePlacesConnection *)conn didFailWithError:(NSError *)error
+{
+    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Error finding place - Try again"
+                                                    message:[error localizedDescription]
+                                                   delegate:nil
+                                          cancelButtonTitle:@"OK"
+                                          otherButtonTitles: nil];
+    [alert show];
 }
 
 @end
