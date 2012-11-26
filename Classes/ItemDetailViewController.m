@@ -9,16 +9,19 @@
 #import "ItemDetailViewController.h"
 #import "CustomTextField.h"
 #import "TextFieldTableCell.h"
+#import "TextViewTableCell.h"
 #import <QuartzCore/QuartzCore.h>
 #import "Event.h"
 
 //#import "SSTheme.h"
+#define kTextFieldWidth	195.0
+#define kTextHeight		34.0
 
 static NSString *kSectionTitleKey = @"sectionTitleKey";
 static NSString *kSourceKey = @"sourceKey";
 static NSString *kViewKey = @"viewKey";
 
-@interface ItemDetailViewController ()<UITextFieldDelegate, UIPickerViewDataSource, UIPickerViewDelegate, GooglePlacesConnectionDelegate>
+@interface ItemDetailViewController ()<UITextFieldDelegate, UIPickerViewDataSource, UIPickerViewDelegate, GooglePlacesConnectionDelegate, UITextViewDelegate>
 @property (nonatomic, retain) NSArray *dataSourceArray;
 @property (nonatomic, assign) NSUInteger selectedCellIndex;
 @property (nonatomic, assign) BOOL isEditing;
@@ -244,7 +247,7 @@ static NSString *kViewKey = @"viewKey";
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    return 60.0;
+    return (indexPath.section == 0)? 100.0: 60.0;
 }
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
@@ -272,12 +275,11 @@ static NSString *kViewKey = @"viewKey";
     static NSString *kCellSummary = @"CellSummary";
     static NSString *kCellTextField_ID = @"CellTextField_ID";    
     if (section == 0) {
-        UITableViewCell *temp = [tableView dequeueReusableCellWithIdentifier:kCellSummary];
+        TextViewTableCell *temp = [tableView dequeueReusableCellWithIdentifier:kCellSummary];
         if (temp == nil) {
-            temp = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:kCellSummary];
+            temp = [[TextViewTableCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:kCellSummary];
         }
-        temp.textLabel.text = @"Summary";
-        temp.detailTextLabel.text = event.name;
+        [temp setContentForTableCellLabel:title andTextView:descTitle andKeyBoardType:keyboardType andEnabled:isEditing];
         cell = temp;
     } else {
         TextFieldTableCell *temp = (TextFieldTableCell*) [tableView dequeueReusableCellWithIdentifier:kCellTextField_ID];
@@ -416,6 +418,12 @@ static NSString *kViewKey = @"viewKey";
 	// the user pressed the "Done" button, so dismiss the keyboard
 	[textField resignFirstResponder];
 	return YES;
+}
+
+- (BOOL)textViewShouldEndEditing:(UITextView *)textView
+{
+    [textView resignFirstResponder];
+    return YES;
 }
 
 #pragma mark - UIBarButton Item
@@ -627,15 +635,13 @@ static NSString *kViewKey = @"viewKey";
                                               otherButtonTitles: nil];
         [alert show];
     } else {
-//        NSLog(@"google search returns :%@",objects);
-//        locations = objects;
-        [objects enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
-            GooglePlacesObject *googlePlace = (GooglePlacesObject*)obj;
-//            NSLog(@"the name: %@, address: %@",googlePlace.name, googlePlace.formattedPhoneNumber);
-            NSLog(@"the place: %@",googlePlace);
-        }];
-        
-        
+
+        locations = objects;
+//        [objects enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+//            GooglePlacesObject *googlePlace = (GooglePlacesObject*)obj;
+//            NSLog(@"the address: %@, ",googlePlace.vicinity);
+//           
+//        }];
     }
 }
 

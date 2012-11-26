@@ -100,8 +100,8 @@ distanceInFeet:(NSString *)distanceFeet
     NSString *distanceInFeet = [NSString stringWithFormat:@"%.f", round(2.0f * inFeet) / 2.0f];
     NSString *distanceInMiles = [NSString stringWithFormat:@"%.2f", inMiles];
     
-    //NSLog(@"Total Distance %@ in feet, distance in files %@",distanceInFeet, distanceInMiles);
-        
+//    NSLog(@"address %@, phone # %@",[jsonResultDict objectForKey:@"formatted_address"], [jsonResultDict objectForKey:@"formatted_phone_number"]);
+    
 	return [self initWithName:[jsonResultDict objectForKey:@"name"] 
               latitude:[[loc objectForKey:@"lat"] doubleValue] 
              longitude:[[loc objectForKey:@"lng"] doubleValue]
@@ -111,7 +111,7 @@ distanceInFeet:(NSString *)distanceFeet
                   type:[jsonResultDict objectForKey:@"types"]
              reference:[jsonResultDict objectForKey:@"reference"]
                    url:[jsonResultDict objectForKey:@"url"]
-     addressComponents:[jsonResultDict objectForKey:@"address_components"]
+     addressComponents:[jsonResultDict objectForKey:@"vicinity"]
       formattedAddress:[jsonResultDict objectForKey:@"formatted_address"]
   formattedPhoneNumber:[jsonResultDict objectForKey:@"formatted_phone_number"]
             website:[jsonResultDict objectForKey:@"website"]

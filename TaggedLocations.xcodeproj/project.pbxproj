@@ -32,20 +32,15 @@
 		28C286E10D94DF7D0034E888 /* RootViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 28C286E00D94DF7D0034E888 /* RootViewController.m */; };
 		28C95C640F4FB4660037F30F /* Event.m in Sources */ = {isa = PBXBuildFile; fileRef = 28C95C630F4FB4660037F30F /* Event.m */; };
 		28FB88860FCCA80500EBA711 /* TagSelectionController.m in Sources */ = {isa = PBXBuildFile; fileRef = 28FB88850FCCA80500EBA711 /* TagSelectionController.m */; };
-		D6B52B021661DE21002A339D /* blackArrow.png in Resources */ = {isa = PBXBuildFile; fileRef = D6B52ACC1661DE21002A339D /* blackArrow.png */; };
-		D6B52B031661DE21002A339D /* blueArrow.png in Resources */ = {isa = PBXBuildFile; fileRef = D6B52ACD1661DE21002A339D /* blueArrow.png */; };
-		D6B52B041661DE21002A339D /* blueArrow_new.png in Resources */ = {isa = PBXBuildFile; fileRef = D6B52ACE1661DE21002A339D /* blueArrow_new.png */; };
 		D6B52B051661DE21002A339D /* DetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D6B52AD01661DE21002A339D /* DetailViewController.m */; };
-		D6B52B061661DE21002A339D /* EGORefreshTableHeaderView.m in Sources */ = {isa = PBXBuildFile; fileRef = D6B52AD21661DE21002A339D /* EGORefreshTableHeaderView.m */; };
-		D6B52B071661DE21002A339D /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = D6B52AD31661DE21002A339D /* InfoPlist.strings */; };
 		D6B52B081661DE21002A339D /* MainStoryboard.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D6B52AD51661DE21002A339D /* MainStoryboard.storyboard */; };
 		D6B52B0A1661DE21002A339D /* GooglePlacesConnection.m in Sources */ = {isa = PBXBuildFile; fileRef = D6B52ADB1661DE21002A339D /* GooglePlacesConnection.m */; };
 		D6B52B0B1661DE21002A339D /* GooglePlacesObject.m in Sources */ = {isa = PBXBuildFile; fileRef = D6B52ADD1661DE21002A339D /* GooglePlacesObject.m */; };
 		D6B52B0C1661DE21002A339D /* GTMNSString+URLArguments.m in Sources */ = {isa = PBXBuildFile; fileRef = D6B52AE21661DE21002A339D /* GTMNSString+URLArguments.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
-		D6B52B0D1661DE21002A339D /* PlaceSearchViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D6B52AE41661DE21002A339D /* PlaceSearchViewController.m */; };
-		D6B52B0E1661DE21002A339D /* PullToRefreshTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D6B52AE61661DE21002A339D /* PullToRefreshTableViewController.m */; };
-		D6B52B1B1661DE21002A339D /* whiteArrow.png in Resources */ = {isa = PBXBuildFile; fileRef = D6B52B011661DE21002A339D /* whiteArrow.png */; };
 		D6B52B231662805B002A339D /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D6B52B221662805B002A339D /* MapKit.framework */; };
+		D6B52B281662F924002A339D /* VaFeedbackViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D6B52B261662F924002A339D /* VaFeedbackViewController.m */; };
+		D6B52B291662F924002A339D /* VaFeedbackViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = D6B52B271662F924002A339D /* VaFeedbackViewController.xib */; };
+		D6B52B2C16630137002A339D /* TextViewTableCell.m in Sources */ = {isa = PBXBuildFile; fileRef = D6B52B2B16630137002A339D /* TextViewTableCell.m */; };
 		D6BEA9621659644A00D05AFC /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = D6BEA9611659644A00D05AFC /* Default-568h@2x.png */; };
 		D6BEA96716596B7400D05AFC /* RootViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = D6BEA96516596B7400D05AFC /* RootViewController.xib */; };
 		D6CCB3331660370400A1B361 /* ItemDetailViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = D6CCB32E1660370300A1B361 /* ItemDetailViewController.xib */; };
@@ -104,14 +99,8 @@
 		28FB88850FCCA80500EBA711 /* TagSelectionController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TagSelectionController.m; sourceTree = "<group>"; };
 		29B97316FDCFA39411CA2CEA /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		8D1107310486CEB800E47090 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; plistStructureDefinitionIdentifier = "com.apple.xcode.plist.structure-definition.iphone.info-plist"; sourceTree = "<group>"; };
-		D6B52ACC1661DE21002A339D /* blackArrow.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = blackArrow.png; sourceTree = "<group>"; };
-		D6B52ACD1661DE21002A339D /* blueArrow.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = blueArrow.png; sourceTree = "<group>"; };
-		D6B52ACE1661DE21002A339D /* blueArrow_new.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = blueArrow_new.png; sourceTree = "<group>"; };
 		D6B52ACF1661DE21002A339D /* DetailViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DetailViewController.h; sourceTree = "<group>"; };
 		D6B52AD01661DE21002A339D /* DetailViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DetailViewController.m; sourceTree = "<group>"; };
-		D6B52AD11661DE21002A339D /* EGORefreshTableHeaderView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EGORefreshTableHeaderView.h; sourceTree = "<group>"; };
-		D6B52AD21661DE21002A339D /* EGORefreshTableHeaderView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EGORefreshTableHeaderView.m; sourceTree = "<group>"; };
-		D6B52AD41661DE21002A339D /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		D6B52AD61661DE21002A339D /* en */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = en; path = en.lproj/MainStoryboard.storyboard; sourceTree = "<group>"; };
 		D6B52ADA1661DE21002A339D /* GooglePlacesConnection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GooglePlacesConnection.h; sourceTree = "<group>"; };
 		D6B52ADB1661DE21002A339D /* GooglePlacesConnection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GooglePlacesConnection.m; sourceTree = "<group>"; };
@@ -121,12 +110,12 @@
 		D6B52AE01661DE21002A339D /* GTMGarbageCollection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GTMGarbageCollection.h; sourceTree = "<group>"; };
 		D6B52AE11661DE21002A339D /* GTMNSString+URLArguments.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "GTMNSString+URLArguments.h"; sourceTree = "<group>"; };
 		D6B52AE21661DE21002A339D /* GTMNSString+URLArguments.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "GTMNSString+URLArguments.m"; sourceTree = "<group>"; };
-		D6B52AE31661DE21002A339D /* PlaceSearchViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PlaceSearchViewController.h; sourceTree = "<group>"; };
-		D6B52AE41661DE21002A339D /* PlaceSearchViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PlaceSearchViewController.m; sourceTree = "<group>"; };
-		D6B52AE51661DE21002A339D /* PullToRefreshTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PullToRefreshTableViewController.h; sourceTree = "<group>"; };
-		D6B52AE61661DE21002A339D /* PullToRefreshTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PullToRefreshTableViewController.m; sourceTree = "<group>"; };
-		D6B52B011661DE21002A339D /* whiteArrow.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = whiteArrow.png; sourceTree = "<group>"; };
 		D6B52B221662805B002A339D /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
+		D6B52B251662F924002A339D /* VaFeedbackViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VaFeedbackViewController.h; sourceTree = "<group>"; };
+		D6B52B261662F924002A339D /* VaFeedbackViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VaFeedbackViewController.m; sourceTree = "<group>"; };
+		D6B52B271662F924002A339D /* VaFeedbackViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = VaFeedbackViewController.xib; sourceTree = "<group>"; };
+		D6B52B2A16630137002A339D /* TextViewTableCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TextViewTableCell.h; sourceTree = "<group>"; };
+		D6B52B2B16630137002A339D /* TextViewTableCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TextViewTableCell.m; sourceTree = "<group>"; };
 		D6BEA9611659644A00D05AFC /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x.png"; sourceTree = "<group>"; };
 		D6BEA96616596B7400D05AFC /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/RootViewController.xib; sourceTree = "<group>"; };
 		D6CCB32E1660370300A1B361 /* ItemDetailViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ItemDetailViewController.xib; sourceTree = "<group>"; };
@@ -181,6 +170,7 @@
 		080E96DDFE201D6D7F000001 /* View Controllers */ = {
 			isa = PBXGroup;
 			children = (
+				D6B52B241662F924002A339D /* feedback */,
 				D6CCB32E1660370300A1B361 /* ItemDetailViewController.xib */,
 				D6CCB32F1660370300A1B361 /* ItemDetailViewController.m */,
 				D6CCB3301660370300A1B361 /* ItemDetailViewController.h */,
@@ -193,6 +183,8 @@
 				D6CCB3381660379500A1B361 /* CustomTextField.h */,
 				28FB88840FCCA80500EBA711 /* TagSelectionController.h */,
 				28FB88850FCCA80500EBA711 /* TagSelectionController.m */,
+				D6B52B2A16630137002A339D /* TextViewTableCell.h */,
+				D6B52B2B16630137002A339D /* TextViewTableCell.m */,
 			);
 			name = "View Controllers";
 			path = Classes;
@@ -306,22 +298,11 @@
 		D6B52ACB1661DE21002A339D /* GoogleLocations */ = {
 			isa = PBXGroup;
 			children = (
-				D6B52ACC1661DE21002A339D /* blackArrow.png */,
-				D6B52ACD1661DE21002A339D /* blueArrow.png */,
-				D6B52ACE1661DE21002A339D /* blueArrow_new.png */,
 				D6B52ACF1661DE21002A339D /* DetailViewController.h */,
 				D6B52AD01661DE21002A339D /* DetailViewController.m */,
-				D6B52AD11661DE21002A339D /* EGORefreshTableHeaderView.h */,
-				D6B52AD21661DE21002A339D /* EGORefreshTableHeaderView.m */,
-				D6B52AD31661DE21002A339D /* InfoPlist.strings */,
 				D6B52AD51661DE21002A339D /* MainStoryboard.storyboard */,
 				D6B52AD91661DE21002A339D /* GooglePlaces */,
 				D6B52ADE1661DE21002A339D /* GTM */,
-				D6B52AE31661DE21002A339D /* PlaceSearchViewController.h */,
-				D6B52AE41661DE21002A339D /* PlaceSearchViewController.m */,
-				D6B52AE51661DE21002A339D /* PullToRefreshTableViewController.h */,
-				D6B52AE61661DE21002A339D /* PullToRefreshTableViewController.m */,
-				D6B52B011661DE21002A339D /* whiteArrow.png */,
 			);
 			name = GoogleLocations;
 			path = Classes/GoogleLocations;
@@ -347,6 +328,16 @@
 				D6B52AE21661DE21002A339D /* GTMNSString+URLArguments.m */,
 			);
 			path = GTM;
+			sourceTree = "<group>";
+		};
+		D6B52B241662F924002A339D /* feedback */ = {
+			isa = PBXGroup;
+			children = (
+				D6B52B251662F924002A339D /* VaFeedbackViewController.h */,
+				D6B52B261662F924002A339D /* VaFeedbackViewController.m */,
+				D6B52B271662F924002A339D /* VaFeedbackViewController.xib */,
+			);
+			path = feedback;
 			sourceTree = "<group>";
 		};
 		D6CCB35116604D6600A1B361 /* Detail */ = {
@@ -444,12 +435,8 @@
 				D6CCB36E16604D8600A1B361 /* carat-open.png in Resources */,
 				D6CCB36F16604D8600A1B361 /* carat.png in Resources */,
 				D6CCB37116604E6B00A1B361 /* MainStoryboard.storyboard in Resources */,
-				D6B52B021661DE21002A339D /* blackArrow.png in Resources */,
-				D6B52B031661DE21002A339D /* blueArrow.png in Resources */,
-				D6B52B041661DE21002A339D /* blueArrow_new.png in Resources */,
-				D6B52B071661DE21002A339D /* InfoPlist.strings in Resources */,
 				D6B52B081661DE21002A339D /* MainStoryboard.storyboard in Resources */,
-				D6B52B1B1661DE21002A339D /* whiteArrow.png in Resources */,
+				D6B52B291662F924002A339D /* VaFeedbackViewController.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -480,12 +467,11 @@
 				D6CCB36716604D6600A1B361 /* SectionInfo.m in Sources */,
 				D6CCB36816604D6600A1B361 /* TableViewController.m in Sources */,
 				D6B52B051661DE21002A339D /* DetailViewController.m in Sources */,
-				D6B52B061661DE21002A339D /* EGORefreshTableHeaderView.m in Sources */,
 				D6B52B0A1661DE21002A339D /* GooglePlacesConnection.m in Sources */,
 				D6B52B0B1661DE21002A339D /* GooglePlacesObject.m in Sources */,
 				D6B52B0C1661DE21002A339D /* GTMNSString+URLArguments.m in Sources */,
-				D6B52B0D1661DE21002A339D /* PlaceSearchViewController.m in Sources */,
-				D6B52B0E1661DE21002A339D /* PullToRefreshTableViewController.m in Sources */,
+				D6B52B281662F924002A339D /* VaFeedbackViewController.m in Sources */,
+				D6B52B2C16630137002A339D /* TextViewTableCell.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -522,14 +508,6 @@
 				1825964711D13136000B79F7 /* en */,
 			);
 			name = MainWindow.xib;
-			sourceTree = "<group>";
-		};
-		D6B52AD31661DE21002A339D /* InfoPlist.strings */ = {
-			isa = PBXVariantGroup;
-			children = (
-				D6B52AD41661DE21002A339D /* en */,
-			);
-			name = InfoPlist.strings;
 			sourceTree = "<group>";
 		};
 		D6B52AD51661DE21002A339D /* MainStoryboard.storyboard */ = {
