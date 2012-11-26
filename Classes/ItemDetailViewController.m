@@ -7,10 +7,12 @@
 //
 
 #import "ItemDetailViewController.h"
-#import "CustomTextField.h"
-#import "TextFieldTableCell.h"
-#import "TextViewTableCell.h"
-#import <QuartzCore/QuartzCore.h>
+#import "WhenCell.h"
+#import "NameCell.h"
+#import "WhatCell.h"
+#import "HowCell.h"
+#import "WhereCell.h"
+
 #import "Event.h"
 
 //#import "SSTheme.h"
@@ -25,10 +27,11 @@ static NSString *kViewKey = @"viewKey";
 @property (nonatomic, retain) NSArray *dataSourceArray;
 @property (nonatomic, assign) NSUInteger selectedCellIndex;
 @property (nonatomic, assign) BOOL isEditing;
-@property (nonatomic, strong) TextFieldTableCell *activeCell;
+@property (nonatomic, strong) WhatCell *activeCell;
 @property (nonatomic, strong) NSDictionary *howDataDictionary;
 @property (nonatomic, strong) NSMutableDictionary *selectedDictionary;
 @property (nonatomic, strong) NSString *howString;
+@property (nonatomic, strong) NameCell *nameCell;
 
 // Google place related
 @property (nonatomic, strong) NSString *searchString;
@@ -39,6 +42,7 @@ static NSString *kViewKey = @"viewKey";
 @synthesize selectedCellIndex, isEditing, activeCell;
 @synthesize howDataDictionary, selectedDictionary, howString;
 @synthesize event;
+@synthesize nameCell;
 @synthesize searchString;
 
 @synthesize resultsLoaded;
@@ -110,7 +114,6 @@ static NSString *kViewKey = @"viewKey";
         [tagArrays addObject:dict];
     }];
     
-    NSLog(@"tag array: %@",tagArrays);
     // I know this is stupid
     __block NSUInteger conjunctionIndex = 0;
     __block NSUInteger particleIndex = 0;
@@ -223,8 +226,41 @@ static NSString *kViewKey = @"viewKey";
     if (!editing) {
         isEditing = editing;
         NSArray *cells = [self.tableView visibleCells];
+        
         [cells enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
-            
+            UITableViewCell *cell = (UITableViewCell *)obj;
+            if ([cell.accessoryView isKindOfClass:[UITextField class]])
+            {
+                UITextField *textField = (UITextField *)cell.accessoryView;
+                switch (textField.tag) {
+                    case 200: //
+                        event.when = textField.text;
+                        break;
+                    case 300:
+                        event.where = textField.text;
+                        break;
+                    case 400:
+                        event.what = textField.text;
+                        break;
+                    default:
+                        break;
+                }
+                
+            } else if ([cell.accessoryView isKindOfClass:[UITextView class]])
+            {
+                UITextView *textView = (UITextView *)cell.accessoryView;
+                switch (textView.tag) {
+                    case 100:
+                        event.name = ((UITextView *)cell.accessoryView).text;
+                        break;
+                    case 500:
+                        event.how = ((UITextView *)cell.accessoryView).text;
+                        break;
+                    default:
+                        break;
+                }
+                
+            }
         }];
         
         [self.tableView reloadData];
@@ -268,34 +304,93 @@ static NSString *kViewKey = @"viewKey";
     NSUInteger row = [indexPath row];
     NSUInteger section = [indexPath section];
     UITableViewCell *cell;
-    NSString *title = self.dataSourceArray[section][kSectionTitleKey];
-    NSString *descTitle = self.dataSourceArray[section][kSourceKey];
-    NSNumber *keyboardType = self.dataSourceArray[section][kViewKey];
-    
-    static NSString *kCellSummary = @"CellSummary";
-    static NSString *kCellTextField_ID = @"CellTextField_ID";    
-    if (section == 0) {
-        TextViewTableCell *temp = [tableView dequeueReusableCellWithIdentifier:kCellSummary];
-        if (temp == nil) {
-            temp = [[TextViewTableCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:kCellSummary];
-        }
-        [temp setContentForTableCellLabel:title andTextView:descTitle andKeyBoardType:keyboardType andEnabled:isEditing];
-        cell = temp;
-    } else {
-        TextFieldTableCell *temp = (TextFieldTableCell*) [tableView dequeueReusableCellWithIdentifier:kCellTextField_ID];
-        
-        if (temp == nil)
+   
+    static NSString *kCellName = @"CellName";
+    static NSString *kCellWhat = @"CellWhat";
+    static NSString *kCellHow = @"CellHow";
+    static NSString *kCellWhen = @"CellWhen";
+    static NSString *kCellWhere = @"CellWhere";
+  
+    switch (section) {
+        case 0:
         {
-            temp = [[TextFieldTableCell alloc] initWithStyle:UITableViewCellStyleSubtitle
-                                           reuseIdentifier:kCellTextField_ID] ;
-            temp.selectionStyle = UITableViewCellSelectionStyleNone;
+            NameCell *temp = [tableView dequeueReusableCellWithIdentifier:kCellName];
+            if (temp == nil) {
+                temp = [[NameCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:kCellName];
+            }
+            temp.textView.tag = 100 *(section + 1) + row;
+            temp.textView.delegate = self;
+            [temp setContentForTableCellTextView:event.name Editing:isEditing];
+            cell = temp;
+            
+            break;
         }
-        temp.textField.delegate = self;
-        temp.textField.tag = 100*section + row;
-     
-        [temp setContentForTableCellLabel:title andTextField:descTitle andKeyBoardType:keyboardType andEnabled:isEditing];
-        cell = temp;
+        case 1: // when
+        {
+            WhenCell *temp = (WhenCell *) [tableView dequeueReusableCellWithIdentifier:kCellWhen];
+            if (temp == nil) {
+                temp = [[WhenCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:kCellWhen];
+            }
+            temp.dateTextField.tag = 100*(section+1);
+            temp.timeTextField.tag = 100 * (section + 1) + 1;
+            temp.dateTextField.text = event.when;
+            [temp setContentForTableCellLabel:NSLocalizedString(@"When", @"When") Editing:isEditing];
+            cell = temp;
+            break;
+        }
+        case 2: // where
+        {
+            WhereCell *temp = (WhereCell *)[tableView dequeueReusableCellWithIdentifier:kCellWhere];
+            if (temp == nil) {
+                temp = [[WhereCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:kCellWhere];
+            }
+            temp.nameTextField.tag = 100*(section+1);
+            temp.addressButton.tag = 100 * (section + 1) + 1;
+            temp.addressButton.enabled = isEditing;
+            [temp.addressButton addTarget:self action:@selector(onAddressSearch:) forControlEvents:UIControlEventTouchUpInside];
+            [temp setContentForTableCellLabel:NSLocalizedString(@"Where", @"Where") andTextField:event.where andEnabled:isEditing];
+            UIActivityIndicatorView *activityIndicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
+            activityIndicator.frame = CGRectMake(25.0, 280.0, 20.0, 20.0);
+            [activityIndicator startAnimating];
+            [temp.contentView addSubview:activityIndicator];
+            cell = temp;
+            break;
+        }
+            
+        case 3:  // what
+        {
+            WhatCell *temp = (WhatCell*) [tableView dequeueReusableCellWithIdentifier:kCellWhat];
+            if (temp == nil)
+            {
+                temp = [[WhatCell alloc] initWithStyle:UITableViewCellStyleSubtitle
+                                                 reuseIdentifier:kCellWhat] ;
+                temp.selectionStyle = UITableViewCellSelectionStyleNone;
+            }
+            temp.textField.delegate = self;
+            temp.textField.tag = 100*(section+1) + row;
+            
+            [temp setContentForTableCellLabel:NSLocalizedString(@"What", @"What") andTextField:event.what andEnabled:isEditing];
+            cell = temp;
+            
+            break;
+        }
+        
+        case 4: // how
+        {
+            HowCell *temp = (HowCell *)[tableView dequeueReusableCellWithIdentifier:kCellHow];
+            if (temp == nil) {
+                temp = [[HowCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:kCellHow];
+            }
+            temp.textView.tag = 100 *(section + 1) + row;
+            temp.textView.delegate = self;
+            [temp setContentForTableCellLabel:NSLocalizedString(@"How", @"How") andTextView:event.how  andEnabled:isEditing];
+            cell = temp;
+            break;
+        }
+        default:
+            break;
     }
+    
     return cell;
 }
 
@@ -318,13 +413,6 @@ static NSString *kViewKey = @"viewKey";
 
 - (BOOL)textFieldShouldBeginEditing:(UITextField *)textField
 {
-    // the textfield's super view is TextField Cell
-    if ([[textField superview] isKindOfClass:[TextFieldTableCell class]]) {
-        TextFieldTableCell *cell = (TextFieldTableCell *)[textField superview];
-//        activeIndexPath = [self.tableView indexPathForCell:cell];
-        activeCell = cell;
-    }
-    
     // should this be an independent class?
     UIToolbar *keyboardToolbar = [[UIToolbar alloc] initWithFrame:CGRectMake(0, 0.0, self.view.frame.size.width, 40)];
     keyboardToolbar.barStyle = UIBarStyleBlackTranslucent;
@@ -429,14 +517,9 @@ static NSString *kViewKey = @"viewKey";
 #pragma mark - UIBarButton Item
 - (void)onDone:(id)sender
 {
-    NSArray *visiableCells = [self.tableView visibleCells];
-    [visiableCells enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
-        if ([obj isKindOfClass:[TextFieldTableCell class]]) {
-            TextFieldTableCell *cell = (TextFieldTableCell *)obj;
-            [cell.textField resignFirstResponder];
-        }
-        
-    }];
+    NSLog(@"100: %@",[self.tableView viewWithTag:100]);
+    
+  
 }
 
 
@@ -457,28 +540,28 @@ static NSString *kViewKey = @"viewKey";
 - (void)pickerView:(UIPickerView *)pickerView didSelectRow:(NSInteger)row inComponent:(NSInteger)component
 {
     NSString *key = [howDataDictionary allKeys][component];
-    NSString *selected = ((NSArray *)howDataDictionary[key])[row];
+    NSArray *selected = howDataDictionary[key];
     if (pickerView.tag == 101) {
         
         switch (component) {
             case 0:
             {
-                [selectedDictionary setValue:selected forKey:@"inAdvance"];
+                event.inAdvance = [NSNumber numberWithInt:row];
                 break;
             }
             case 1:
             {
-                [selectedDictionary setValue:selected forKey:@"repeat"];
+                event.frequency = [NSNumber numberWithInt:row];
                 break;
             }
             case 2:
             {
-                [selectedDictionary setValue:selected forKey:@"location"];
+                event.geoFencingPreference = [NSNumber numberWithInt:row];
                 break;
             }
             case 3:
             {
-                [selectedDictionary setValue:selected forKey:@"priority"];
+                event.prority = [NSNumber numberWithInt:row];
                 break;
             }
             default:
@@ -487,10 +570,7 @@ static NSString *kViewKey = @"viewKey";
     }
     
     
-    UITableViewCell *cell = [self.tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:4]];
-    if ([cell isKindOfClass:[TextFieldTableCell class]]) {
-        ((TextFieldTableCell *)cell).textField.text = [NSString stringWithFormat:@"%@", selectedDictionary];;
-    }
+    event.how = [NSString stringWithFormat:@"%@, %@, %@, %@",selected[[event.inAdvance intValue]], selected[[event.frequency intValue]],selected[[event.geoFencingPreference intValue]], selected[[event.prority intValue]]];
 }
 
 

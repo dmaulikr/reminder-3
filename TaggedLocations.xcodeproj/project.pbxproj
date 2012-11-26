@@ -40,12 +40,15 @@
 		D6B52B231662805B002A339D /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D6B52B221662805B002A339D /* MapKit.framework */; };
 		D6B52B281662F924002A339D /* VaFeedbackViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D6B52B261662F924002A339D /* VaFeedbackViewController.m */; };
 		D6B52B291662F924002A339D /* VaFeedbackViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = D6B52B271662F924002A339D /* VaFeedbackViewController.xib */; };
-		D6B52B2C16630137002A339D /* TextViewTableCell.m in Sources */ = {isa = PBXBuildFile; fileRef = D6B52B2B16630137002A339D /* TextViewTableCell.m */; };
+		D6B52B3216631319002A339D /* WhenCell.m in Sources */ = {isa = PBXBuildFile; fileRef = D6B52B3116631319002A339D /* WhenCell.m */; };
+		D6B52B351663181C002A339D /* NameCell.m in Sources */ = {isa = PBXBuildFile; fileRef = D6B52B331663181C002A339D /* NameCell.m */; };
+		D6B52B3A16631A43002A339D /* HowCell.m in Sources */ = {isa = PBXBuildFile; fileRef = D6B52B3716631A41002A339D /* HowCell.m */; };
+		D6B52B3B16631A43002A339D /* WhatCell.m in Sources */ = {isa = PBXBuildFile; fileRef = D6B52B3916631A42002A339D /* WhatCell.m */; };
+		D6B52B3E16631B09002A339D /* WhereCell.m in Sources */ = {isa = PBXBuildFile; fileRef = D6B52B3C16631B09002A339D /* WhereCell.m */; };
 		D6BEA9621659644A00D05AFC /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = D6BEA9611659644A00D05AFC /* Default-568h@2x.png */; };
 		D6BEA96716596B7400D05AFC /* RootViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = D6BEA96516596B7400D05AFC /* RootViewController.xib */; };
 		D6CCB3331660370400A1B361 /* ItemDetailViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = D6CCB32E1660370300A1B361 /* ItemDetailViewController.xib */; };
 		D6CCB3341660370400A1B361 /* ItemDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D6CCB32F1660370300A1B361 /* ItemDetailViewController.m */; };
-		D6CCB3351660370400A1B361 /* TextFieldTableCell.m in Sources */ = {isa = PBXBuildFile; fileRef = D6CCB3321660370300A1B361 /* TextFieldTableCell.m */; };
 		D6CCB3391660379500A1B361 /* CustomTextField.m in Sources */ = {isa = PBXBuildFile; fileRef = D6CCB3371660379500A1B361 /* CustomTextField.m */; };
 		D6CCB33B1660387500A1B361 /* EventDetail.plist in Resources */ = {isa = PBXBuildFile; fileRef = D6CCB33A1660387500A1B361 /* EventDetail.plist */; };
 		D6CCB36216604D6600A1B361 /* HighlightingTextView.m in Sources */ = {isa = PBXBuildFile; fileRef = D6CCB35316604D6600A1B361 /* HighlightingTextView.m */; };
@@ -114,15 +117,21 @@
 		D6B52B251662F924002A339D /* VaFeedbackViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VaFeedbackViewController.h; sourceTree = "<group>"; };
 		D6B52B261662F924002A339D /* VaFeedbackViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VaFeedbackViewController.m; sourceTree = "<group>"; };
 		D6B52B271662F924002A339D /* VaFeedbackViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = VaFeedbackViewController.xib; sourceTree = "<group>"; };
-		D6B52B2A16630137002A339D /* TextViewTableCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TextViewTableCell.h; sourceTree = "<group>"; };
-		D6B52B2B16630137002A339D /* TextViewTableCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TextViewTableCell.m; sourceTree = "<group>"; };
+		D6B52B3016631319002A339D /* WhenCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = WhenCell.h; path = Classes/WhenCell.h; sourceTree = "<group>"; };
+		D6B52B3116631319002A339D /* WhenCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = WhenCell.m; path = Classes/WhenCell.m; sourceTree = "<group>"; };
+		D6B52B331663181C002A339D /* NameCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = NameCell.m; path = Classes/NameCell.m; sourceTree = "<group>"; };
+		D6B52B341663181C002A339D /* NameCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = NameCell.h; path = Classes/NameCell.h; sourceTree = "<group>"; };
+		D6B52B3616631A41002A339D /* HowCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HowCell.h; sourceTree = "<group>"; };
+		D6B52B3716631A41002A339D /* HowCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HowCell.m; sourceTree = "<group>"; };
+		D6B52B3816631A41002A339D /* WhatCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WhatCell.h; sourceTree = "<group>"; };
+		D6B52B3916631A42002A339D /* WhatCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WhatCell.m; sourceTree = "<group>"; };
+		D6B52B3C16631B09002A339D /* WhereCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = WhereCell.m; path = Classes/WhereCell.m; sourceTree = "<group>"; };
+		D6B52B3D16631B09002A339D /* WhereCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = WhereCell.h; path = Classes/WhereCell.h; sourceTree = "<group>"; };
 		D6BEA9611659644A00D05AFC /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x.png"; sourceTree = "<group>"; };
 		D6BEA96616596B7400D05AFC /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/RootViewController.xib; sourceTree = "<group>"; };
 		D6CCB32E1660370300A1B361 /* ItemDetailViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ItemDetailViewController.xib; sourceTree = "<group>"; };
 		D6CCB32F1660370300A1B361 /* ItemDetailViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ItemDetailViewController.m; sourceTree = "<group>"; };
 		D6CCB3301660370300A1B361 /* ItemDetailViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ItemDetailViewController.h; sourceTree = "<group>"; };
-		D6CCB3311660370300A1B361 /* TextFieldTableCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TextFieldTableCell.h; sourceTree = "<group>"; };
-		D6CCB3321660370300A1B361 /* TextFieldTableCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TextFieldTableCell.m; sourceTree = "<group>"; };
 		D6CCB3371660379500A1B361 /* CustomTextField.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CustomTextField.m; sourceTree = "<group>"; };
 		D6CCB3381660379500A1B361 /* CustomTextField.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CustomTextField.h; sourceTree = "<group>"; };
 		D6CCB33A1660387500A1B361 /* EventDetail.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = EventDetail.plist; sourceTree = "<group>"; };
@@ -170,21 +179,21 @@
 		080E96DDFE201D6D7F000001 /* View Controllers */ = {
 			isa = PBXGroup;
 			children = (
+				D6B52B3616631A41002A339D /* HowCell.h */,
+				D6B52B3716631A41002A339D /* HowCell.m */,
+				D6B52B3816631A41002A339D /* WhatCell.h */,
+				D6B52B3916631A42002A339D /* WhatCell.m */,
 				D6B52B241662F924002A339D /* feedback */,
 				D6CCB32E1660370300A1B361 /* ItemDetailViewController.xib */,
 				D6CCB32F1660370300A1B361 /* ItemDetailViewController.m */,
 				D6CCB3301660370300A1B361 /* ItemDetailViewController.h */,
 				D6CCB33A1660387500A1B361 /* EventDetail.plist */,
-				D6CCB3311660370300A1B361 /* TextFieldTableCell.h */,
-				D6CCB3321660370300A1B361 /* TextFieldTableCell.m */,
 				28C286DF0D94DF7D0034E888 /* RootViewController.h */,
 				28C286E00D94DF7D0034E888 /* RootViewController.m */,
 				D6CCB3371660379500A1B361 /* CustomTextField.m */,
 				D6CCB3381660379500A1B361 /* CustomTextField.h */,
 				28FB88840FCCA80500EBA711 /* TagSelectionController.h */,
 				28FB88850FCCA80500EBA711 /* TagSelectionController.m */,
-				D6B52B2A16630137002A339D /* TextViewTableCell.h */,
-				D6B52B2B16630137002A339D /* TextViewTableCell.m */,
 			);
 			name = "View Controllers";
 			path = Classes;
@@ -233,6 +242,12 @@
 		29B97314FDCFA39411CA2CEA /* CustomTemplate */ = {
 			isa = PBXGroup;
 			children = (
+				D6B52B3C16631B09002A339D /* WhereCell.m */,
+				D6B52B3D16631B09002A339D /* WhereCell.h */,
+				D6B52B331663181C002A339D /* NameCell.m */,
+				D6B52B341663181C002A339D /* NameCell.h */,
+				D6B52B3016631319002A339D /* WhenCell.h */,
+				D6B52B3116631319002A339D /* WhenCell.m */,
 				D6B52ACB1661DE21002A339D /* GoogleLocations */,
 				D6CCB35116604D6600A1B361 /* Detail */,
 				D6BEA9611659644A00D05AFC /* Default-568h@2x.png */,
@@ -457,7 +472,6 @@
 				28B1247A0FCDB70900FA3CBF /* EventTableViewCell.m in Sources */,
 				283659D00FD8513400B8A769 /* Tag.m in Sources */,
 				D6CCB3341660370400A1B361 /* ItemDetailViewController.m in Sources */,
-				D6CCB3351660370400A1B361 /* TextFieldTableCell.m in Sources */,
 				D6CCB3391660379500A1B361 /* CustomTextField.m in Sources */,
 				D6CCB36216604D6600A1B361 /* HighlightingTextView.m in Sources */,
 				D6CCB36316604D6600A1B361 /* Play.m in Sources */,
@@ -471,7 +485,11 @@
 				D6B52B0B1661DE21002A339D /* GooglePlacesObject.m in Sources */,
 				D6B52B0C1661DE21002A339D /* GTMNSString+URLArguments.m in Sources */,
 				D6B52B281662F924002A339D /* VaFeedbackViewController.m in Sources */,
-				D6B52B2C16630137002A339D /* TextViewTableCell.m in Sources */,
+				D6B52B3216631319002A339D /* WhenCell.m in Sources */,
+				D6B52B351663181C002A339D /* NameCell.m in Sources */,
+				D6B52B3A16631A43002A339D /* HowCell.m in Sources */,
+				D6B52B3B16631A43002A339D /* WhatCell.m in Sources */,
+				D6B52B3E16631B09002A339D /* WhereCell.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

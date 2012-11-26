@@ -6,27 +6,31 @@
 //
 //
 
-#import "TextViewTableCell.h"
+#import "NameCell.h"
 #import <QuartzCore/QuartzCore.h>
 
 #define kTextFieldWidth	140.0
-#define kTextHeight		34.0
+#define kTextHeight		40.0
+#define kPadding 5.0
 
-@implementation TextViewTableCell
+@implementation NameCell
 @synthesize textView;
 - (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier
 {
     self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
     if (self) {
         // Initialization code
-        textView = [[UITextView alloc] initWithFrame:CGRectMake(100, 5.0, kTextFieldWidth, 80.0)];
+        textView = [[UITextView alloc] initWithFrame:CGRectMake(kPadding, kPadding, kTextFieldWidth, kTextHeight)];
         textView.contentInset = UIEdgeInsetsMake(0, 5, 0, 5);
+        
         // We also don't want to set the returnkey of keyboard "Done" for the TextView
         // because the user might just want to change to new line
         textView.returnKeyType = UIReturnKeyDefault;
+        textView.keyboardType = UIKeyboardTypeDefault;
         textView.font = [UIFont systemFontOfSize:14.0f];
         textView.backgroundColor = [UIColor clearColor];
-        self.accessoryView = textView;
+        textView.userInteractionEnabled = NO;
+        [self.contentView addSubview:textView];
     }
     return self;
 }
@@ -51,5 +55,14 @@
     
 }
 
+- (void)setContentForTableCellTextView:(NSString *)text Editing:(BOOL)isEditing
+{
+    self.textView.text = text;
+    self.textView.layer.cornerRadius = 4.0f;
+    self.textView.layer.masksToBounds = YES;
+    self.textView.layer.borderColor = (isEditing)?[[UIColor redColor]CGColor]:[[UIColor clearColor]CGColor];
+    self.textView.layer.borderWidth = 1.0f;
+    self.textView.userInteractionEnabled = isEditing;
+}
 
 @end

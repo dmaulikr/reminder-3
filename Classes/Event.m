@@ -25,5 +25,10 @@
 @dynamic where;
 @dynamic how;
 @dynamic what;
+@dynamic geoFencingPreference;
+@dynamic frequency;
+@dynamic inAdvance;
+@dynamic prority;
+
 
 @end
