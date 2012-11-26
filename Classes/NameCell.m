@@ -29,7 +29,7 @@
         textView.keyboardType = UIKeyboardTypeDefault;
         textView.font = [UIFont systemFontOfSize:14.0f];
         textView.backgroundColor = [UIColor clearColor];
-        textView.userInteractionEnabled = NO;
+        textView.userInteractionEnabled = YES;
         [self.contentView addSubview:textView];
     }
     return self;
@@ -40,20 +40,13 @@
     [super setSelected:selected animated:animated];
 
     // Configure the view for the selected state
-}
-
-- (void)setContentForTableCellLabel:(NSString*)title andTextView:(NSString *)text andKeyBoardType:(NSNumber *)type andEnabled:(BOOL)enabled
-{
-    self.textLabel.text = title;
-    self.textView.text = text;
-    self.textView.keyboardType = [type intValue];
     self.textView.layer.cornerRadius = 4.0f;
     self.textView.layer.masksToBounds = YES;
-    self.textView.layer.borderColor = (enabled)?[[UIColor redColor]CGColor]:[[UIColor clearColor]CGColor];
+    self.textView.layer.borderColor = (selected)?[[UIColor redColor]CGColor]:[[UIColor clearColor]CGColor];
     self.textView.layer.borderWidth = 1.0f;
-    self.textView.userInteractionEnabled = enabled;
-    
+
 }
+
 
 - (void)setContentForTableCellTextView:(NSString *)text Editing:(BOOL)isEditing
 {

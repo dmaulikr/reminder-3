@@ -10,8 +10,7 @@
 #import "CustomTextField.h"
 #import <QuartzCore/QuartzCore.h>
 
-#define kLabelWidth	140.0
-#define kTextFieldWidth	220.0
+#define kTextFieldWidth	210.0
 #define kTextHeight		20.0
 #define kPadding 2.0
 
@@ -24,11 +23,11 @@
     if (self) {
         // Initialization code
         CGRect frame = CGRectMake(80, kPadding, kTextFieldWidth, kTextHeight);
-        dateTextField = [[CustomTextField alloc] initWithFrame:frame];
+        dateTextField = [[UITextField alloc] initWithFrame:frame];
         dateTextField.borderStyle = UITextBorderStyleNone;
         dateTextField.textColor = [UIColor blackColor];
         dateTextField.font = [UIFont systemFontOfSize:13.0];
-        dateTextField.textAlignment = NSTextAlignmentLeft;
+        dateTextField.textAlignment = NSTextAlignmentRight;
         dateTextField.contentVerticalAlignment = UIControlContentVerticalAlignmentCenter;
         dateTextField.enabled = NO;
         dateTextField.backgroundColor = [UIColor clearColor];
@@ -36,7 +35,7 @@
         
         dateTextField.returnKeyType = UIReturnKeyDone;
         dateTextField.clearButtonMode = UITextFieldViewModeWhileEditing;	// has a clear 'x' button to the right
-        [self.contentView addSubview:dateTextField];
+        [self addSubview:dateTextField];
         
         timeTextField = [[CustomTextField alloc] initWithFrame:frame];
         timeTextField.borderStyle = UITextBorderStyleNone;
@@ -50,9 +49,9 @@
         
         timeTextField.returnKeyType = UIReturnKeyDone;
         timeTextField.clearButtonMode = UITextFieldViewModeWhileEditing;	// has a clear 'x' button to the right
-        [self.contentView addSubview:timeTextField];
+        [self addSubview:timeTextField];
         
-         self.selectionStyle = UITableViewCellSelectionStyleNone;
+        self.selectionStyle = UITableViewCellSelectionStyleNone;
         
         
     }

@@ -180,25 +180,25 @@ static NSString *kViewKey = @"viewKey";
 
     
 //    NSLog(@"what: %@, when: %@, where :%@",what, when, where);
-    self.dataSourceArray = @[@{kSectionTitleKey: @"Summary",
-                             kSourceKey: event.name,
-                             kViewKey: @(UIKeyboardTypeDefault)},
-							
-							@{kSectionTitleKey: @"When",
-                             kSourceKey: event.when,
-                             kViewKey: @(UIKeyboardTypeNamePhonePad)},
-							
-							@{kSectionTitleKey: @"Where",
-                             kSourceKey: event.where,
-                             kViewKey: @(UIKeyboardTypePhonePad)},
-						    
-                            @{kSectionTitleKey: @"What",
-                             kSourceKey: event.what,
-                             kViewKey: @(UIKeyboardTypeDefault)},
-                            
-                            @{kSectionTitleKey: @"How",
-                             kSourceKey: event.how,
-                             kViewKey: @(UIKeyboardTypeDefault)}];
+//    self.dataSourceArray = @[@{kSectionTitleKey: @"Summary",
+//                             kSourceKey: event.name,
+//                             kViewKey: @(UIKeyboardTypeDefault)},
+//							
+//							@{kSectionTitleKey: @"When",
+//                             kSourceKey: event.when,
+//                             kViewKey: @(UIKeyboardTypeNamePhonePad)},
+//							
+//							@{kSectionTitleKey: @"Where",
+//                             kSourceKey: event.where,
+//                             kViewKey: @(UIKeyboardTypePhonePad)},
+//						    
+//                            @{kSectionTitleKey: @"What",
+//                             kSourceKey: event.what,
+//                             kViewKey: @(UIKeyboardTypeDefault)},
+//                            
+//                            @{kSectionTitleKey: @"How",
+//                             kSourceKey: event.how,
+//                             kViewKey: @(UIKeyboardTypeDefault)}];
 	
 	self.title = NSLocalizedString(@"Event Detail", @"Event Detail");
 	
@@ -274,28 +274,22 @@ static NSString *kViewKey = @"viewKey";
     // Dispose of any resources that can be recreated.
 }
 
-- (void)onCheckButton:(id)sender
-{
-    NSLog(@"we save the user info");
-}
 
 #pragma mark - Table view data source
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    return (indexPath.section == 0)? 100.0: 60.0;
+    return (indexPath.section == 0 || indexPath.section == 4)? 100.0: 44.0;
 }
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
-    // Return the number of sections.
-    return [self.dataSourceArray count];
+    return 5;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     // Return the number of rows in the section.
-//    return [self.dataSourceArray count];
     return 1;
 }
 
@@ -320,6 +314,7 @@ static NSString *kViewKey = @"viewKey";
             }
             temp.textView.tag = 100 *(section + 1) + row;
             temp.textView.delegate = self;
+//            temp.textView.text = event.name;
             [temp setContentForTableCellTextView:event.name Editing:isEditing];
             cell = temp;
             
@@ -352,7 +347,7 @@ static NSString *kViewKey = @"viewKey";
             UIActivityIndicatorView *activityIndicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
             activityIndicator.frame = CGRectMake(25.0, 280.0, 20.0, 20.0);
             [activityIndicator startAnimating];
-            [temp.contentView addSubview:activityIndicator];
+            [temp addSubview:activityIndicator];
             cell = temp;
             break;
         }
@@ -413,16 +408,20 @@ static NSString *kViewKey = @"viewKey";
 
 - (BOOL)textFieldShouldBeginEditing:(UITextField *)textField
 {
+    UIBarButtonItem *doneItem = [[UIBarButtonItem alloc] initWithTitle:@"Done" style:UIBarButtonItemStyleDone target:self action:@selector(onDone:)];
+    self.navigationItem.rightBarButtonItem = doneItem;
+
+    
     // should this be an independent class?
-    UIToolbar *keyboardToolbar = [[UIToolbar alloc] initWithFrame:CGRectMake(0, 0.0, self.view.frame.size.width, 40)];
-    keyboardToolbar.barStyle = UIBarStyleBlackTranslucent;
-    keyboardToolbar.tintColor = [UIColor darkGrayColor];
-    
-    UIBarButtonItem *doneItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(onDone:)];
-    
-    NSArray *itemsArray =  @[doneItem];
-    keyboardToolbar.items = itemsArray;
-    textField.inputAccessoryView = keyboardToolbar;
+//    UIToolbar *keyboardToolbar = [[UIToolbar alloc] initWithFrame:CGRectMake(0, 0.0, self.view.frame.size.width, 40)];
+//    keyboardToolbar.barStyle = UIBarStyleBlackTranslucent;
+//    keyboardToolbar.tintColor = [UIColor darkGrayColor];
+//    
+//    UIBarButtonItem *doneItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(onDone:)];
+//    
+//    NSArray *itemsArray =  @[doneItem];
+//    keyboardToolbar.items = itemsArray;
+//    textField.inputAccessoryView = keyboardToolbar;
     
     if (textField.tag == 100){
         UIDatePicker *datePickerView = [[UIDatePicker alloc] initWithFrame:CGRectZero];
@@ -499,13 +498,23 @@ static NSString *kViewKey = @"viewKey";
     
 }
 
-#pragma mark - UITextField Delegate methods
 
 - (BOOL)textFieldShouldReturn:(UITextField *)textField
 {
 	// the user pressed the "Done" button, so dismiss the keyboard
 	[textField resignFirstResponder];
 	return YES;
+}
+
+#pragma mark - UITextView Delegate methods
+- (BOOL)textViewShouldBeginEditing:(UITextView *)textView
+{
+    if (self.navigationItem.rightBarButtonItem == nil) {
+        UIBarButtonItem *doneItem = [[UIBarButtonItem alloc] initWithTitle:@"Done" style:UIBarButtonItemStyleDone target:self action:@selector(onDone:)];
+        self.navigationItem.rightBarButtonItem = doneItem;
+    }
+    
+    return YES;
 }
 
 - (BOOL)textViewShouldEndEditing:(UITextView *)textView

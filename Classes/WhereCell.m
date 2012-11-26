@@ -11,7 +11,7 @@
 #import "CustomTextField.h"
 
 #define kLabelWidth	140.0
-#define kTextFieldWidth	220.0
+#define kTextFieldWidth	215.0
 #define kTextHeight		20.0
 #define kPadding 2.0
 
@@ -23,11 +23,11 @@
     if (self) {
         // Initialization code
         CGRect frame = CGRectMake(80, kPadding, kTextFieldWidth, kTextHeight);
-        nameTextField = [[CustomTextField alloc] initWithFrame:frame];
+        nameTextField = [[UITextField alloc] initWithFrame:frame];
         nameTextField.borderStyle = UITextBorderStyleNone;
         nameTextField.textColor = [UIColor blackColor];
         nameTextField.font = [UIFont systemFontOfSize:13.0];
-        nameTextField.textAlignment = NSTextAlignmentLeft;
+        nameTextField.textAlignment = NSTextAlignmentRight;
         nameTextField.contentVerticalAlignment = UIControlContentVerticalAlignmentCenter;
         nameTextField.enabled = NO;
         nameTextField.backgroundColor = [UIColor clearColor];
@@ -35,10 +35,10 @@
         
         nameTextField.returnKeyType = UIReturnKeyDone;
         nameTextField.clearButtonMode = UITextFieldViewModeWhileEditing;	// has a clear 'x' button to the right
-        [self.contentView addSubview:nameTextField];
+        [self addSubview:nameTextField];
         addressButton = [UIButton buttonWithType:UIButtonTypeCustom];
         addressButton.frame = CGRectMake(155.0, kTextHeight+2*kPadding, kTextFieldWidth, kTextHeight);
-        [self.contentView addSubview:addressButton];
+        [self addSubview:addressButton];
         self.selectionStyle = UITableViewCellSelectionStyleNone;
 
     }

@@ -327,7 +327,7 @@ static NSString *kViewKey = @"viewKey";
 - (void)textFieldDidBeginEditing:(UITextField *)textField
 {
     // create a "done" item as the right barButtonItem so user can dismiss the keyboard
-     UIBarButtonItem *doneItem = [[UIBarButtonItem alloc] initWithTitle:@"Done" style:UIBarButtonItemStyleDone target:self action:@selector(onDone:)];
+    UIBarButtonItem *doneItem = [[UIBarButtonItem alloc] initWithTitle:@"Done" style:UIBarButtonItemStyleDone target:self action:@selector(onDone:)];
     self.navigationItem.rightBarButtonItem = doneItem;
     selected = textField.tag - 10;
     
