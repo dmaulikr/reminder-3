@@ -18,10 +18,12 @@
 //#import "SSTheme.h"
 #define kTextFieldWidth	195.0
 #define kTextHeight		34.0
-
-static NSString *kSectionTitleKey = @"sectionTitleKey";
-static NSString *kSourceKey = @"sourceKey";
-static NSString *kViewKey = @"viewKey";
+#define kSummary 0
+#define kTime 1
+#define kDate 2
+#define kWhere 3
+#define kWhat 4
+#define kHow 5
 
 @interface ItemDetailViewController ()<UITextFieldDelegate, UIPickerViewDataSource, UIPickerViewDelegate, GooglePlacesConnectionDelegate, UITextViewDelegate>
 @property (nonatomic, retain) NSArray *dataSourceArray;
@@ -176,30 +178,6 @@ static NSString *kViewKey = @"viewKey";
         event.when = whenString;
     }
     
-//    __block NSMutableString *howString = [NSMutableString string];
-
-    
-//    NSLog(@"what: %@, when: %@, where :%@",what, when, where);
-//    self.dataSourceArray = @[@{kSectionTitleKey: @"Summary",
-//                             kSourceKey: event.name,
-//                             kViewKey: @(UIKeyboardTypeDefault)},
-//							
-//							@{kSectionTitleKey: @"When",
-//                             kSourceKey: event.when,
-//                             kViewKey: @(UIKeyboardTypeNamePhonePad)},
-//							
-//							@{kSectionTitleKey: @"Where",
-//                             kSourceKey: event.where,
-//                             kViewKey: @(UIKeyboardTypePhonePad)},
-//						    
-//                            @{kSectionTitleKey: @"What",
-//                             kSourceKey: event.what,
-//                             kViewKey: @(UIKeyboardTypeDefault)},
-//                            
-//                            @{kSectionTitleKey: @"How",
-//                             kSourceKey: event.how,
-//                             kViewKey: @(UIKeyboardTypeDefault)}];
-	
 	self.title = NSLocalizedString(@"Event Detail", @"Event Detail");
 	
 	// we aren't editing any fields yet, it will be in edit when the user touches an edit field
@@ -284,7 +262,7 @@ static NSString *kViewKey = @"viewKey";
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
-    return 5;
+    return 6;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
@@ -306,7 +284,7 @@ static NSString *kViewKey = @"viewKey";
     static NSString *kCellWhere = @"CellWhere";
   
     switch (section) {
-        case 0:
+        case kSummary:
         {
             NameCell *temp = [tableView dequeueReusableCellWithIdentifier:kCellName];
             if (temp == nil) {
@@ -320,20 +298,33 @@ static NSString *kViewKey = @"viewKey";
             
             break;
         }
-        case 1: // when
+        case kTime: // when / date
         {
             WhenCell *temp = (WhenCell *) [tableView dequeueReusableCellWithIdentifier:kCellWhen];
             if (temp == nil) {
                 temp = [[WhenCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:kCellWhen];
             }
             temp.dateTextField.tag = 100*(section+1);
-            temp.timeTextField.tag = 100 * (section + 1) + 1;
+//            temp.timeTextField.tag = 100 * (section + 1) + 1;
             temp.dateTextField.text = event.when;
-            [temp setContentForTableCellLabel:NSLocalizedString(@"When", @"When") Editing:isEditing];
+            [temp setContentForTableCellLabel:NSLocalizedString(@"Date", @"Date") Editing:isEditing];
             cell = temp;
             break;
         }
-        case 2: // where
+        case kDate: // when / time
+        {
+            WhenCell *temp = (WhenCell *) [tableView dequeueReusableCellWithIdentifier:kCellWhen];
+            if (temp == nil) {
+                temp = [[WhenCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:kCellWhen];
+            }
+            temp.dateTextField.tag = 100*(section+1);
+//            temp.timeTextField.tag = 100 * (section + 1) + 1;
+            temp.dateTextField.text = event.when;
+            [temp setContentForTableCellLabel:NSLocalizedString(@"Time", @"Time") Editing:isEditing];
+            cell = temp;
+            break;
+        }
+        case kWhere: // where
         {
             WhereCell *temp = (WhereCell *)[tableView dequeueReusableCellWithIdentifier:kCellWhere];
             if (temp == nil) {
@@ -352,7 +343,7 @@ static NSString *kViewKey = @"viewKey";
             break;
         }
             
-        case 3:  // what
+        case kWhat:  // what
         {
             WhatCell *temp = (WhatCell*) [tableView dequeueReusableCellWithIdentifier:kCellWhat];
             if (temp == nil)
@@ -370,7 +361,7 @@ static NSString *kViewKey = @"viewKey";
             break;
         }
         
-        case 4: // how
+        case kHow: // how
         {
             HowCell *temp = (HowCell *)[tableView dequeueReusableCellWithIdentifier:kCellHow];
             if (temp == nil) {
