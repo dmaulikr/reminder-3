@@ -56,7 +56,7 @@
 
 @class EventTableViewCell;
 
-@interface RootViewController : UITableViewController <UISearchDisplayDelegate, UISearchBarDelegate, CLLocationManagerDelegate, UITextFieldDelegate, UIAlertViewDelegate, EKEventEditViewDelegate, EKCalendarChooserDelegate> {
+@interface RootViewController : UITableViewController <UISearchDisplayDelegate, UISearchBarDelegate, CLLocationManagerDelegate, UITextFieldDelegate, UIAlertViewDelegate, EKEventEditViewDelegate, EKCalendarChooserDelegate, UIActionSheetDelegate> {
 	
     NSMutableArray *eventsArray;
     NSMutableArray	*filteredListContent;	// The content filtered as a result of a search.

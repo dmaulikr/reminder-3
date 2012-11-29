@@ -22,6 +22,7 @@
 #import "TableViewController.h"
 #import "AppCalendar.h"
 #import "PlaceSearchViewController.h"
+#import "TaggedLocationsAppDelegate.h"
 
 @implementation RootViewController
 
@@ -50,6 +51,9 @@
 	
 	addButton.enabled = NO;
     self.navigationItem.rightBarButtonItem = addButton;
+    
+    // detect shake
+    [self becomeFirstResponder];
     
 	// Start the location manager.
 	[[self locationManager] startUpdatingLocation];
@@ -741,14 +745,15 @@
             {
                 [self.filteredListContent addObject:event];
             }
-        } else if ([scope isEqualToString:@"Label"]){
-            NSRange descriptionRange = [name rangeOfString:searchText options:NSCaseInsensitiveSearch];
-            if(descriptionRange.location != NSNotFound)
-            {
-                [self.filteredListContent addObject:event];
-            }
-            
         }
+//        else if ([scope isEqualToString:@"Label"]){
+//            NSRange descriptionRange = [name rangeOfString:searchText options:NSCaseInsensitiveSearch];
+//            if(descriptionRange.location != NSNotFound)
+//            {
+//                [self.filteredListContent addObject:event];
+//            }
+//            
+//        }
 	}
 }
 
@@ -815,6 +820,24 @@
     localNotif.userInfo = infoDict;
     
     [[UIApplication sharedApplication] scheduleLocalNotification:localNotif];
+}
+
+#pragma mark - Sort options
+- (BOOL)canBecomeFirstResponder
+{
+    return YES;
+    
+}
+
+- (void)motionEnded:(UIEventSubtype)motion withEvent:(UIEvent *)event
+{
+    if (motion == UIEventSubtypeMotionShake)
+    {
+        UIActionSheet *actionSheet = [[UIActionSheet alloc] initWithTitle:@"Sort By" delegate:self cancelButtonTitle:@"Cancel" destructiveButtonTitle:nil otherButtonTitles:@"Status",@"Expired Time",@"Name",@"Prority", nil];
+        actionSheet.destructiveButtonIndex = 3; // modified date will be highlighted
+        [actionSheet showInView:self.tableView];
+
+    }
 }
 
 @end
