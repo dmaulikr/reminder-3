@@ -51,10 +51,12 @@
  */
 
 #import <CoreLocation/CoreLocation.h>
+#import <UIKit/UIKit.h>
+#import <EventKitUI/EventKitUI.h>
 
 @class EventTableViewCell;
 
-@interface RootViewController : UITableViewController <UISearchDisplayDelegate, UISearchBarDelegate, CLLocationManagerDelegate, UITextFieldDelegate> {
+@interface RootViewController : UITableViewController <UISearchDisplayDelegate, UISearchBarDelegate, CLLocationManagerDelegate, UITextFieldDelegate, UIAlertViewDelegate, EKEventEditViewDelegate, EKCalendarChooserDelegate> {
 	
     NSMutableArray *eventsArray;
     NSMutableArray	*filteredListContent;	// The content filtered as a result of a search.

@@ -32,6 +32,9 @@
 		28C286E10D94DF7D0034E888 /* RootViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 28C286E00D94DF7D0034E888 /* RootViewController.m */; };
 		28C95C640F4FB4660037F30F /* Event.m in Sources */ = {isa = PBXBuildFile; fileRef = 28C95C630F4FB4660037F30F /* Event.m */; };
 		28FB88860FCCA80500EBA711 /* TagSelectionController.m in Sources */ = {isa = PBXBuildFile; fileRef = 28FB88850FCCA80500EBA711 /* TagSelectionController.m */; };
+		D6972DD41667B774002FD2AB /* AppCalendar.m in Sources */ = {isa = PBXBuildFile; fileRef = D6972DD31667B774002FD2AB /* AppCalendar.m */; };
+		D6972DD81667B83C002FD2AB /* EventKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D6972DD61667B83C002FD2AB /* EventKit.framework */; };
+		D6972DD91667B83C002FD2AB /* EventKitUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D6972DD71667B83C002FD2AB /* EventKitUI.framework */; };
 		D6B52B051661DE21002A339D /* DetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D6B52AD01661DE21002A339D /* DetailViewController.m */; };
 		D6B52B081661DE21002A339D /* MainStoryboard.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D6B52AD51661DE21002A339D /* MainStoryboard.storyboard */; };
 		D6B52B0A1661DE21002A339D /* GooglePlacesConnection.m in Sources */ = {isa = PBXBuildFile; fileRef = D6B52ADB1661DE21002A339D /* GooglePlacesConnection.m */; };
@@ -102,6 +105,10 @@
 		28FB88850FCCA80500EBA711 /* TagSelectionController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TagSelectionController.m; sourceTree = "<group>"; };
 		29B97316FDCFA39411CA2CEA /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		8D1107310486CEB800E47090 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; plistStructureDefinitionIdentifier = "com.apple.xcode.plist.structure-definition.iphone.info-plist"; sourceTree = "<group>"; };
+		D6972DD21667B774002FD2AB /* AppCalendar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppCalendar.h; sourceTree = "<group>"; };
+		D6972DD31667B774002FD2AB /* AppCalendar.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AppCalendar.m; sourceTree = "<group>"; };
+		D6972DD61667B83C002FD2AB /* EventKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = EventKit.framework; path = System/Library/Frameworks/EventKit.framework; sourceTree = SDKROOT; };
+		D6972DD71667B83C002FD2AB /* EventKitUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = EventKitUI.framework; path = System/Library/Frameworks/EventKitUI.framework; sourceTree = SDKROOT; };
 		D6B52ACF1661DE21002A339D /* DetailViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DetailViewController.h; sourceTree = "<group>"; };
 		D6B52AD01661DE21002A339D /* DetailViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DetailViewController.m; sourceTree = "<group>"; };
 		D6B52AD61661DE21002A339D /* en */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = en; path = en.lproj/MainStoryboard.storyboard; sourceTree = "<group>"; };
@@ -162,6 +169,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D6972DD81667B83C002FD2AB /* EventKit.framework in Frameworks */,
+				D6972DD91667B83C002FD2AB /* EventKitUI.framework in Frameworks */,
 				D6B52B231662805B002A339D /* MapKit.framework in Frameworks */,
 				D6CCB37516604F5F00A1B361 /* QuartzCore.framework in Frameworks */,
 				D6CCB37316604F2200A1B361 /* MessageUI.framework in Frameworks */,
@@ -180,6 +189,8 @@
 			isa = PBXGroup;
 			children = (
 				D6B52B3616631A41002A339D /* HowCell.h */,
+				D6972DD21667B774002FD2AB /* AppCalendar.h */,
+				D6972DD31667B774002FD2AB /* AppCalendar.m */,
 				D6B52B3716631A41002A339D /* HowCell.m */,
 				D6B52B3816631A41002A339D /* WhatCell.h */,
 				D6B52B3916631A42002A339D /* WhatCell.m */,
@@ -298,6 +309,8 @@
 		29B97323FDCFA39411CA2CEA /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				D6972DD61667B83C002FD2AB /* EventKit.framework */,
+				D6972DD71667B83C002FD2AB /* EventKitUI.framework */,
 				D6B52B221662805B002A339D /* MapKit.framework */,
 				D6CCB37416604F5F00A1B361 /* QuartzCore.framework */,
 				D6CCB37216604F2200A1B361 /* MessageUI.framework */,
@@ -490,6 +503,7 @@
 				D6B52B3A16631A43002A339D /* HowCell.m in Sources */,
 				D6B52B3B16631A43002A339D /* WhatCell.m in Sources */,
 				D6B52B3E16631B09002A339D /* WhereCell.m in Sources */,
+				D6972DD41667B774002FD2AB /* AppCalendar.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

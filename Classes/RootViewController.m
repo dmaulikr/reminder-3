@@ -16,12 +16,13 @@
 #import "TaggedLocationsAppDelegate.h"
 #import "Event.h"
 #import "Tag.h"
-#import "Quotation.h"
-#import "Play.h"
+//#import "Quotation.h"
+//#import "Play.h"
 #import "EventTableViewCell.h"
 #import "TagSelectionController.h"
 #import "ItemDetailViewController.h"
 #import "TableViewController.h"
+#import "AppCalendar.h"
 
 @implementation RootViewController
 
@@ -217,27 +218,250 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 
-	Event *event;// = (Event *)eventsArray[indexPath.row];
 	
-    if (tableView == self.searchDisplayController.searchResultsTableView)
+    
+    [[[UIAlertView alloc] initWithTitle:@"Set Geo-fencing?"
+                                message:@"I heard you mention a location, do you want to set location notification?"
+                               delegate:self
+                      cancelButtonTitle:@"Just show the detail"
+                      otherButtonTitles:@"Okay, see what you got", nil] show];
+    
+//    [self showEvent:event animated:YES];
+}
+
+
+#pragma mark - Alertview delegate
+
+-(void)alertView:(UIAlertView *)alertView didDismissWithButtonIndex:(NSInteger)buttonIndex
+{
+    if (buttonIndex==0) {
+        //show calendar chooser view controller
+        EKCalendarChooser* chooseCal = [[EKCalendarChooser alloc] initWithSelectionStyle:EKCalendarChooserSelectionStyleSingle
+                                                                            displayStyle:EKCalendarChooserDisplayWritableCalendarsOnly
+                                                                              eventStore:[AppCalendar eventStore] ];
+        chooseCal.delegate = self;
+        chooseCal.showsDoneButton = YES;
+        [self.navigationController pushViewController:chooseCal animated:YES];
+    } else {
+        //use the app's default calendar
+        int row = [self.tableView indexPathForSelectedRow].row;
+        
+        
+        Event *event;
+        
+        if (self.tableView == self.searchDisplayController.searchResultsTableView)
+        {
+            event = (self.filteredListContent)[row];
+        }
+        else
+        {
+            event = (Event *)eventsArray[row];
+        }
+        
+        [self addReminder:event
+           toCalendar: [AppCalendar calendar]];
+    }
+}
+
+#pragma mark - Calendar methods
+
+-(void)addReminder:(Event*)reminder toCalendar:(EKCalendar*)calendar
+//-(void)addShow:(NSDictionary*)show toCalendar:(EKCalendar*)calendar
+{
+    EKEvent* event = [EKEvent eventWithEventStore: [AppCalendar eventStore] ];
+    event.calendar = calendar;
+    
+    EKAlarm* myAlarm = [EKAlarm alarmWithRelativeOffset: - 06*60 ];
+    [event addAlarm: myAlarm];
+    
+    NSDateFormatter* frm = [[NSDateFormatter alloc] init];
+    [frm setDateFormat:@"MM/dd/yyyy HH:mm zzz"];
+    [frm setLocale:[[NSLocale alloc] initWithLocaleIdentifier:@"en_US"]];
+    
+    // Set up the content
+    Event *localReminder = reminder;
+    
+    NSString *question = @"Remind to use coupon when entering Walmart at 5 pm, tomorrow.";
+    
+    localReminder.name = question;
+    
+    NSLinguisticTaggerOptions options = NSLinguisticTaggerOmitWhitespace | NSLinguisticTaggerOmitPunctuation | NSLinguisticTaggerJoinNames;
+    NSLinguisticTagger *tagger = [[NSLinguisticTagger alloc] initWithTagSchemes: [NSLinguisticTagger availableTagSchemesForLanguage:@"en"] options:options];
+    tagger.string = question;
+    
+    // I need a better algorithm for this
+    __block NSMutableArray *tagArrays = [NSMutableArray array];
+    [tagger enumerateTagsInRange:NSMakeRange(0, [question length]) scheme:NSLinguisticTagSchemeNameTypeOrLexicalClass options:options usingBlock:^(NSString *tag, NSRange tokenRange, NSRange sentenceRange, BOOL *stop) {
+        NSString *token = [question substringWithRange:tokenRange];
+        NSDictionary *dict = @{@"tag":tag, @"token":token};
+        [tagArrays addObject:dict];
+    }];
+    
+    // I know this is stupid
+    __block NSUInteger conjunctionIndex = 0;
+    __block NSUInteger particleIndex = 0;
+    __block NSUInteger prepositionIndex = 0;
+    [tagArrays enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+        NSDictionary *dict = (NSDictionary *)obj;
+        if ([dict[@"tag"] isEqualToString:@"Particle"]) {
+            particleIndex = idx;
+        }
+        if ([dict[@"tag"] isEqualToString:@"Conjunction"]) {
+            conjunctionIndex = idx;
+        }
+        if ([dict[@"tag"] isEqualToString:@"Preposition"]) {
+            prepositionIndex = idx;
+        }
+        
+    }];
+    //    NSLog(@"par:%d, con:%d,  prep: %d",particleIndex, conjunctionIndex, prepositionIndex);
+    //
+    //
+    __block NSMutableString *whatString = [NSMutableString string];
+    
+    if  (conjunctionIndex - (particleIndex+1) > 0)
     {
-        event = (self.filteredListContent)[indexPath.row];
+        NSRange whatRange = NSMakeRange(particleIndex+1, conjunctionIndex-(particleIndex+ 1));
+        NSArray *whatArray = [tagArrays objectsAtIndexes:[NSIndexSet indexSetWithIndexesInRange:whatRange]];
+        
+        if (whatArray.count>0) {
+            [whatArray enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+                [whatString appendString:[NSString stringWithFormat:@"%@ ",((NSDictionary *)obj)[@"token"]]];
+            }];
+        }
+        NSLog(@"what :%@",whatString);
+        localReminder.what = whatString;
+    }
+    
+    __block NSMutableString *whereString = [NSMutableString string];
+    if (prepositionIndex-(conjunctionIndex+1) > 0) {
+        NSRange whereRange = NSMakeRange(conjunctionIndex+1, prepositionIndex-(conjunctionIndex+ 1));
+        NSArray *whereArray = [tagArrays objectsAtIndexes:[NSIndexSet indexSetWithIndexesInRange:whereRange]];
+        if (whereArray.count>0) {
+            [whereArray enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+                [whereString appendString:[NSString stringWithFormat:@"%@ ",((NSDictionary *)obj)[@"token"]]];
+            }];
+        }
+        NSLog(@"where :%@",whereString);
+        localReminder.where = whereString;
+    }
+    
+    __block NSMutableString *whenString = [NSMutableString string];
+    if (tagArrays.count-(prepositionIndex+1) > 0) {
+        NSRange whenRange = NSMakeRange(prepositionIndex+1, tagArrays.count-(prepositionIndex+ 1));
+        NSArray *whenArray = [tagArrays objectsAtIndexes:[NSIndexSet indexSetWithIndexesInRange:whenRange]];
+        if (whenArray.count>0) {
+            [whenArray enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+                [whenString appendString:[NSString stringWithFormat:@"%@ ",((NSDictionary *)obj)[@"token"]]];
+            }];
+        }
+        NSLog(@"when :%@",whenString);
+        localReminder.when = whenString;
+    }
+    
+
+//    event.startDate = [frm dateFromString: [show objectForKey:@"startDate"]];
+//    event.endDate   = [frm dateFromString: [show objectForKey:@"endDate"]];
+    
+    event.title = localReminder.name; //[show objectForKey:@"title"];
+//    event.URL = [NSURL URLWithString:[show objectForKey:@"url"]];
+    event.location = localReminder.where; //@"The living room";
+    event.notes = localReminder.how ;
+//    event.notes = [show objectForKey:@"tip"];
+    
+    
+    // this is how we want to set up the how.
+    NSNumber* weekDay = [NSNumber numberWithInt:1]; //[show objectForKey:@"dayOfTheWeek"];
+    //1
+    EKRecurrenceDayOfWeek* showDay = [EKRecurrenceDayOfWeek dayOfWeek: [weekDay intValue] ];
+    //2
+    EKRecurrenceEnd* runFor3Months = [EKRecurrenceEnd recurrenceEndWithOccurrenceCount:12];
+    //3
+    EKRecurrenceRule* myReccurrence =
+    [[EKRecurrenceRule alloc] initRecurrenceWithFrequency:EKRecurrenceFrequencyWeekly
+                                                 interval:1
+                                            daysOfTheWeek:[NSArray arrayWithObject:showDay]
+                                           daysOfTheMonth:nil
+                                          monthsOfTheYear:nil
+                                           weeksOfTheYear:nil
+                                            daysOfTheYear:nil
+                                             setPositions:nil
+                                                      end:runFor3Months];
+    [event addRecurrenceRule: myReccurrence];
+    
+    //1 save the event to the calendar
+    NSError* error = nil;
+    [[AppCalendar eventStore] saveEvent:event span:EKSpanFutureEvents commit:YES error:&error];
+    
+    //2 show the edit event dialogue
+    EKEventEditViewController* editEvent = [[EKEventEditViewController alloc] init];
+    editEvent.eventStore = [AppCalendar eventStore];
+    editEvent.event = event;
+    editEvent.editViewDelegate = self;
+    [self presentViewController:editEvent animated:YES completion:^{
+        UINavigationItem* item = [editEvent.navigationBar.items objectAtIndex:0];
+        item.leftBarButtonItem = nil;
+    }];
+    
+}
+
+#pragma mark - Edit event delegate
+- (EKCalendar *)eventEditViewControllerDefaultCalendarForNewEvents:(EKEventEditViewController *)controller
+{
+    return [AppCalendar calendar];
+}
+
+- (void)eventEditViewController:(EKEventEditViewController *)controller didCompleteWithAction:(EKEventEditViewAction)action
+{
+    NSError* error = nil;
+    switch (action) {
+        case EKEventEditViewActionDeleted:
+            [[AppCalendar eventStore] removeEvent:controller.event span:EKSpanFutureEvents error:&error];
+        default:break;
+    }
+    
+    [controller dismissViewControllerAnimated:YES completion:nil];
+    
+//    [controller dismissModalViewControllerAnimated:YES ];
+}
+
+#pragma mark - Calendar chooser delegate
+
+- (void)calendarChooserDidFinish:(EKCalendarChooser *)calendarChooser
+{
+    //1
+    EKCalendar* selectedCalendar = [calendarChooser.selectedCalendars anyObject];
+    
+    //2
+    int row = [self.tableView indexPathForSelectedRow].row;
+    
+    //3
+    Event *event;
+    
+    if (self.tableView == self.searchDisplayController.searchResultsTableView)
+    {
+        event = (self.filteredListContent)[row];
     }
     else
     {
-        event = (Event *)eventsArray[indexPath.row];
+        event = (Event *)eventsArray[row];
     }
-    [self showEvent:event animated:YES];
+    
+    [self addReminder:event
+           toCalendar: selectedCalendar];
+//    [self addShow: [shows objectAtIndex:row]
+//       toCalendar: selectedCalendar];
+    //4
+    [self.navigationController popViewControllerAnimated:YES];
 }
 
-
-#pragma mark - Show Event
-- (void)showEvent:(Event *)event animated:(BOOL)animated {
-    ItemDetailViewController *eventDetailViewController = [[ItemDetailViewController alloc] initWithStyle:UITableViewStyleGrouped];
-    eventDetailViewController.event = event;
-    UINavigationController *navController = [[UINavigationController alloc] initWithRootViewController:eventDetailViewController];
-    [self presentViewController:navController animated:YES completion:nil];
-}
+//#pragma mark - Show Event
+//- (void)showEvent:(Event *)event animated:(BOOL)animated {
+//    ItemDetailViewController *eventDetailViewController = [[ItemDetailViewController alloc] initWithStyle:UITableViewStyleGrouped];
+//    eventDetailViewController.event = event;
+//    UINavigationController *navController = [[UINavigationController alloc] initWithRootViewController:eventDetailViewController];
+//    [self presentViewController:navController animated:YES completion:nil];
+//}
 
 #pragma mark -
 #pragma mark Editing
@@ -538,35 +762,5 @@
     [[UIApplication sharedApplication] scheduleLocalNotification:localNotif];
 }
 
-
-#pragma mark - temp
-//- (NSMutableArray *)setUpPlaysArray {
-//    
-//    NSURL *url = [[NSBundle mainBundle] URLForResource:@"PlaysAndQuotations" withExtension:@"plist"];
-//    NSArray *playDictionariesArray = [[NSArray alloc ] initWithContentsOfURL:url];
-//    NSMutableArray *playsArray = [NSMutableArray arrayWithCapacity:[playDictionariesArray count]];
-//    
-//    for (NSDictionary *playDictionary in playDictionariesArray) {
-//        
-//        Play *play = [[Play alloc] init];
-//        play.name = playDictionary[@"playName"];
-//        
-//        NSArray *quotationDictionaries = playDictionary[@"quotations"];
-//        NSMutableArray *quotations = [NSMutableArray arrayWithCapacity:[quotationDictionaries count]];
-//        
-//        for (NSDictionary *quotationDictionary in quotationDictionaries) {
-//            
-//            Quotation *quotation = [[Quotation alloc] init];
-//            [quotation setValuesForKeysWithDictionary:quotationDictionary];
-//            
-//            [quotations addObject:quotation];
-//        }
-//        play.quotations = quotations;
-//        
-//        [playsArray addObject:play];
-//    }
-//    
-//    return playsArray;
-//}
 @end
 
