@@ -45,6 +45,7 @@
 @property (nonatomic, retain) NSMutableData     *responseData;
 @property (nonatomic, retain) NSMutableArray    *locations;
 @property (nonatomic, retain) NSMutableArray    *locationsFilterResults;
+@property (nonatomic, strong) NSString *searchString;
 
 -(void)buildSearchArrayFrom:(NSString *)matchString;
 

@@ -17,10 +17,10 @@
 // limitations under the License.
 
 #import "PlaceSearchViewController.h"
-//#import "SBJson.h"
 #import "GTMNSString+URLArguments.h"
 #import "GooglePlacesObject.h"
 #import "DetailViewController.h"
+#import "SVProgressHUD.h"
 
 @implementation PlaceSearchViewController
 
@@ -30,6 +30,7 @@
 @synthesize urlConnection;
 @synthesize responseData;
 @synthesize locations;
+@synthesize searchString;
 //NEW - to handle filtering
 @synthesize locationsFilterResults;
 
@@ -38,6 +39,11 @@
     [super didReceiveMemoryWarning];
     // Release any cached data, images, etc that aren't in use.
 }
+#pragma mark -
+- (void)onDone:(id)sender
+{
+    [self dismissViewControllerAnimated:YES completion:nil];
+}
 
 #pragma mark - View lifecycle
 
@@ -45,6 +51,13 @@
 {
     [super viewDidLoad];
 	// Do any additional setup after loading the view, typically from a nib.
+    UIBarButtonItem *doneItem = [[UIBarButtonItem alloc] initWithTitle:@"Done" style:UIBarButtonSystemItemCancel target:self action:@selector(onDone:)];
+    self.navigationItem.leftBarButtonItem = doneItem;
+    
+    UIBarButtonItem *mapBarItem = [[UIBarButtonItem alloc] initWithTitle:@"Map" style:UIBarButtonItemStylePlain target:self action:@selector(displayPlacemarks)];
+    self.navigationItem.rightBarButtonItem = mapBarItem;
+    
+    self.navigationItem.rightBarButtonItem.enabled = NO;
     
     [self.refreshHeaderView setLastRefreshDate:nil];    
     
@@ -58,6 +71,11 @@
     [searchBar setDelegate:self];
     
     googlePlacesConnection = [[GooglePlacesConnection alloc] initWithDelegate:self];
+    
+    if (searchString != nil) {
+        self.searchBar.text = searchString;
+        [self buildSearchArrayFrom:searchString];
+    }
 }
 
 - (void)viewDidUnload
@@ -69,25 +87,6 @@
 
 }
 
-- (void)viewWillAppear:(BOOL)animated
-{
-    [super viewWillAppear:animated];
-}
-
-- (void)viewDidAppear:(BOOL)animated
-{
-    [super viewDidAppear:animated];
-}
-
-- (void)viewWillDisappear:(BOOL)animated
-{
-	[super viewWillDisappear:animated];
-}
-
-- (void)viewDidDisappear:(BOOL)animated
-{
-	[super viewDidDisappear:animated];
-}
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
 {
@@ -232,7 +231,7 @@
 	UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
     if (cell == nil) {
         cell                = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:CellIdentifier];
-        cell.accessoryType  = UITableViewCellAccessoryDisclosureIndicator;
+        cell.accessoryType  = UITableViewCellAccessoryNone;
     }
     
     // Get the object to display and set the value in the cell.    
@@ -317,7 +316,7 @@
     currentLocation = newLocation;
     
     //What places to search for
-    NSString *searchLocations = [NSString stringWithFormat:@"%@|%@|%@|%@|%@|%@|%@|%@|%@", 
+    NSString *searchLocations = [NSString stringWithFormat:@"%@|%@|%@|%@|%@|%@|%@|%@|%@|%@", 
                                  kBar, 
                                  kRestaurant,
                                  kCafe,
@@ -326,7 +325,8 @@
                                  kLodging,
                                  kMealDelivery,
                                  kMealTakeaway,
-                                 kNightClub
+                                 kNightClub,
+                                 kGrocerySupermarket
                                  ];
     
     [googlePlacesConnection getGoogleObjects:CLLocationCoordinate2DMake(newLocation.coordinate.latitude, newLocation.coordinate.longitude) 
@@ -349,12 +349,13 @@
 {
     
     if ([objects count] == 0) {
-        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"No matches found near this location" 
-                                                        message:@"Try another place name or address" 
-                                                       delegate:nil 
-                                              cancelButtonTitle:@"OK" 
-                                              otherButtonTitles: nil];
-        [alert show];
+//        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"No matches found near this location" 
+//                                                        message:@"Try another place name or address" 
+//                                                       delegate:nil 
+//                                              cancelButtonTitle:@"OK" 
+//                                              otherButtonTitles: nil];
+//        [alert show];
+        [SVProgressHUD showErrorWithStatus:@"No matches found near this location"];
     } else {
         locations = objects;
         //UPDATED locationFilterResults for filtering later on
@@ -365,12 +366,13 @@
 
 - (void) googlePlacesConnection:(GooglePlacesConnection *)conn didFailWithError:(NSError *)error
 {
-    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Error finding place - Try again" 
-                                                    message:[error localizedDescription] 
-                                                   delegate:nil 
-                                          cancelButtonTitle:@"OK" 
-                                          otherButtonTitles: nil];
-    [alert show];
+//    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Error finding place - Try again" 
+//                                                    message:[error localizedDescription] 
+//                                                   delegate:nil 
+//                                          cancelButtonTitle:@"OK" 
+//                                          otherButtonTitles: nil];
+//    [alert show];
+    [SVProgressHUD showErrorWithStatus:[error localizedDescription]];
 }
 
 @end

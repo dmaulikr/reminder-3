@@ -233,6 +233,16 @@
 
 -(void)alertView:(UIAlertView *)alertView didDismissWithButtonIndex:(NSInteger)buttonIndex
 {
+    int row = [self.tableView indexPathForSelectedRow].row;
+    Event *event;
+    if (self.tableView == self.searchDisplayController.searchResultsTableView)
+    {
+        event = (self.filteredListContent)[row];
+    }
+    else
+    {
+        event = (Event *)eventsArray[row];
+    }
     if (buttonIndex==0) {
         //show calendar chooser view controller
         EKCalendarChooser* chooseCal = [[EKCalendarChooser alloc] initWithSelectionStyle:EKCalendarChooserSelectionStyleSingle
@@ -243,35 +253,21 @@
         [self.navigationController pushViewController:chooseCal animated:YES];
     } else if (buttonIndex == 1) {
         //use the app's default calendar
-        int row = [self.tableView indexPathForSelectedRow].row;
         
-        
-        Event *event;
-        
-        if (self.tableView == self.searchDisplayController.searchResultsTableView)
-        {
-            event = (self.filteredListContent)[row];
-        }
-        else
-        {
-            event = (Event *)eventsArray[row];
-        }
         
         [self addReminder:event
            toCalendar: [AppCalendar calendar]];
     } else if (buttonIndex == 2) {
         UIStoryboard *storyBoard = [UIStoryboard storyboardWithName:@"LocationStoryboard" bundle:nil];
         UINavigationController *controller = [storyBoard instantiateInitialViewController];
-//        PlaceSearchViewController *placeSearchViewController = [storyBoard instantiateInitialViewController];
-        NSLog(@"view controller : %@",controller);
-//        ViewController *viewController = [[ViewController alloc] initWithStyle:UITableViewStylePlain];
+        PlaceSearchViewController *searchViewController = (PlaceSearchViewController*)controller.viewControllers[0];
         
-//        UINavigationController *navController = [[UINavigationController alloc] initWithRootViewController:viewController];
-        [self presentViewController:controller animated:YES completion:^{
-            NSLog(@"we finished!");
-            
-        }];
+        event.where = @"target";
+        NSLog(@"where it is? %@",event.where);
+        searchViewController.searchString = event.where;
+        [self presentViewController:controller animated:YES completion:nil];
     }
+ 
 }
 
 #pragma mark - Calendar methods
