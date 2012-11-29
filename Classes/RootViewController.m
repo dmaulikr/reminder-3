@@ -16,13 +16,12 @@
 #import "TaggedLocationsAppDelegate.h"
 #import "Event.h"
 #import "Tag.h"
-//#import "Quotation.h"
-//#import "Play.h"
 #import "EventTableViewCell.h"
 #import "TagSelectionController.h"
 #import "ItemDetailViewController.h"
 #import "TableViewController.h"
 #import "AppCalendar.h"
+#import "PlaceSearchViewController.h"
 
 @implementation RootViewController
 
@@ -223,8 +222,8 @@
     [[[UIAlertView alloc] initWithTitle:@"Set Geo-fencing?"
                                 message:@"I heard you mention a location, do you want to set location notification?"
                                delegate:self
-                      cancelButtonTitle:@"Just show the detail"
-                      otherButtonTitles:@"Okay, see what you got", nil] show];
+                      cancelButtonTitle:@"the detail"
+                      otherButtonTitles:@"Okay, see what you got",@"geo-fencing", nil] show];
     
 //    [self showEvent:event animated:YES];
 }
@@ -242,7 +241,7 @@
         chooseCal.delegate = self;
         chooseCal.showsDoneButton = YES;
         [self.navigationController pushViewController:chooseCal animated:YES];
-    } else {
+    } else if (buttonIndex == 1) {
         //use the app's default calendar
         int row = [self.tableView indexPathForSelectedRow].row;
         
@@ -260,6 +259,18 @@
         
         [self addReminder:event
            toCalendar: [AppCalendar calendar]];
+    } else if (buttonIndex == 2) {
+        UIStoryboard *storyBoard = [UIStoryboard storyboardWithName:@"LocationStoryboard" bundle:nil];
+        UINavigationController *controller = [storyBoard instantiateInitialViewController];
+//        PlaceSearchViewController *placeSearchViewController = [storyBoard instantiateInitialViewController];
+        NSLog(@"view controller : %@",controller);
+//        ViewController *viewController = [[ViewController alloc] initWithStyle:UITableViewStylePlain];
+        
+//        UINavigationController *navController = [[UINavigationController alloc] initWithRootViewController:viewController];
+        [self presentViewController:controller animated:YES completion:^{
+            NSLog(@"we finished!");
+            
+        }];
     }
 }
 
