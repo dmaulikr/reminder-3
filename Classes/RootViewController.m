@@ -631,20 +631,19 @@
 #pragma mark - Region Managerment
 
 - (void)locationManager:(CLLocationManager *)manager didEnterRegion:(CLRegion *)region  {
-	NSString *event = [NSString stringWithFormat:@"You are entering the HEB at %@. Have your shopping list ready.", region.identifier];
+	NSString *event = [NSString stringWithFormat:@"You are entering %@.", region.identifier];
 	[self updateWithEvent:event];
 }
 
 
 - (void)locationManager:(CLLocationManager *)manager didExitRegion:(CLRegion *)region {
-	NSString *event = [NSString stringWithFormat:@"You are leaving the HEB at %@. Do you have everything?", region.identifier];
-	
+	NSString *event = [NSString stringWithFormat:@"You are leaving t%@.", region.identifier];
 	[self updateWithEvent:event];
 }
 
 
 - (void)locationManager:(CLLocationManager *)manager monitoringDidFailForRegion:(CLRegion *)region withError:(NSError *)error {
-	NSString *event = [NSString stringWithFormat:@"Monitoring fail for HEB location %@", region.identifier];
+	NSString *event = [NSString stringWithFormat:@"Monitoring fail for %@", region.identifier];
 	[self updateWithEvent:event];
 }
 
@@ -657,6 +656,26 @@
     localNotification.alertBody = message;
     localNotification.soundName = UILocalNotificationDefaultSoundName;
     [[UIApplication sharedApplication] presentLocalNotificationNow:localNotification];
+}
+
+- (void)registerGeoFencing:(NSArray *)events
+{
+    // We dont' want to mointor those regions have been monitored
+    NSArray *monitoredRegions = [[locationManager monitoredRegions] allObjects];
+    // Define regions
+    [events enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+        
+        Event *event = (Event *)obj;
+        
+        CLLocationCoordinate2D cord = CLLocationCoordinate2DMake([event.latitude doubleValue], [event.longitude doubleValue]);
+        //        CLLocationCoordinate2D cord = CLLocationCoordinate2DMake(30.359771, -97.746520);
+        CLRegion *whereRegion = [[CLRegion alloc] initCircularRegionWithCenter:cord radius:50.0 identifier:event.where];
+        if (![monitoredRegions containsObject:whereRegion]) {
+            [locationManager startMonitoringForRegion:whereRegion desiredAccuracy:kCLLocationAccuracyBest];
+        }
+    }];
+    
+    
 }
 #pragma mark -
 #pragma mark Editing text fields
