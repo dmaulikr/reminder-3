@@ -834,7 +834,7 @@
     if (motion == UIEventSubtypeMotionShake)
     {
         UIActionSheet *actionSheet = [[UIActionSheet alloc] initWithTitle:@"Sort By" delegate:self cancelButtonTitle:@"Cancel" destructiveButtonTitle:nil otherButtonTitles:@"Status",@"Expired Time",@"Name",@"Prority", nil];
-        actionSheet.destructiveButtonIndex = 3; // modified date will be highlighted
+        actionSheet.destructiveButtonIndex = 3; // Priority will be highlighted
         [actionSheet showInView:self.tableView];
 
     }

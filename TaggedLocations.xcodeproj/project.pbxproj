@@ -11,8 +11,6 @@
 		1811EF0D11D0292E0068DA4C /* Icon-Small-50.png in Resources */ = {isa = PBXBuildFile; fileRef = 1811EF0611D0292E0068DA4C /* Icon-Small-50.png */; };
 		1811EF0E11D0292E0068DA4C /* Icon-Small.png in Resources */ = {isa = PBXBuildFile; fileRef = 1811EF0711D0292E0068DA4C /* Icon-Small.png */; };
 		1811EF0F11D0292E0068DA4C /* Icon-Small@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 1811EF0811D0292E0068DA4C /* Icon-Small@2x.png */; };
-		1811EF1011D0292E0068DA4C /* Icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 1811EF0911D0292E0068DA4C /* Icon.png */; };
-		1811EF1111D0292E0068DA4C /* Icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 1811EF0A11D0292E0068DA4C /* Icon@2x.png */; };
 		1825951211D11AE8000B79F7 /* EditableTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1825950C11D11AE8000B79F7 /* EditableTableViewCell.xib */; };
 		1825951311D11AE8000B79F7 /* EventTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1825950E11D11AE8000B79F7 /* EventTableViewCell.xib */; };
 		1825951411D11AE8000B79F7 /* TagsHeaderView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1825951011D11AE8000B79F7 /* TagsHeaderView.xib */; };
@@ -51,6 +49,13 @@
 		D6972E9B1667CEB0002FD2AB /* SVProgressHUD.m in Sources */ = {isa = PBXBuildFile; fileRef = D6972E991667CEB0002FD2AB /* SVProgressHUD.m */; };
 		D6972EA31667CFBE002FD2AB /* PlacemarkViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D6972EA11667CFBE002FD2AB /* PlacemarkViewController.m */; };
 		D6972EA41667CFBE002FD2AB /* PlacemarkViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = D6972EA21667CFBE002FD2AB /* PlacemarkViewController.xib */; };
+		D69C2E1B166A686000A68729 /* icon.png in Resources */ = {isa = PBXBuildFile; fileRef = D69C2E1A166A686000A68729 /* icon.png */; };
+		D69C2E1D166A687500A68729 /* icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = D69C2E1C166A687500A68729 /* icon@2x.png */; };
+		D69C2E20166A689600A68729 /* icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = D69C2E1E166A689600A68729 /* icon@2x.png */; };
+		D69C2E21166A689600A68729 /* icon.png in Resources */ = {isa = PBXBuildFile; fileRef = D69C2E1F166A689600A68729 /* icon.png */; };
+		D69C2E2F166A696900A68729 /* MainWindow-iPad.xib in Resources */ = {isa = PBXBuildFile; fileRef = D69C2E2D166A696900A68729 /* MainWindow-iPad.xib */; };
+		D69C2E31166A698500A68729 /*  Icon-72.png in Resources */ = {isa = PBXBuildFile; fileRef = D69C2E30166A698500A68729 /*  Icon-72.png */; };
+		D69C2E33166A698D00A68729 /*  Icon-72@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = D69C2E32166A698D00A68729 /*  Icon-72@2x.png */; };
 		D6B52B231662805B002A339D /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D6B52B221662805B002A339D /* MapKit.framework */; };
 		D6B52B281662F924002A339D /* VaFeedbackViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D6B52B261662F924002A339D /* VaFeedbackViewController.m */; };
 		D6B52B291662F924002A339D /* VaFeedbackViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = D6B52B271662F924002A339D /* VaFeedbackViewController.xib */; };
@@ -84,8 +89,6 @@
 		1811EF0611D0292E0068DA4C /* Icon-Small-50.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Icon-Small-50.png"; path = "images/Icon-Small-50.png"; sourceTree = "<group>"; };
 		1811EF0711D0292E0068DA4C /* Icon-Small.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Icon-Small.png"; path = "images/Icon-Small.png"; sourceTree = "<group>"; };
 		1811EF0811D0292E0068DA4C /* Icon-Small@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Icon-Small@2x.png"; path = "images/Icon-Small@2x.png"; sourceTree = "<group>"; };
-		1811EF0911D0292E0068DA4C /* Icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = Icon.png; path = images/Icon.png; sourceTree = "<group>"; };
-		1811EF0A11D0292E0068DA4C /* Icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Icon@2x.png"; path = "images/Icon@2x.png"; sourceTree = "<group>"; };
 		1825950D11D11AE8000B79F7 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/EditableTableViewCell.xib; sourceTree = "<group>"; };
 		1825950F11D11AE8000B79F7 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/EventTableViewCell.xib; sourceTree = "<group>"; };
 		1825951111D11AE8000B79F7 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/TagsHeaderView.xib; sourceTree = "<group>"; };
@@ -146,6 +149,13 @@
 		D6972EA01667CFBE002FD2AB /* PlacemarkViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PlacemarkViewController.h; sourceTree = "<group>"; };
 		D6972EA11667CFBE002FD2AB /* PlacemarkViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PlacemarkViewController.m; sourceTree = "<group>"; };
 		D6972EA21667CFBE002FD2AB /* PlacemarkViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = PlacemarkViewController.xib; sourceTree = "<group>"; };
+		D69C2E1A166A686000A68729 /* icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = icon.png; sourceTree = "<group>"; };
+		D69C2E1C166A687500A68729 /* icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon@2x.png"; sourceTree = "<group>"; };
+		D69C2E1E166A689600A68729 /* icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "icon@2x.png"; path = "icons/icon@2x.png"; sourceTree = "<group>"; };
+		D69C2E1F166A689600A68729 /* icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = icon.png; path = icons/icon.png; sourceTree = "<group>"; };
+		D69C2E2E166A696900A68729 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = "iPad/en.lproj/MainWindow-iPad.xib"; sourceTree = "<group>"; };
+		D69C2E30166A698500A68729 /*  Icon-72.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = " Icon-72.png"; sourceTree = "<group>"; };
+		D69C2E32166A698D00A68729 /*  Icon-72@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = " Icon-72@2x.png"; sourceTree = "<group>"; };
 		D6B52B221662805B002A339D /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
 		D6B52B251662F924002A339D /* VaFeedbackViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VaFeedbackViewController.h; sourceTree = "<group>"; };
 		D6B52B261662F924002A339D /* VaFeedbackViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VaFeedbackViewController.m; sourceTree = "<group>"; };
@@ -279,6 +289,10 @@
 		29B97314FDCFA39411CA2CEA /* CustomTemplate */ = {
 			isa = PBXGroup;
 			children = (
+				D69C2E32166A698D00A68729 /*  Icon-72@2x.png */,
+				D69C2E30166A698500A68729 /*  Icon-72.png */,
+				D69C2E1C166A687500A68729 /* icon@2x.png */,
+				D69C2E1A166A686000A68729 /* icon.png */,
 				D6972E951667CEB0002FD2AB /* ThirdParty */,
 				D6972E411667CB2D002FD2AB /* GoogleLocations */,
 				D6B52B3C16631B09002A339D /* WhereCell.m */,
@@ -295,6 +309,7 @@
 				28FB887C0FCCA69C00EBA711 /* Application */,
 				29B97315FDCFA39411CA2CEA /* Other Sources */,
 				29B97317FDCFA39411CA2CEA /* Resources */,
+				D69C2E2C166A696900A68729 /* iPad */,
 				29B97323FDCFA39411CA2CEA /* Frameworks */,
 				19C28FACFE9D520D11CA2CBB /* Products */,
 			);
@@ -313,6 +328,8 @@
 		29B97317FDCFA39411CA2CEA /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				D69C2E1E166A689600A68729 /* icon@2x.png */,
+				D69C2E1F166A689600A68729 /* icon.png */,
 				D6CCB36A16604D8600A1B361 /* PlaysAndQuotations.plist */,
 				D6CCB36B16604D8600A1B361 /* carat-open.png */,
 				D6CCB36C16604D8600A1B361 /* carat.png */,
@@ -326,8 +343,6 @@
 				1811EF0611D0292E0068DA4C /* Icon-Small-50.png */,
 				1811EF0711D0292E0068DA4C /* Icon-Small.png */,
 				1811EF0811D0292E0068DA4C /* Icon-Small@2x.png */,
-				1811EF0911D0292E0068DA4C /* Icon.png */,
-				1811EF0A11D0292E0068DA4C /* Icon@2x.png */,
 				8D1107310486CEB800E47090 /* Info.plist */,
 			);
 			name = Resources;
@@ -414,6 +429,14 @@
 				D6972E991667CEB0002FD2AB /* SVProgressHUD.m */,
 			);
 			path = SVProgressHUD;
+			sourceTree = "<group>";
+		};
+		D69C2E2C166A696900A68729 /* iPad */ = {
+			isa = PBXGroup;
+			children = (
+				D69C2E2D166A696900A68729 /* MainWindow-iPad.xib */,
+			);
+			name = iPad;
 			sourceTree = "<group>";
 		};
 		D6B52B241662F924002A339D /* feedback */ = {
@@ -506,8 +529,6 @@
 				1811EF0D11D0292E0068DA4C /* Icon-Small-50.png in Resources */,
 				1811EF0E11D0292E0068DA4C /* Icon-Small.png in Resources */,
 				1811EF0F11D0292E0068DA4C /* Icon-Small@2x.png in Resources */,
-				1811EF1011D0292E0068DA4C /* Icon.png in Resources */,
-				1811EF1111D0292E0068DA4C /* Icon@2x.png in Resources */,
 				1825951211D11AE8000B79F7 /* EditableTableViewCell.xib in Resources */,
 				1825951311D11AE8000B79F7 /* EventTableViewCell.xib in Resources */,
 				1825951411D11AE8000B79F7 /* TagsHeaderView.xib in Resources */,
@@ -528,6 +549,13 @@
 				D6972E911667CB2D002FD2AB /* whiteArrow.png in Resources */,
 				D6972E9A1667CEB0002FD2AB /* SVProgressHUD.bundle in Resources */,
 				D6972EA41667CFBE002FD2AB /* PlacemarkViewController.xib in Resources */,
+				D69C2E1B166A686000A68729 /* icon.png in Resources */,
+				D69C2E1D166A687500A68729 /* icon@2x.png in Resources */,
+				D69C2E20166A689600A68729 /* icon@2x.png in Resources */,
+				D69C2E21166A689600A68729 /* icon.png in Resources */,
+				D69C2E2F166A696900A68729 /* MainWindow-iPad.xib in Resources */,
+				D69C2E31166A698500A68729 /*  Icon-72.png in Resources */,
+				D69C2E33166A698D00A68729 /*  Icon-72@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -618,6 +646,14 @@
 			name = LocationStoryboard.storyboard;
 			sourceTree = "<group>";
 		};
+		D69C2E2D166A696900A68729 /* MainWindow-iPad.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				D69C2E2E166A696900A68729 /* en */,
+			);
+			name = "MainWindow-iPad.xib";
+			sourceTree = "<group>";
+		};
 		D6BEA96516596B7400D05AFC /* RootViewController.xib */ = {
 			isa = PBXVariantGroup;
 			children = (
@@ -640,9 +676,10 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = TaggedLocations_Prefix.pch;
 				INFOPLIST_FILE = Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
 				PRODUCT_NAME = TaggedLocations;
 				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
 		};
@@ -655,9 +692,10 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = TaggedLocations_Prefix.pch;
 				INFOPLIST_FILE = Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
 				PRODUCT_NAME = TaggedLocations;
 				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;
 		};
