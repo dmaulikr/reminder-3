@@ -202,7 +202,9 @@
 						[numberFormatter stringFromNumber:[event longitude]]];
     cell.locationLabel.text = string;
     
-	NSMutableArray *eventTagNames = [NSMutableArray array];
+    cell.backgroundColor =  [UIColor scrollViewTexturedBackgroundColor];
+	
+    NSMutableArray *eventTagNames = [NSMutableArray array];
 	for (Tag *tag in event.tags) {
 		[eventTagNames addObject:tag.name];
 	}
