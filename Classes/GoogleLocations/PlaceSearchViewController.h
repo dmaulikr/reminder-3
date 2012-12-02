@@ -27,7 +27,6 @@
     CLLocationManager       *locationManager;
     CLLocation              *currentLocation;
     
-    NSMutableData           *responseData;
     NSMutableArray          *locations;
     NSMutableArray          *locationsFilterResults;
     NSString                *searchString;
@@ -42,10 +41,10 @@
 @property (nonatomic, retain) CLLocation        *currentLocation;
 
 @property (nonatomic, retain) NSURLConnection   *urlConnection;
-@property (nonatomic, retain) NSMutableData     *responseData;
 @property (nonatomic, retain) NSMutableArray    *locations;
 @property (nonatomic, retain) NSMutableArray    *locationsFilterResults;
 @property (nonatomic, strong) NSString *searchString;
+@property (nonatomic, strong) NSArray *categories;
 
 -(void)buildSearchArrayFrom:(NSString *)matchString;
 

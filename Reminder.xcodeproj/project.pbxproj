@@ -78,6 +78,11 @@
 		D6FF80C5166BBAA100D2DC4F /* Icon-Small@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = D6FF80BF166BBAA100D2DC4F /* Icon-Small@2x.png */; };
 		D6FF80C6166BBAA100D2DC4F /* Icon-72.png in Resources */ = {isa = PBXBuildFile; fileRef = D6FF80C0166BBAA100D2DC4F /* Icon-72.png */; };
 		D6FF80C7166BBAA100D2DC4F /* Icon-72@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = D6FF80C1166BBAA100D2DC4F /* Icon-72@2x.png */; };
+		D6FF80E5166BE42100D2DC4F /* FPPopoverController.m in Sources */ = {isa = PBXBuildFile; fileRef = D6FF80DA166BE42100D2DC4F /* FPPopoverController.m */; };
+		D6FF80E6166BE42100D2DC4F /* FPPopoverView.m in Sources */ = {isa = PBXBuildFile; fileRef = D6FF80DC166BE42100D2DC4F /* FPPopoverView.m */; };
+		D6FF80E7166BE42100D2DC4F /* FPTouchView.m in Sources */ = {isa = PBXBuildFile; fileRef = D6FF80DE166BE42100D2DC4F /* FPTouchView.m */; };
+		D6FF80E8166BE42100D2DC4F /* UIViewController+KNSemiModal.m in Sources */ = {isa = PBXBuildFile; fileRef = D6FF80E1166BE42100D2DC4F /* UIViewController+KNSemiModal.m */; };
+		D6FF80E9166BE42100D2DC4F /* TTTTimeIntervalFormatter.m in Sources */ = {isa = PBXBuildFile; fileRef = D6FF80E4166BE42100D2DC4F /* TTTTimeIntervalFormatter.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -190,6 +195,16 @@
 		D6FF80BF166BBAA100D2DC4F /* Icon-Small@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Icon-Small@2x.png"; path = "images/Icon-Small@2x.png"; sourceTree = "<group>"; };
 		D6FF80C0166BBAA100D2DC4F /* Icon-72.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Icon-72.png"; path = "images/Icon-72.png"; sourceTree = "<group>"; };
 		D6FF80C1166BBAA100D2DC4F /* Icon-72@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Icon-72@2x.png"; path = "images/Icon-72@2x.png"; sourceTree = "<group>"; };
+		D6FF80D9166BE42100D2DC4F /* FPPopoverController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FPPopoverController.h; sourceTree = "<group>"; };
+		D6FF80DA166BE42100D2DC4F /* FPPopoverController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FPPopoverController.m; sourceTree = "<group>"; };
+		D6FF80DB166BE42100D2DC4F /* FPPopoverView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FPPopoverView.h; sourceTree = "<group>"; };
+		D6FF80DC166BE42100D2DC4F /* FPPopoverView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FPPopoverView.m; sourceTree = "<group>"; };
+		D6FF80DD166BE42100D2DC4F /* FPTouchView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FPTouchView.h; sourceTree = "<group>"; };
+		D6FF80DE166BE42100D2DC4F /* FPTouchView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FPTouchView.m; sourceTree = "<group>"; };
+		D6FF80E0166BE42100D2DC4F /* UIViewController+KNSemiModal.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIViewController+KNSemiModal.h"; sourceTree = "<group>"; };
+		D6FF80E1166BE42100D2DC4F /* UIViewController+KNSemiModal.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIViewController+KNSemiModal.m"; sourceTree = "<group>"; };
+		D6FF80E3166BE42100D2DC4F /* TTTTimeIntervalFormatter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TTTTimeIntervalFormatter.h; sourceTree = "<group>"; };
+		D6FF80E4166BE42100D2DC4F /* TTTTimeIntervalFormatter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TTTTimeIntervalFormatter.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -404,6 +419,9 @@
 		D6972E951667CEB0002FD2AB /* ThirdParty */ = {
 			isa = PBXGroup;
 			children = (
+				D6FF80D8166BE42100D2DC4F /* FPPopover */,
+				D6FF80DF166BE42100D2DC4F /* SemiModal */,
+				D6FF80E2166BE42100D2DC4F /* TTTimerInterval */,
 				D6972E961667CEB0002FD2AB /* SVProgressHUD */,
 			);
 			path = ThirdParty;
@@ -458,6 +476,37 @@
 			);
 			name = Detail;
 			path = Classes/Detail;
+			sourceTree = "<group>";
+		};
+		D6FF80D8166BE42100D2DC4F /* FPPopover */ = {
+			isa = PBXGroup;
+			children = (
+				D6FF80D9166BE42100D2DC4F /* FPPopoverController.h */,
+				D6FF80DA166BE42100D2DC4F /* FPPopoverController.m */,
+				D6FF80DB166BE42100D2DC4F /* FPPopoverView.h */,
+				D6FF80DC166BE42100D2DC4F /* FPPopoverView.m */,
+				D6FF80DD166BE42100D2DC4F /* FPTouchView.h */,
+				D6FF80DE166BE42100D2DC4F /* FPTouchView.m */,
+			);
+			path = FPPopover;
+			sourceTree = "<group>";
+		};
+		D6FF80DF166BE42100D2DC4F /* SemiModal */ = {
+			isa = PBXGroup;
+			children = (
+				D6FF80E0166BE42100D2DC4F /* UIViewController+KNSemiModal.h */,
+				D6FF80E1166BE42100D2DC4F /* UIViewController+KNSemiModal.m */,
+			);
+			path = SemiModal;
+			sourceTree = "<group>";
+		};
+		D6FF80E2166BE42100D2DC4F /* TTTimerInterval */ = {
+			isa = PBXGroup;
+			children = (
+				D6FF80E3166BE42100D2DC4F /* TTTTimeIntervalFormatter.h */,
+				D6FF80E4166BE42100D2DC4F /* TTTTimeIntervalFormatter.m */,
+			);
+			path = TTTimerInterval;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -584,6 +633,11 @@
 				D6972E841667CB2D002FD2AB /* PullToRefreshTableViewController.m in Sources */,
 				D6972E9B1667CEB0002FD2AB /* SVProgressHUD.m in Sources */,
 				D6972EA31667CFBE002FD2AB /* PlacemarkViewController.m in Sources */,
+				D6FF80E5166BE42100D2DC4F /* FPPopoverController.m in Sources */,
+				D6FF80E6166BE42100D2DC4F /* FPPopoverView.m in Sources */,
+				D6FF80E7166BE42100D2DC4F /* FPTouchView.m in Sources */,
+				D6FF80E8166BE42100D2DC4F /* UIViewController+KNSemiModal.m in Sources */,
+				D6FF80E9166BE42100D2DC4F /* TTTTimeIntervalFormatter.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
