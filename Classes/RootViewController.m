@@ -38,7 +38,7 @@
     [super viewDidLoad];
 	
 	// Set the title.
-    self.title = @"Locations";
+    self.title = NSLocalizedString(@"Reminders", @"Reminders");
     
 	self.tableView.rowHeight = 77;
 	
@@ -197,12 +197,12 @@
 	
 	cell.creationDateLabel.text = [dateFormatter stringFromDate:[event creationDate]];
 	
-	NSString *string = [NSString stringWithFormat:@"%@, %@",
-						[numberFormatter stringFromNumber:[event latitude]],
-						[numberFormatter stringFromNumber:[event longitude]]];
-    cell.locationLabel.text = string;
+//	NSString *string = [NSString stringWithFormat:@"%@, %@",
+//						[numberFormatter stringFromNumber:[event latitude]],
+//						[numberFormatter stringFromNumber:[event longitude]]];
+//    cell.locationLabel.text = string;
     
-    cell.backgroundColor =  [UIColor scrollViewTexturedBackgroundColor];
+//    cell.backgroundColor =  [UIColor scrollViewTexturedBackgroundColor];
 	
     NSMutableArray *eventTagNames = [NSMutableArray array];
 	for (Tag *tag in event.tags) {
@@ -226,10 +226,10 @@
 	
     
     [[[UIAlertView alloc] initWithTitle:@"Set Geo-fencing?"
-                                message:@"I heard you mention a location, do you want to set location notification?"
+                                message:@"You mentioned a location?"
                                delegate:self
-                      cancelButtonTitle:@"the detail"
-                      otherButtonTitles:@"Okay, see what you got",@"geo-fencing", nil] show];
+                      cancelButtonTitle:NSLocalizedString(@"No", @"No")
+                      otherButtonTitles:@"Yes", nil] show];
     
 //    [self showEvent:event animated:YES];
 }
@@ -249,21 +249,14 @@
     {
         event = (Event *)eventsArray[row];
     }
-    if (buttonIndex==0) {
-        //show calendar chooser view controller
-        EKCalendarChooser* chooseCal = [[EKCalendarChooser alloc] initWithSelectionStyle:EKCalendarChooserSelectionStyleSingle
-                                                                            displayStyle:EKCalendarChooserDisplayWritableCalendarsOnly
-                                                                              eventStore:[AppCalendar eventStore] ];
-        chooseCal.delegate = self;
-        chooseCal.showsDoneButton = YES;
-        [self.navigationController pushViewController:chooseCal animated:YES];
-    } else if (buttonIndex == 1) {
-        //use the app's default calendar
+    
+    if (buttonIndex == alertView.cancelButtonIndex) {
+        [alertView dismissWithClickedButtonIndex:buttonIndex animated:YES];
         
-        
+        //TODO: MAKE SURE THOSE ALERT WON'T SHOW AGAIN ONCE THE USER SELECTS NO
         [self addReminder:event
-           toCalendar: [AppCalendar calendar]];
-    } else if (buttonIndex == 2) {
+               toCalendar: [AppCalendar calendar]];
+    } else {
         UIStoryboard *storyBoard = [UIStoryboard storyboardWithName:@"LocationStoryboard" bundle:nil];
         UINavigationController *controller = [storyBoard instantiateInitialViewController];
         PlaceSearchViewController *searchViewController = (PlaceSearchViewController*)controller.viewControllers[0];
@@ -273,13 +266,37 @@
         searchViewController.searchString = event.where;
         [self presentViewController:controller animated:YES completion:nil];
     }
+    
+//    if (buttonIndex==0) {
+//        //show calendar chooser view controller
+//        EKCalendarChooser* chooseCal = [[EKCalendarChooser alloc] initWithSelectionStyle:EKCalendarChooserSelectionStyleSingle
+//                                                                            displayStyle:EKCalendarChooserDisplayWritableCalendarsOnly
+//                                                                              eventStore:[AppCalendar eventStore] ];
+//        chooseCal.delegate = self;
+//        chooseCal.showsDoneButton = YES;
+//        [self.navigationController pushViewController:chooseCal animated:YES];
+//    } else if (buttonIndex == 1) {
+//        //use the app's default calendar
+//        
+//        
+//        [self addReminder:event
+//           toCalendar: [AppCalendar calendar]];
+//    } else if (buttonIndex == 2) {
+//        UIStoryboard *storyBoard = [UIStoryboard storyboardWithName:@"LocationStoryboard" bundle:nil];
+//        UINavigationController *controller = [storyBoard instantiateInitialViewController];
+//        PlaceSearchViewController *searchViewController = (PlaceSearchViewController*)controller.viewControllers[0];
+//        
+//        event.where = @"target";
+//        NSLog(@"where it is? %@",event.where);
+//        searchViewController.searchString = event.where;
+//        [self presentViewController:controller animated:YES completion:nil];
+//    }
  
 }
 
 #pragma mark - Calendar methods
 
 -(void)addReminder:(Event*)reminder toCalendar:(EKCalendar*)calendar
-//-(void)addShow:(NSDictionary*)show toCalendar:(EKCalendar*)calendar
 {
     EKEvent* event = [EKEvent eventWithEventStore: [AppCalendar eventStore] ];
     event.calendar = calendar;
@@ -432,10 +449,21 @@
             [[AppCalendar eventStore] removeEvent:controller.event span:EKSpanFutureEvents error:&error];
         default:break;
     }
-    
     [controller dismissViewControllerAnimated:YES completion:nil];
     
-//    [controller dismissModalViewControllerAnimated:YES ];
+    // let's update the database & update the tableview
+    
+    
+
+}
+
+- (void)updateCellInfo {
+    NSArray *visibleCells = [self.tableView visibleCells];
+    for (EventTableViewCell *cell in visibleCells) {
+        NSInteger tag = [[self.tableView indexPathForCell:cell] row];
+        cell.nameField.tag = tag;
+        cell.tagsButton.tag = tag;
+    }
 }
 
 #pragma mark - Calendar chooser delegate

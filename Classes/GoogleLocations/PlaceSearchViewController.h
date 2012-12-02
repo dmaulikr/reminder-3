@@ -22,7 +22,7 @@
 
 @class GooglePlacesObject;
 
-@interface PlaceSearchViewController : PullToRefreshTableViewController <UITextFieldDelegate, UITableViewDelegate, UITableViewDataSource, UISearchBarDelegate, GooglePlacesConnectionDelegate, CLLocationManagerDelegate>
+@interface PlaceSearchViewController : PullToRefreshTableViewController <UITextFieldDelegate, UITableViewDelegate, UITableViewDataSource, UISearchBarDelegate, GooglePlacesConnectionDelegate, CLLocationManagerDelegate, UIActionSheetDelegate>
 {   
     CLLocationManager       *locationManager;
     CLLocation              *currentLocation;

@@ -45,6 +45,56 @@
     [self dismissViewControllerAnimated:YES completion:nil];
 }
 
+- (void)showFilters:(id)sender
+{
+    
+    UIActionSheet *filterSheet = [[UIActionSheet alloc] initWithTitle:@"Filter" delegate:self cancelButtonTitle:@"Cancel" destructiveButtonTitle:nil otherButtonTitles:nil];
+    [filterSheet addButtonWithTitle:@"Bar"];
+    [filterSheet addButtonWithTitle:@"SuperMarket"];
+    
+    
+    
+    [filterSheet showFromBarButtonItem:self.navigationItem.rightBarButtonItem animated:YES];
+}
+
+#pragma mark - UIActionSheet Delegate
+- (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex
+{
+    if (buttonIndex == actionSheet.cancelButtonIndex) {
+        [actionSheet dismissWithClickedButtonIndex:buttonIndex animated:YES];
+    } else {
+        NSString *sortKey = @"";
+        NSSortDescriptor *sortdis;
+        
+        switch (buttonIndex) {
+            case 0: //Price
+                sortKey = @"AppraisedValue";
+                break;
+            case 1: // Status
+                sortKey = @"Status";
+                break;
+            case 2: // Name
+                sortKey = @"VehicleTitle";
+                break;
+            case 3:  // last modified date
+                sortKey = @"LastModifiedTime";
+                break;
+                
+            default:
+                break;
+        }
+        
+        sortdis = [[NSSortDescriptor alloc] initWithKey:sortKey ascending:YES];
+        NSArray *discriptor = [NSArray arrayWithObjects:sortdis,nil];
+//        NSArray *sortedArray =  [listContent sortedArrayUsingDescriptors:discriptor];
+//        listContent = [NSMutableArray arrayWithArray:sortedArray];
+        
+        [self.tableView reloadData];
+    }
+    
+    
+}
+
 #pragma mark - View lifecycle
 
 - (void)viewDidLoad
@@ -54,10 +104,14 @@
     UIBarButtonItem *doneItem = [[UIBarButtonItem alloc] initWithTitle:@"Done" style:UIBarButtonSystemItemCancel target:self action:@selector(onDone:)];
     self.navigationItem.leftBarButtonItem = doneItem;
     
-    UIBarButtonItem *mapBarItem = [[UIBarButtonItem alloc] initWithTitle:@"Map" style:UIBarButtonItemStylePlain target:self action:@selector(displayPlacemarks)];
-    self.navigationItem.rightBarButtonItem = mapBarItem;
+//    UIBarButtonItem *mapBarItem = [[UIBarButtonItem alloc] initWithTitle:@"Map" style:UIBarButtonItemStylePlain target:self action:@selector(displayPlacemarks)];
+//    self.navigationItem.rightBarButtonItem = mapBarItem;
+
+    // Filters
+    UIBarButtonItem *filterBarItem = [[UIBarButtonItem alloc] initWithTitle:@"Filter" style:UIBarButtonItemStylePlain target:self action:@selector(showFilters:)];
+    self.navigationItem.rightBarButtonItem = filterBarItem;
     
-    self.navigationItem.rightBarButtonItem.enabled = NO;
+    self.navigationItem.rightBarButtonItem.enabled = YES;
     
     [self.refreshHeaderView setLastRefreshDate:nil];    
     
@@ -219,7 +273,7 @@
 - (NSInteger)tableView:(UITableView *)theTableView numberOfRowsInSection:(NSInteger)section
 {
     //return [locations count];
-    return [locationsFilterResults count];
+    return [locationsFilterResults count] + 1;
 }
 
 //UPDATE - to handle filtering
@@ -238,9 +292,15 @@
     GooglePlacesObject *place     = [[GooglePlacesObject alloc] init];
     
     //UPDATED from locations to locationFilter results
-    place                       = [locationsFilterResults objectAtIndex:[indexPath row]];
+    if (indexPath.row < [locationsFilterResults count]) {
+        place                       = [locationsFilterResults objectAtIndex:[indexPath row]];
+        
+        cell.textLabel.text                         = place.name;
+        cell.detailTextLabel.text                   = [NSString stringWithFormat:@"%@ - Distance %@ miles", place.vicinity, place.distanceInMilesString];
+    } else {
+        cell.textLabel.text  = @"Not in the list, let's narraw the search down";
+    }
     
-    cell.textLabel.text                         = place.name;
     cell.textLabel.adjustsFontSizeToFitWidth    = YES;
 	cell.textLabel.font                         = [UIFont systemFontOfSize:12.0];
 	cell.textLabel.minimumFontSize              = 10;
@@ -251,7 +311,7 @@
     
     //You can use place.distanceInMilesString or place.distanceInFeetString.  
     //You can add logic that if distanceInMilesString starts with a 0. then use Feet otherwise use Miles.
-    cell.detailTextLabel.text                   = [NSString stringWithFormat:@"%@ - Distance %@ miles", place.vicinity, place.distanceInMilesString];
+    
     cell.detailTextLabel.textColor              = [UIColor darkGrayColor];
     cell.detailTextLabel.font                   = [UIFont systemFontOfSize:10.0];
 
@@ -266,10 +326,16 @@
         NSIndexPath *selectedRowIndex = [self.tableView indexPathForSelectedRow];
         
         //UPDATED from locations to locationFilterResults
-        GooglePlacesObject *places = [locationsFilterResults objectAtIndex:selectedRowIndex.row];
-        
-        DetailViewController *detailViewController = [segue destinationViewController];
-        detailViewController.reference =  places.reference;     
+        if (selectedRowIndex.row < locationsFilterResults.count) {
+            GooglePlacesObject *places = [locationsFilterResults objectAtIndex:selectedRowIndex.row];
+            
+            DetailViewController *detailViewController = [segue destinationViewController];
+            detailViewController.reference =  places.reference;
+        } else {
+            
+            
+        }
+           
     }
 }
 
