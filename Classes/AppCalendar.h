@@ -17,7 +17,7 @@
 #import <Foundation/Foundation.h>
 #import <EventKit/EventKit.h>
 
-#define kAppCalendarTitle @"Good Times TV Guide"
+#define kAppCalendarTitle @"Reminder+"
 
 @interface AppCalendar : NSObject
 

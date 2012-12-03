@@ -43,7 +43,7 @@
 	[super didTransitionToState:state];
 	
 	if (!(state & UITableViewCellStateEditingMask)) {
-		locationLabel.hidden = NO;
+		locationLabel.hidden = YES;
 		nameField.enabled = NO;
 		tagsButton.hidden = YES;
 		tagsField.placeholder = @"";

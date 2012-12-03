@@ -298,141 +298,168 @@
 
 -(void)addReminder:(Event*)reminder toCalendar:(EKCalendar*)calendar
 {
-    EKEvent* event = [EKEvent eventWithEventStore: [AppCalendar eventStore] ];
-    event.calendar = calendar;
+    EKEventStore *es = [AppCalendar eventStore];
     
-    EKAlarm* myAlarm = [EKAlarm alarmWithRelativeOffset: - 06*60 ];
-    [event addAlarm: myAlarm];
-    
-    NSDateFormatter* frm = [[NSDateFormatter alloc] init];
-    [frm setDateFormat:@"MM/dd/yyyy HH:mm zzz"];
-    [frm setLocale:[[NSLocale alloc] initWithLocaleIdentifier:@"en_US"]];
-    
-    // Set up the content
-    Event *localReminder = reminder;
-    
-    NSString *question = @"Remind to use coupon when entering Walmart at 5 pm, tomorrow.";
-    
-    localReminder.name = question;
-    
-    NSLinguisticTaggerOptions options = NSLinguisticTaggerOmitWhitespace | NSLinguisticTaggerOmitPunctuation | NSLinguisticTaggerJoinNames;
-    NSLinguisticTagger *tagger = [[NSLinguisticTagger alloc] initWithTagSchemes: [NSLinguisticTagger availableTagSchemesForLanguage:@"en"] options:options];
-    tagger.string = question;
-    
-    // I need a better algorithm for this
-    __block NSMutableArray *tagArrays = [NSMutableArray array];
-    [tagger enumerateTagsInRange:NSMakeRange(0, [question length]) scheme:NSLinguisticTagSchemeNameTypeOrLexicalClass options:options usingBlock:^(NSString *tag, NSRange tokenRange, NSRange sentenceRange, BOOL *stop) {
-        NSString *token = [question substringWithRange:tokenRange];
-        NSDictionary *dict = @{@"tag":tag, @"token":token};
-        [tagArrays addObject:dict];
-    }];
-    
-    // I know this is stupid
-    __block NSUInteger conjunctionIndex = 0;
-    __block NSUInteger particleIndex = 0;
-    __block NSUInteger prepositionIndex = 0;
-    [tagArrays enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
-        NSDictionary *dict = (NSDictionary *)obj;
-        if ([dict[@"tag"] isEqualToString:@"Particle"]) {
-            particleIndex = idx;
-        }
-        if ([dict[@"tag"] isEqualToString:@"Conjunction"]) {
-            conjunctionIndex = idx;
-        }
-        if ([dict[@"tag"] isEqualToString:@"Preposition"]) {
-            prepositionIndex = idx;
-        }
+    //TODO: NEED TO BE FIXED
+    [es requestAccessToEntityType:EKEntityTypeEvent completion:^(BOOL granted, NSError *error) {
+        /* This code will run when uses has made his/her choice */
         
-    }];
-    //    NSLog(@"par:%d, con:%d,  prep: %d",particleIndex, conjunctionIndex, prepositionIndex);
-    //
-    //
-    __block NSMutableString *whatString = [NSMutableString string];
-    
-    if  (conjunctionIndex - (particleIndex+1) > 0)
-    {
-        NSRange whatRange = NSMakeRange(particleIndex+1, conjunctionIndex-(particleIndex+ 1));
-        NSArray *whatArray = [tagArrays objectsAtIndexes:[NSIndexSet indexSetWithIndexesInRange:whatRange]];
-        
-        if (whatArray.count>0) {
-            [whatArray enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
-                [whatString appendString:[NSString stringWithFormat:@"%@ ",((NSDictionary *)obj)[@"token"]]];
-            }];
-        }
-        NSLog(@"what :%@",whatString);
-        localReminder.what = whatString;
-    }
-    
-    __block NSMutableString *whereString = [NSMutableString string];
-    if (prepositionIndex-(conjunctionIndex+1) > 0) {
-        NSRange whereRange = NSMakeRange(conjunctionIndex+1, prepositionIndex-(conjunctionIndex+ 1));
-        NSArray *whereArray = [tagArrays objectsAtIndexes:[NSIndexSet indexSetWithIndexesInRange:whereRange]];
-        if (whereArray.count>0) {
-            [whereArray enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
-                [whereString appendString:[NSString stringWithFormat:@"%@ ",((NSDictionary *)obj)[@"token"]]];
-            }];
-        }
-        NSLog(@"where :%@",whereString);
-        localReminder.where = whereString;
-    }
-    
-    __block NSMutableString *whenString = [NSMutableString string];
-    if (tagArrays.count-(prepositionIndex+1) > 0) {
-        NSRange whenRange = NSMakeRange(prepositionIndex+1, tagArrays.count-(prepositionIndex+ 1));
-        NSArray *whenArray = [tagArrays objectsAtIndexes:[NSIndexSet indexSetWithIndexesInRange:whenRange]];
-        if (whenArray.count>0) {
-            [whenArray enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
-                [whenString appendString:[NSString stringWithFormat:@"%@ ",((NSDictionary *)obj)[@"token"]]];
-            }];
-        }
-        NSLog(@"when :%@",whenString);
-        localReminder.when = whenString;
-    }
-    
+        NSString *message = @"";
+        if (error !=nil){
+            message = [error localizedDescription];
+        } else {
+            if (granted) {
+                EKEvent* event = [EKEvent eventWithEventStore:es];
+                event.calendar = calendar;
+                
+                EKAlarm* myAlarm = [EKAlarm alarmWithRelativeOffset: - 06*60 ];  // reminder in 6 mins before
+                [event addAlarm: myAlarm];
+                
+                NSDateFormatter* frm = [[NSDateFormatter alloc] init];
+                [frm setDateFormat:@"MM/dd/yyyy HH:mm zzz"];
+                [frm setLocale:[[NSLocale alloc] initWithLocaleIdentifier:@"en_US"]];
+                
+                // Set up the content
+                Event *localReminder = reminder;
+                
+                NSString *question = @"Remind to use coupon when entering Walmart at 5 pm, tomorrow.";
+                
+                localReminder.name = question;
+                
+                NSLinguisticTaggerOptions options = NSLinguisticTaggerOmitWhitespace | NSLinguisticTaggerOmitPunctuation | NSLinguisticTaggerJoinNames;
+                NSLinguisticTagger *tagger = [[NSLinguisticTagger alloc] initWithTagSchemes: [NSLinguisticTagger availableTagSchemesForLanguage:@"en"] options:options];
+                tagger.string = question;
+                
+                // I need a better algorithm for this
+                __block NSMutableArray *tagArrays = [NSMutableArray array];
+                [tagger enumerateTagsInRange:NSMakeRange(0, [question length]) scheme:NSLinguisticTagSchemeNameTypeOrLexicalClass options:options usingBlock:^(NSString *tag, NSRange tokenRange, NSRange sentenceRange, BOOL *stop) {
+                    NSString *token = [question substringWithRange:tokenRange];
+                    NSDictionary *dict = @{@"tag":tag, @"token":token};
+                    [tagArrays addObject:dict];
+                }];
+                
+                // I know this is stupid
+                __block NSUInteger conjunctionIndex = 0;
+                __block NSUInteger particleIndex = 0;
+                __block NSUInteger prepositionIndex = 0;
+                [tagArrays enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+                    NSDictionary *dict = (NSDictionary *)obj;
+                    if ([dict[@"tag"] isEqualToString:@"Particle"]) {
+                        particleIndex = idx;
+                    }
+                    if ([dict[@"tag"] isEqualToString:@"Conjunction"]) {
+                        conjunctionIndex = idx;
+                    }
+                    if ([dict[@"tag"] isEqualToString:@"Preposition"]) {
+                        prepositionIndex = idx;
+                    }
+                    
+                }];
+                //    NSLog(@"par:%d, con:%d,  prep: %d",particleIndex, conjunctionIndex, prepositionIndex);
+                //
+                //
+                __block NSMutableString *whatString = [NSMutableString string];
+                
+                if  (conjunctionIndex - (particleIndex+1) > 0)
+                {
+                    NSRange whatRange = NSMakeRange(particleIndex+1, conjunctionIndex-(particleIndex+ 1));
+                    NSArray *whatArray = [tagArrays objectsAtIndexes:[NSIndexSet indexSetWithIndexesInRange:whatRange]];
+                    
+                    if (whatArray.count>0) {
+                        [whatArray enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+                            [whatString appendString:[NSString stringWithFormat:@"%@ ",((NSDictionary *)obj)[@"token"]]];
+                        }];
+                    }
+                    NSLog(@"what :%@",whatString);
+                    localReminder.what = whatString;
+                }
+                
+                __block NSMutableString *whereString = [NSMutableString string];
+                if (prepositionIndex-(conjunctionIndex+1) > 0) {
+                    NSRange whereRange = NSMakeRange(conjunctionIndex+1, prepositionIndex-(conjunctionIndex+ 1));
+                    NSArray *whereArray = [tagArrays objectsAtIndexes:[NSIndexSet indexSetWithIndexesInRange:whereRange]];
+                    if (whereArray.count>0) {
+                        [whereArray enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+                            [whereString appendString:[NSString stringWithFormat:@"%@ ",((NSDictionary *)obj)[@"token"]]];
+                        }];
+                    }
+                    NSLog(@"where :%@",whereString);
+                    localReminder.where = whereString;
+                }
+                
+                __block NSMutableString *whenString = [NSMutableString string];
+                if (tagArrays.count-(prepositionIndex+1) > 0) {
+                    NSRange whenRange = NSMakeRange(prepositionIndex+1, tagArrays.count-(prepositionIndex+ 1));
+                    NSArray *whenArray = [tagArrays objectsAtIndexes:[NSIndexSet indexSetWithIndexesInRange:whenRange]];
+                    if (whenArray.count>0) {
+                        [whenArray enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+                            [whenString appendString:[NSString stringWithFormat:@"%@ ",((NSDictionary *)obj)[@"token"]]];
+                        }];
+                    }
+                    NSLog(@"when :%@",whenString);
+                    localReminder.when = whenString;
+                }
+                
+                
+                //    event.startDate = [frm dateFromString: [show objectForKey:@"startDate"]];
+                //    event.endDate   = [frm dateFromString: [show objectForKey:@"endDate"]];
+                
+                event.title = localReminder.name; //[show objectForKey:@"title"];
+                //    event.URL = [NSURL URLWithString:[show objectForKey:@"url"]];
+                event.location = localReminder.where; //@"The living room";
+                event.notes = localReminder.how ;
+                //    event.notes = [show objectForKey:@"tip"];
+                
+                
+                // this is how we want to set up the how.
+                NSNumber* weekDay = [NSNumber numberWithInt:1]; //[show objectForKey:@"dayOfTheWeek"];
+                //1
+                EKRecurrenceDayOfWeek* showDay = [EKRecurrenceDayOfWeek dayOfWeek: [weekDay intValue] ];
+                //2
+                EKRecurrenceEnd* runFor3Months = [EKRecurrenceEnd recurrenceEndWithOccurrenceCount:12];
+                //3
+                EKRecurrenceRule* myReccurrence =
+                [[EKRecurrenceRule alloc] initRecurrenceWithFrequency:EKRecurrenceFrequencyWeekly
+                                                             interval:1
+                                                        daysOfTheWeek:[NSArray arrayWithObject:showDay]
+                                                       daysOfTheMonth:nil
+                                                      monthsOfTheYear:nil
+                                                       weeksOfTheYear:nil
+                                                        daysOfTheYear:nil
+                                                         setPositions:nil
+                                                                  end:runFor3Months];
+                [event addRecurrenceRule: myReccurrence];
+                
+                //1 save the event to the calendar
+                NSError* error = nil;
+                [[AppCalendar eventStore] saveEvent:event span:EKSpanFutureEvents commit:YES error:&error];
+                
+                //2 show the edit event dialogue
+                EKEventEditViewController* editEvent = [[EKEventEditViewController alloc] init];
+                editEvent.eventStore = [AppCalendar eventStore];
+                editEvent.event = event;
+                editEvent.editViewDelegate = self;
+                [self presentViewController:editEvent animated:YES completion:^{
+//                    UINavigationItem* item = [editEvent.navigationBar.items objectAtIndex:0];
+//                    item.leftBarButtonItem = nil;
+                }];
 
-//    event.startDate = [frm dateFromString: [show objectForKey:@"startDate"]];
-//    event.endDate   = [frm dateFromString: [show objectForKey:@"endDate"]];
-    
-    event.title = localReminder.name; //[show objectForKey:@"title"];
-//    event.URL = [NSURL URLWithString:[show objectForKey:@"url"]];
-    event.location = localReminder.where; //@"The living room";
-    event.notes = localReminder.how ;
-//    event.notes = [show objectForKey:@"tip"];
-    
-    
-    // this is how we want to set up the how.
-    NSNumber* weekDay = [NSNumber numberWithInt:1]; //[show objectForKey:@"dayOfTheWeek"];
-    //1
-    EKRecurrenceDayOfWeek* showDay = [EKRecurrenceDayOfWeek dayOfWeek: [weekDay intValue] ];
-    //2
-    EKRecurrenceEnd* runFor3Months = [EKRecurrenceEnd recurrenceEndWithOccurrenceCount:12];
-    //3
-    EKRecurrenceRule* myReccurrence =
-    [[EKRecurrenceRule alloc] initRecurrenceWithFrequency:EKRecurrenceFrequencyWeekly
-                                                 interval:1
-                                            daysOfTheWeek:[NSArray arrayWithObject:showDay]
-                                           daysOfTheMonth:nil
-                                          monthsOfTheYear:nil
-                                           weeksOfTheYear:nil
-                                            daysOfTheYear:nil
-                                             setPositions:nil
-                                                      end:runFor3Months];
-    [event addRecurrenceRule: myReccurrence];
-    
-    //1 save the event to the calendar
-    NSError* error = nil;
-    [[AppCalendar eventStore] saveEvent:event span:EKSpanFutureEvents commit:YES error:&error];
-    
-    //2 show the edit event dialogue
-    EKEventEditViewController* editEvent = [[EKEventEditViewController alloc] init];
-    editEvent.eventStore = [AppCalendar eventStore];
-    editEvent.event = event;
-    editEvent.editViewDelegate = self;
-    [self presentViewController:editEvent animated:YES completion:^{
-        UINavigationItem* item = [editEvent.navigationBar.items objectAtIndex:0];
-        item.leftBarButtonItem = nil;
+            } else {
+                message = @"Please accept the request to use the app";
+            }
+        }
+        
+        if (message.length > 0) {
+            [[[UIAlertView alloc] initWithTitle:@"Oops"
+                                        message:message
+                                       delegate:nil
+                              cancelButtonTitle:NSLocalizedString(@"OK", @"OK")
+                              otherButtonTitles:nil] show];
+
+        }
     }];
-    
+        
+        
 }
 
 #pragma mark - Edit event delegate
@@ -447,6 +474,31 @@
     switch (action) {
         case EKEventEditViewActionDeleted:
             [[AppCalendar eventStore] removeEvent:controller.event span:EKSpanFutureEvents error:&error];
+            break;
+        case EKEventEditViewActionSaved:
+        {
+            EKEvent* returnedEvent = controller.event;
+            NSLog(@"returned event: %@",returnedEvent);
+            NSIndexPath *selectedPath = [self.tableView indexPathForSelectedRow];
+            
+            // need to update this one
+            Event *event = eventsArray[selectedPath.row];
+            event.name = returnedEvent.title;
+            event.creationDate = returnedEvent.endDate;
+            
+            // Commit the change.
+            NSError *error;
+            if (![managedObjectContext save:&error]) {
+                // Handle the error.
+                NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
+                exit(-1);  // Fail
+            }
+
+            // then we update the view
+            [self.tableView reloadRowsAtIndexPaths:@[selectedPath] withRowAnimation:UITableViewRowAnimationNone];
+            break;
+        }
+        
         default:break;
     }
     [controller dismissViewControllerAnimated:YES completion:nil];
@@ -532,7 +584,25 @@
 			NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
 			exit(-1);  // Fail
 		}
-
+        // Apparantly the only way I can think is to compare the title:
+        // check for a calendar with the same name with our own Event object
+        EKEventStore *eventStore = [AppCalendar eventStore];
+        
+        __block EKEvent *targetEvent = nil;
+        const double secondsInAYear = (60.0*60.0*24.0)*365.0;
+        NSPredicate* predicate = [eventStore predicateForEventsWithStartDate:[NSDate dateWithTimeIntervalSinceNow:-secondsInAYear] endDate:[NSDate dateWithTimeIntervalSinceNow:secondsInAYear] calendars:nil];
+        [eventStore enumerateEventsMatchingPredicate:predicate
+                                          usingBlock:^(EKEvent *event, BOOL *stop) {
+                                              if ([event.title isEqualToString:((Event *)eventToDelete).name]) {
+                                                  targetEvent = event;
+                                                  *stop = YES;
+                                                  
+                                              }
+                                          }];
+        if (targetEvent != nil) {
+           [[AppCalendar eventStore] removeEvent:targetEvent span:EKSpanFutureEvents error:&error]; 
+        }
+        
 		[self performSelector:@selector(updateRowTags) withObject:nil afterDelay:0.0];
     }   
 }

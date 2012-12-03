@@ -78,9 +78,9 @@
 		D6FF80C5166BBAA100D2DC4F /* Icon-Small@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = D6FF80BF166BBAA100D2DC4F /* Icon-Small@2x.png */; };
 		D6FF80C6166BBAA100D2DC4F /* Icon-72.png in Resources */ = {isa = PBXBuildFile; fileRef = D6FF80C0166BBAA100D2DC4F /* Icon-72.png */; };
 		D6FF80C7166BBAA100D2DC4F /* Icon-72@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = D6FF80C1166BBAA100D2DC4F /* Icon-72@2x.png */; };
-		D6FF80E5166BE42100D2DC4F /* FPPopoverController.m in Sources */ = {isa = PBXBuildFile; fileRef = D6FF80DA166BE42100D2DC4F /* FPPopoverController.m */; };
-		D6FF80E6166BE42100D2DC4F /* FPPopoverView.m in Sources */ = {isa = PBXBuildFile; fileRef = D6FF80DC166BE42100D2DC4F /* FPPopoverView.m */; };
-		D6FF80E7166BE42100D2DC4F /* FPTouchView.m in Sources */ = {isa = PBXBuildFile; fileRef = D6FF80DE166BE42100D2DC4F /* FPTouchView.m */; };
+		D6FF80E5166BE42100D2DC4F /* FPPopoverController.m in Sources */ = {isa = PBXBuildFile; fileRef = D6FF80DA166BE42100D2DC4F /* FPPopoverController.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		D6FF80E6166BE42100D2DC4F /* FPPopoverView.m in Sources */ = {isa = PBXBuildFile; fileRef = D6FF80DC166BE42100D2DC4F /* FPPopoverView.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		D6FF80E7166BE42100D2DC4F /* FPTouchView.m in Sources */ = {isa = PBXBuildFile; fileRef = D6FF80DE166BE42100D2DC4F /* FPTouchView.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		D6FF80E8166BE42100D2DC4F /* UIViewController+KNSemiModal.m in Sources */ = {isa = PBXBuildFile; fileRef = D6FF80E1166BE42100D2DC4F /* UIViewController+KNSemiModal.m */; };
 		D6FF80E9166BE42100D2DC4F /* TTTTimeIntervalFormatter.m in Sources */ = {isa = PBXBuildFile; fileRef = D6FF80E4166BE42100D2DC4F /* TTTTimeIntervalFormatter.m */; };
 /* End PBXBuildFile section */
