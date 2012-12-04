@@ -14,14 +14,14 @@
 @interface EventTableViewCell : UITableViewCell {
 	UITextField *nameField;
 	UILabel *creationDateLabel;
-	UILabel *locationLabel;
+	UILabel *expiredDateLabel;
 	UITextField *tagsField;
 	UIButton *tagsButton;
 }
 
 @property (nonatomic, strong) IBOutlet UITextField *nameField;
 @property (nonatomic, strong) IBOutlet UILabel *creationDateLabel;
-@property (nonatomic, strong) IBOutlet UILabel *locationLabel;
+@property (nonatomic, strong) IBOutlet UILabel *expiredDateLabel;
 @property (nonatomic, strong) IBOutlet UITextField *tagsField;
 @property (nonatomic, strong) IBOutlet UIButton *tagsButton;
 

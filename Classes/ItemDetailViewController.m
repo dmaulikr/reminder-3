@@ -561,7 +561,7 @@
             }
             case 3:
             {
-                event.prority = [NSNumber numberWithInt:row];
+                event.priority = [NSNumber numberWithInt:row];
                 break;
             }
             default:
@@ -570,7 +570,7 @@
     }
     
     
-    event.how = [NSString stringWithFormat:@"%@, %@, %@, %@",selected[[event.inAdvance intValue]], selected[[event.frequency intValue]],selected[[event.geoFencingPreference intValue]], selected[[event.prority intValue]]];
+    event.how = [NSString stringWithFormat:@"%@, %@, %@, %@",selected[[event.inAdvance intValue]], selected[[event.frequency intValue]],selected[[event.geoFencingPreference intValue]], selected[[event.priority intValue]]];
 }
 
 

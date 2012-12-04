@@ -23,6 +23,7 @@
 #import "AppCalendar.h"
 #import "PlaceSearchViewController.h"
 #import "TaggedLocationsAppDelegate.h"
+#import "TTTTimeIntervalFormatter.h"
 
 @implementation RootViewController
 
@@ -196,6 +197,8 @@
 	cell.nameField.text = event.name;
 	
 	cell.creationDateLabel.text = [dateFormatter stringFromDate:[event creationDate]];
+    
+    cell.expiredDateLabel.text = event.expired;
 	
 //	NSString *string = [NSString stringWithFormat:@"%@, %@",
 //						[numberFormatter stringFromNumber:[event latitude]],
@@ -254,8 +257,36 @@
         [alertView dismissWithClickedButtonIndex:buttonIndex animated:YES];
         
         //TODO: MAKE SURE THOSE ALERT WON'T SHOW AGAIN ONCE THE USER SELECTS NO
-        [self addReminder:event
-               toCalendar: [AppCalendar calendar]];
+//        int row = [self.tableView indexPathForSelectedRow].row;
+        //        [self addShow:[shows objectAtIndex:row]
+        //           toCalendar: [AppCalendar calendar]];
+        
+        EKEventStore *store = [AppCalendar eventStore];
+        [store requestAccessToEntityType:EKEntityTypeEvent completion:^(BOOL granted, NSError *error) {
+            // handle access here
+            if (error != nil) {
+                [[[UIAlertView alloc] initWithTitle:@"Oops"
+                                            message:@"Unexpected Error:"
+                                           delegate:self
+                                  cancelButtonTitle:@"Okay"
+                                  otherButtonTitles:nil] show];
+                
+            } else {
+                if (granted) {
+                    dispatch_async(dispatch_get_main_queue(), ^{
+                        [self addShow:event toEventStore:store toCalendar:[AppCalendar calendar]];
+                    });
+                } else {
+                    [[[UIAlertView alloc] initWithTitle:@"Oops"
+                                                message:@"The app needs to use your calendar"
+                                               delegate:self
+                                      cancelButtonTitle:@"Okay"
+                                      otherButtonTitles:nil] show];
+                    
+                }
+            }
+        }];
+
     } else {
         UIStoryboard *storyBoard = [UIStoryboard storyboardWithName:@"LocationStoryboard" bundle:nil];
         UINavigationController *controller = [storyBoard instantiateInitialViewController];
@@ -296,7 +327,9 @@
 
 #pragma mark - Calendar methods
 
--(void)addReminder:(Event*)reminder toCalendar:(EKCalendar*)calendar
+-(void)addShow:(Event*)reminder toEventStore:(EKEventStore *)store toCalendar:(EKCalendar*)calendar
+
+//-(void)addReminder:(Event*)reminder toCalendar:(EKCalendar*)calendar
 {
     EKEventStore *es = [AppCalendar eventStore];
     
@@ -484,7 +517,7 @@
             // need to update this one
             Event *event = eventsArray[selectedPath.row];
             event.name = returnedEvent.title;
-            event.creationDate = returnedEvent.endDate;
+            event.expired = [self relativeDate:returnedEvent.endDate];
             
             // Commit the change.
             NSError *error;
@@ -520,33 +553,31 @@
 
 #pragma mark - Calendar chooser delegate
 
-- (void)calendarChooserDidFinish:(EKCalendarChooser *)calendarChooser
-{
-    //1
-    EKCalendar* selectedCalendar = [calendarChooser.selectedCalendars anyObject];
-    
-    //2
-    int row = [self.tableView indexPathForSelectedRow].row;
-    
-    //3
-    Event *event;
-    
-    if (self.tableView == self.searchDisplayController.searchResultsTableView)
-    {
-        event = (self.filteredListContent)[row];
-    }
-    else
-    {
-        event = (Event *)eventsArray[row];
-    }
-    
-    [self addReminder:event
-           toCalendar: selectedCalendar];
-//    [self addShow: [shows objectAtIndex:row]
-//       toCalendar: selectedCalendar];
-    //4
-    [self.navigationController popViewControllerAnimated:YES];
-}
+//- (void)calendarChooserDidFinish:(EKCalendarChooser *)calendarChooser
+//{
+//    //1
+//    EKCalendar* selectedCalendar = [calendarChooser.selectedCalendars anyObject];
+//    
+//    //2
+//    int row = [self.tableView indexPathForSelectedRow].row;
+//    
+//    //3
+//    Event *event;
+//    
+//    if (self.tableView == self.searchDisplayController.searchResultsTableView)
+//    {
+//        event = (self.filteredListContent)[row];
+//    }
+//    else
+//    {
+//        event = (Event *)eventsArray[row];
+//    }
+//    
+//    [self addReminder:event
+//           toCalendar: selectedCalendar];
+//    //4
+//    [self.navigationController popViewControllerAnimated:YES];
+//}
 
 //#pragma mark - Show Event
 //- (void)showEvent:(Event *)event animated:(BOOL)animated {
@@ -938,6 +969,26 @@
         [actionSheet showInView:self.tableView];
 
     }
+}
+
+
+#pragma mark - helper method
+#pragma mark - get relative Date String
+- (NSString *)relativeDate:(NSDate*)pastDate
+{
+    
+    NSDate* rightNow = [NSDate date];
+    
+    NSTimeInterval timeInterval = [pastDate timeIntervalSinceDate:rightNow];
+    static TTTTimeIntervalFormatter *_timeIntervalFormatter = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        _timeIntervalFormatter = [[TTTTimeIntervalFormatter alloc] init];
+        [_timeIntervalFormatter setLocale:[NSLocale currentLocale]];
+    });
+    
+    return [_timeIntervalFormatter stringForTimeInterval:timeInterval];
+    
 }
 
 @end

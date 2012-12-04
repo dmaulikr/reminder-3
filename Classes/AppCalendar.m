@@ -17,6 +17,7 @@
 #import "AppCalendar.h"
 
 static EKEventStore* eStore = NULL;
+static EKReminder* eReminder = NULL;
 
 @implementation AppCalendar
 
@@ -99,4 +100,42 @@ static EKEventStore* eStore = NULL;
     return result;
 }
 
++(EKReminder *)reminder
+{
+    
+    if (!eReminder) {
+        eReminder = [EKReminder
+                     reminderWithEventStore:[self eventStore]];
+    }
+    
+    return eReminder;
+    
+        
+//    reminder.title = _locationText.text;
+    
+    
+    
+//    EKStructuredLocation *location = [EKStructuredLocation
+//                                      locationWithTitle:@"Current Location"];
+//    
+//    location.geoLocation = [locations lastObject];
+    
+//    EKAlarm *alarm = [[EKAlarm alloc]init];
+    
+//    alarm.structuredLocation = location;
+    
+//    alarm.proximity = EKAlarmProximityLeave;
+    
+//    [reminder addAlarm:alarm];
+    
+//    NSError *error = nil;
+//    
+//    [[self eventStore] saveReminder:reminder commit:YES error:&error];
+//    
+//    if (error)
+//        NSLog(@"Failed to set reminder: %@", error);
+    
+    
+
+}
 @end

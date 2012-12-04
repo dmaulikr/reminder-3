@@ -17,7 +17,7 @@
 
 @implementation EventTableViewCell
 
-@synthesize nameField, creationDateLabel, locationLabel, tagsField, tagsButton;
+@synthesize nameField, creationDateLabel, expiredDateLabel, tagsField, tagsButton;
 
 /*
  When the table view becomes editable, the cell should:
@@ -32,7 +32,7 @@
 	[super willTransitionToState:state];
 	
 	if (state & UITableViewCellStateEditingMask) {
-		locationLabel.hidden = YES;
+		expiredDateLabel.hidden = YES;
 		nameField.enabled = YES;
 		tagsButton.hidden = NO;
 		tagsField.placeholder = @"Tap to edit tags";
@@ -43,7 +43,7 @@
 	[super didTransitionToState:state];
 	
 	if (!(state & UITableViewCellStateEditingMask)) {
-		locationLabel.hidden = YES;
+		expiredDateLabel.hidden = YES;
 		nameField.enabled = NO;
 		tagsButton.hidden = YES;
 		tagsField.placeholder = @"";

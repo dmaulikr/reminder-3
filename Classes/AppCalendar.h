@@ -24,5 +24,6 @@
 +(EKEventStore*)eventStore;
 +(EKCalendar*)calendar;
 +(EKCalendar*)createAppCalendar;
++(EKReminder *)reminder;
 
 @end
