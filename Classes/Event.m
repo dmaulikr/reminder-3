@@ -30,6 +30,7 @@
 @dynamic frequency;
 @dynamic inAdvance;
 @dynamic priority;
+@dynamic useGeoFencing;
 
 
 @end
