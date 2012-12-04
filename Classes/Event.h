@@ -60,7 +60,9 @@
 @property (nonatomic, strong) NSString *where;
 @property (nonatomic, strong) NSString *what;
 @property (nonatomic, strong) NSString *how;
-@property (nonatomic, strong) NSNumber *prority;
+@property (nonatomic, strong) NSString *expired;
+
+@property (nonatomic, strong) NSNumber *priority;
 @property (nonatomic, strong) NSNumber *inAdvance;
 @property (nonatomic, strong) NSNumber *frequency;
 @property (nonatomic, strong) NSNumber *geoFencingPreference;

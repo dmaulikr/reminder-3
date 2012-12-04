@@ -25,10 +25,11 @@
 @dynamic where;
 @dynamic how;
 @dynamic what;
+@dynamic expired;
 @dynamic geoFencingPreference;
 @dynamic frequency;
 @dynamic inAdvance;
-@dynamic prority;
+@dynamic priority;
 
 
 @end

@@ -28,11 +28,11 @@
 @synthesize locationManager;
 @synthesize currentLocation;
 @synthesize urlConnection;
-@synthesize responseData;
 @synthesize locations;
 @synthesize searchString;
 //NEW - to handle filtering
 @synthesize locationsFilterResults;
+@synthesize categories;
 
 - (void)didReceiveMemoryWarning
 {
@@ -45,6 +45,56 @@
     [self dismissViewControllerAnimated:YES completion:nil];
 }
 
+- (void)showFilters:(id)sender
+{
+    
+    UIActionSheet *filterSheet = [[UIActionSheet alloc] initWithTitle:@"Filter" delegate:self cancelButtonTitle:@"Cancel" destructiveButtonTitle:nil otherButtonTitles:nil];
+    [filterSheet addButtonWithTitle:@"Bar"];
+    [filterSheet addButtonWithTitle:@"SuperMarket"];
+    
+    
+    
+    [filterSheet showFromBarButtonItem:self.navigationItem.rightBarButtonItem animated:YES];
+}
+
+#pragma mark - UIActionSheet Delegate
+- (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex
+{
+    if (buttonIndex == actionSheet.cancelButtonIndex) {
+        [actionSheet dismissWithClickedButtonIndex:buttonIndex animated:YES];
+    } else {
+        NSString *sortKey = @"";
+        NSSortDescriptor *sortdis;
+        
+        switch (buttonIndex) {
+            case 0: //Price
+                sortKey = @"AppraisedValue";
+                break;
+            case 1: // Status
+                sortKey = @"Status";
+                break;
+            case 2: // Name
+                sortKey = @"VehicleTitle";
+                break;
+            case 3:  // last modified date
+                sortKey = @"LastModifiedTime";
+                break;
+                
+            default:
+                break;
+        }
+        
+        sortdis = [[NSSortDescriptor alloc] initWithKey:sortKey ascending:YES];
+        NSArray *discriptor = [NSArray arrayWithObjects:sortdis,nil];
+//        NSArray *sortedArray =  [listContent sortedArrayUsingDescriptors:discriptor];
+//        listContent = [NSMutableArray arrayWithArray:sortedArray];
+        
+        [self.tableView reloadData];
+    }
+    
+    
+}
+
 #pragma mark - View lifecycle
 
 - (void)viewDidLoad
@@ -54,14 +104,20 @@
     UIBarButtonItem *doneItem = [[UIBarButtonItem alloc] initWithTitle:@"Done" style:UIBarButtonSystemItemCancel target:self action:@selector(onDone:)];
     self.navigationItem.leftBarButtonItem = doneItem;
     
-    UIBarButtonItem *mapBarItem = [[UIBarButtonItem alloc] initWithTitle:@"Map" style:UIBarButtonItemStylePlain target:self action:@selector(displayPlacemarks)];
-    self.navigationItem.rightBarButtonItem = mapBarItem;
+//    UIBarButtonItem *mapBarItem = [[UIBarButtonItem alloc] initWithTitle:@"Map" style:UIBarButtonItemStylePlain target:self action:@selector(displayPlacemarks)];
+//    self.navigationItem.rightBarButtonItem = mapBarItem;
+
+    // Filters
+    UIBarButtonItem *filterBarItem = [[UIBarButtonItem alloc] initWithTitle:@"Filter" style:UIBarButtonItemStylePlain target:self action:@selector(showFilters:)];
+    self.navigationItem.rightBarButtonItem = filterBarItem;
     
-    self.navigationItem.rightBarButtonItem.enabled = NO;
+    self.navigationItem.rightBarButtonItem.enabled = YES;
     
-    [self.refreshHeaderView setLastRefreshDate:nil];    
+    // don't want to put those long strings here
+    [self setCategoryValues];
     
-    responseData = [[NSMutableData data] init];
+    [self.refreshHeaderView setLastRefreshDate:nil];
+    
     
     [[self locationManager] startUpdatingLocation];
     
@@ -219,7 +275,7 @@
 - (NSInteger)tableView:(UITableView *)theTableView numberOfRowsInSection:(NSInteger)section
 {
     //return [locations count];
-    return [locationsFilterResults count];
+    return [locationsFilterResults count] + 1;
 }
 
 //UPDATE - to handle filtering
@@ -238,9 +294,15 @@
     GooglePlacesObject *place     = [[GooglePlacesObject alloc] init];
     
     //UPDATED from locations to locationFilter results
-    place                       = [locationsFilterResults objectAtIndex:[indexPath row]];
+    if (indexPath.row < [locationsFilterResults count]) {
+        place                       = [locationsFilterResults objectAtIndex:[indexPath row]];
+        
+        cell.textLabel.text                         = place.name;
+        cell.detailTextLabel.text                   = [NSString stringWithFormat:@"%@ - Distance %@ miles", place.vicinity, place.distanceInMilesString];
+    } else {
+        cell.textLabel.text  = @"Not in the list, let's narraw the search down";
+    }
     
-    cell.textLabel.text                         = place.name;
     cell.textLabel.adjustsFontSizeToFitWidth    = YES;
 	cell.textLabel.font                         = [UIFont systemFontOfSize:12.0];
 	cell.textLabel.minimumFontSize              = 10;
@@ -251,7 +313,7 @@
     
     //You can use place.distanceInMilesString or place.distanceInFeetString.  
     //You can add logic that if distanceInMilesString starts with a 0. then use Feet otherwise use Miles.
-    cell.detailTextLabel.text                   = [NSString stringWithFormat:@"%@ - Distance %@ miles", place.vicinity, place.distanceInMilesString];
+    
     cell.detailTextLabel.textColor              = [UIColor darkGrayColor];
     cell.detailTextLabel.font                   = [UIFont systemFontOfSize:10.0];
 
@@ -266,10 +328,16 @@
         NSIndexPath *selectedRowIndex = [self.tableView indexPathForSelectedRow];
         
         //UPDATED from locations to locationFilterResults
-        GooglePlacesObject *places = [locationsFilterResults objectAtIndex:selectedRowIndex.row];
-        
-        DetailViewController *detailViewController = [segue destinationViewController];
-        detailViewController.reference =  places.reference;     
+        if (selectedRowIndex.row < locationsFilterResults.count) {
+            GooglePlacesObject *places = [locationsFilterResults objectAtIndex:selectedRowIndex.row];
+            
+            DetailViewController *detailViewController = [segue destinationViewController];
+            detailViewController.reference =  places.reference;
+        } else {
+            
+            
+        }
+           
     }
 }
 
@@ -373,6 +441,111 @@
 //                                          otherButtonTitles: nil];
 //    [alert show];
     [SVProgressHUD showErrorWithStatus:[error localizedDescription]];
+}
+
+
+#pragma mark - categories
+- (void)setCategoryValues
+{
+    self.categories = @[
+    @"accounting",
+    @"airport",
+    @"amusement_park",
+    @"aquarium",
+    @"art_gallery",
+    @"atm",
+    @"bakery",
+    @"bank",
+    @"bar",
+    @"beauty_salon",
+    @"bicycle_store",
+    @"book_store",
+    @"bowling_alley",
+    @"bus_station",
+    @"cafe",
+    @"campground",
+    @"car_dealer",
+    @"car_rental",
+    @"car_repair",
+    @"car_wash",
+    @"casino",
+    @"cemetery",
+    @"church",
+    @"city_hall",
+    @"clothing_store",
+    @"convenience_store",
+    @"courthouse",
+    @"dentist",
+    @"department_store",
+    @"doctor",
+    @"electrician",
+    @"electronics_store",
+    @"embassy",
+    @"establishment",
+    @"finance",
+    @"fire_station",
+    @"florist",
+    @"food",
+    @"funeral_home",
+    @"furniture_store",
+    @"gas_station",
+    @"general_contractor",
+    @"geocode",
+    @"grocery_or_supermarket",
+    @"gym",
+    @"hair_care",
+    @"hardware_store",
+    @"health",
+    @"hindu_temple",
+    @"home_goods_store",
+    @"hospital",
+    @"insurance_agency",
+    @"jewelry_store",
+    @"laundry",
+    @"lawyer",
+    @"library",
+    @"liquor_store",
+    @"local_government_office",
+    @"locksmith",
+    @"lodging",
+    @"meal_delivery",
+    @"meal_takeaway",
+    @"mosque",
+    @"movie_rental",
+    @"movie_theater",
+    @"moving_company",
+    @"museum",
+    @"night_club",
+    @"painter",
+    @"park",
+    @"parking",
+    @"pet_store",
+    @"pharmacy",
+    @"physiotherapist",
+    @"place_of_worship",
+    @"plumber",
+    @"police",
+    @"post_office",
+    @"real_estate_agency", 
+    @"restaurant", 
+    @"roofing_contractor", 
+    @"rv_park", 
+    @"school", 
+    @"shoe_store", 
+    @"shopping_mall", 
+    @"spa", 
+    @"stadium", 
+    @"storage", 
+    @"store", 
+    @"subway_station", 
+    @"synagogue", 
+    @"taxi_stand", 
+    @"train_station", 
+    @"travel_agency", 
+    @"university", 
+    @"veterinary_care", 
+    @"zoo"
+    ];
 }
 
 @end
