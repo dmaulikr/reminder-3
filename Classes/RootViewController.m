@@ -24,6 +24,7 @@
 #import "PlaceSearchViewController.h"
 #import "TaggedLocationsAppDelegate.h"
 #import "TTTTimeIntervalFormatter.h"
+#import "SVProgressHUD.h"
 
 @implementation RootViewController
 
@@ -273,9 +274,22 @@
                 
             } else {
                 if (granted) {
+                    EKCalendarChooser* chooseCal = [[EKCalendarChooser alloc] initWithSelectionStyle:EKCalendarChooserSelectionStyleSingle
+                                                                                        displayStyle:EKCalendarChooserDisplayWritableCalendarsOnly
+                                                                                          eventStore:[AppCalendar eventStore] ];
+                    chooseCal.delegate = self;
+                    chooseCal.showsDoneButton = YES;
+                    
+                    
                     dispatch_async(dispatch_get_main_queue(), ^{
-                        [self addShow:event toEventStore:store toCalendar:[AppCalendar calendar]];
+                        [SVProgressHUD showWithStatus:@"Loading"];
+                        [self.navigationController presentViewController:chooseCal animated:YES completion:^{
+                            [SVProgressHUD dismiss];
+                        }];
                     });
+                    
+//                    [self.navigationController pushViewController:chooseCal animated:YES];
+                    
                 } else {
                     [[[UIAlertView alloc] initWithTitle:@"Oops"
                                                 message:@"The app needs to use your calendar"
@@ -537,9 +551,6 @@
     [controller dismissViewControllerAnimated:YES completion:nil];
     
     // let's update the database & update the tableview
-    
-    
-
 }
 
 - (void)updateCellInfo {
@@ -553,31 +564,35 @@
 
 #pragma mark - Calendar chooser delegate
 
-//- (void)calendarChooserDidFinish:(EKCalendarChooser *)calendarChooser
-//{
-//    //1
-//    EKCalendar* selectedCalendar = [calendarChooser.selectedCalendars anyObject];
-//    
-//    //2
-//    int row = [self.tableView indexPathForSelectedRow].row;
-//    
-//    //3
-//    Event *event;
-//    
-//    if (self.tableView == self.searchDisplayController.searchResultsTableView)
-//    {
-//        event = (self.filteredListContent)[row];
-//    }
-//    else
-//    {
-//        event = (Event *)eventsArray[row];
-//    }
-//    
+- (void)calendarChooserDidFinish:(EKCalendarChooser *)calendarChooser
+{
+    //1
+    EKCalendar* selectedCalendar = [calendarChooser.selectedCalendars anyObject];
+    
+    //2
+    int row = [self.tableView indexPathForSelectedRow].row;
+    
+    //3
+    Event *event;
+    
+    if (self.tableView == self.searchDisplayController.searchResultsTableView)
+    {
+        event = (self.filteredListContent)[row];
+    }
+    else
+    {
+        event = (Event *)eventsArray[row];
+    }
+    
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self addShow:event toEventStore:[AppCalendar eventStore] toCalendar:selectedCalendar];
+    });
+
 //    [self addReminder:event
 //           toCalendar: selectedCalendar];
-//    //4
-//    [self.navigationController popViewControllerAnimated:YES];
-//}
+    //4
+    [self.navigationController popViewControllerAnimated:YES];
+}
 
 //#pragma mark - Show Event
 //- (void)showEvent:(Event *)event animated:(BOOL)animated {
