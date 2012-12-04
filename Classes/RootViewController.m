@@ -164,14 +164,13 @@
 		[dateFormatter setDateStyle:NSDateFormatterShortStyle];
 	}
 	
-	// A number formatter for the latitude and longitude.
-	static NSNumberFormatter *numberFormatter = nil;
-	if (numberFormatter == nil) {
-		numberFormatter = [[NSNumberFormatter alloc] init];
-		[numberFormatter setNumberStyle:NSNumberFormatterDecimalStyle];
-		[numberFormatter setMaximumFractionDigits:3];
-	}
-	
+//	// A number formatter for the latitude and longitude.
+//	static NSNumberFormatter *numberFormatter = nil;
+//	if (numberFormatter == nil) {
+//		numberFormatter = [[NSNumberFormatter alloc] init];
+//		[numberFormatter setNumberStyle:NSNumberFormatterDecimalStyle];
+//		[numberFormatter setMaximumFractionDigits:3];
+//	}
 	
     static NSString *CellIdentifier = @"EventTableViewCell";
 
@@ -183,7 +182,7 @@
     }
     
 	// Get the event corresponding to the current index path and configure the table view cell.
-	Event *event;// = (Event *)eventsArray[indexPath.row];
+	Event *event;
 	
     if (tableView == self.searchDisplayController.searchResultsTableView)
     {
@@ -199,14 +198,7 @@
 	
 	cell.creationDateLabel.text = [dateFormatter stringFromDate:[event creationDate]];
     
-    cell.expiredDateLabel.text = event.expired;
-	
-//	NSString *string = [NSString stringWithFormat:@"%@, %@",
-//						[numberFormatter stringFromNumber:[event latitude]],
-//						[numberFormatter stringFromNumber:[event longitude]]];
-//    cell.locationLabel.text = string;
-    
-//    cell.backgroundColor =  [UIColor scrollViewTexturedBackgroundColor];
+    cell.expiredDateLabel.text = (event.expired !=nil)?event.expired:@"";
 	
     NSMutableArray *eventTagNames = [NSMutableArray array];
 	for (Tag *tag in event.tags) {
@@ -228,12 +220,29 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 
 	
+    Event *event;
+	
+    if (tableView == self.searchDisplayController.searchResultsTableView)
+    {
+        event = (self.filteredListContent)[indexPath.row];
+    }
+    else
+    {
+        event = (Event *)eventsArray[indexPath.row];
+    }
     
-    [[[UIAlertView alloc] initWithTitle:@"Set Geo-fencing?"
-                                message:@"You mentioned a location?"
-                               delegate:self
-                      cancelButtonTitle:NSLocalizedString(@"No", @"No")
-                      otherButtonTitles:@"Yes", nil] show];
+    if (event.geoFencingPreference) {
+        [[[UIAlertView alloc] initWithTitle:@"Set Geo-fencing?"
+                                    message:@"You mentioned a location?"
+                                   delegate:self
+                          cancelButtonTitle:NSLocalizedString(@"No", @"No")
+                          otherButtonTitles:@"Yes", nil] show];
+    } else  {
+        
+        
+    }
+    
+   
     
 //    [self showEvent:event animated:YES];
 }
@@ -280,12 +289,9 @@
                     chooseCal.delegate = self;
                     chooseCal.showsDoneButton = YES;
                     
+                    // have to make it on main thread or very slow to load
                     dispatch_async(dispatch_get_main_queue(), ^{
-//                        [SVProgressHUD showWithStatus:@"Loading"];
                         [self.navigationController pushViewController:chooseCal animated:YES];
-//                        [self.navigationController presentViewController:chooseCal animated:YES completion:^{
-//                            [SVProgressHUD dismiss];
-//                        }];
                     });
                 } else {
                     [[[UIAlertView alloc] initWithTitle:@"Oops"
@@ -308,42 +314,13 @@
         searchViewController.searchString = event.where;
         [self presentViewController:controller animated:YES completion:nil];
     }
-    
-//    if (buttonIndex==0) {
-//        //show calendar chooser view controller
-//        EKCalendarChooser* chooseCal = [[EKCalendarChooser alloc] initWithSelectionStyle:EKCalendarChooserSelectionStyleSingle
-//                                                                            displayStyle:EKCalendarChooserDisplayWritableCalendarsOnly
-//                                                                              eventStore:[AppCalendar eventStore] ];
-//        chooseCal.delegate = self;
-//        chooseCal.showsDoneButton = YES;
-//        [self.navigationController pushViewController:chooseCal animated:YES];
-//    } else if (buttonIndex == 1) {
-//        //use the app's default calendar
-//        
-//        
-//        [self addReminder:event
-//           toCalendar: [AppCalendar calendar]];
-//    } else if (buttonIndex == 2) {
-//        UIStoryboard *storyBoard = [UIStoryboard storyboardWithName:@"LocationStoryboard" bundle:nil];
-//        UINavigationController *controller = [storyBoard instantiateInitialViewController];
-//        PlaceSearchViewController *searchViewController = (PlaceSearchViewController*)controller.viewControllers[0];
-//        
-//        event.where = @"target";
-//        NSLog(@"where it is? %@",event.where);
-//        searchViewController.searchString = event.where;
-//        [self presentViewController:controller animated:YES completion:nil];
-//    }
- 
 }
 
 #pragma mark - Calendar methods
 
 -(void)addShow:(Event*)reminder toEventStore:(EKEventStore *)store toCalendar:(EKCalendar*)calendar
-
-//-(void)addReminder:(Event*)reminder toCalendar:(EKCalendar*)calendar
 {
-//    EKEventStore *es = [AppCalendar eventStore];
-//    
+
     EKEvent* event = [EKEvent eventWithEventStore:store];
     event.calendar = calendar;
     
@@ -497,7 +474,7 @@
         case EKEventEditViewActionSaved:
         {
             EKEvent* returnedEvent = controller.event;
-            NSLog(@"returned event: %@",returnedEvent);
+//            NSLog(@"returned event: %@",returnedEvent);
             NSIndexPath *selectedPath = [self.tableView indexPathForSelectedRow];
             
             // need to update this one
