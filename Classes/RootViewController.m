@@ -695,18 +695,18 @@
 /**
  Return a location manager -- create one if necessary.
  */
-- (CLLocationManager *)locationManager {
-	
-    if (locationManager != nil) {
-		return locationManager;
-	}
-	
-	locationManager = [[CLLocationManager alloc] init];
-	[locationManager setDesiredAccuracy:kCLLocationAccuracyNearestTenMeters];
-	[locationManager setDelegate:self];
-	
-	return locationManager;
-}
+//- (CLLocationManager *)locationManager {
+//	
+//    if (locationManager != nil) {
+//		return locationManager;
+//	}
+//	
+//	locationManager = [[CLLocationManager alloc] init];
+//	[locationManager setDesiredAccuracy:kCLLocationAccuracyNearestTenMeters];
+//	[locationManager setDelegate:self];
+//	
+//	return locationManager;
+//}
 
 
 /**
@@ -714,18 +714,18 @@
  If the location manager is generating updates, then enable the button;
  If the location manager is failing, then disable the button.
  */
-- (void)locationManager:(CLLocationManager *)manager
-    didUpdateToLocation:(CLLocation *)newLocation
-           fromLocation:(CLLocation *)oldLocation {
-    if (!self.editing) {
-		addButton.enabled = YES;
-	}
-}
-
-- (void)locationManager:(CLLocationManager *)manager
-       didFailWithError:(NSError *)error {
-    addButton.enabled = NO;
-}
+//- (void)locationManager:(CLLocationManager *)manager
+//    didUpdateToLocation:(CLLocation *)newLocation
+//           fromLocation:(CLLocation *)oldLocation {
+//    if (!self.editing) {
+//		addButton.enabled = YES;
+//	}
+//}
+//
+//- (void)locationManager:(CLLocationManager *)manager
+//       didFailWithError:(NSError *)error {
+//    addButton.enabled = NO;
+//}
 
 #pragma mark - Region Managerment
 
@@ -833,7 +833,7 @@
 			{
 				[self.filteredListContent addObject:event];
             }
-		} else if ([scope isEqualToString:@"Tag"])// search by model
+		} else if ([scope isEqualToString:@"Tag"])// search by tag
         {
             NSRange nameRange = [name rangeOfString:searchText options:NSCaseInsensitiveSearch];
             if(nameRange.location != NSNotFound)
@@ -841,14 +841,7 @@
                 [self.filteredListContent addObject:event];
             }
         }
-//        else if ([scope isEqualToString:@"Label"]){
-//            NSRange descriptionRange = [name rangeOfString:searchText options:NSCaseInsensitiveSearch];
-//            if(descriptionRange.location != NSNotFound)
-//            {
-//                [self.filteredListContent addObject:event];
-//            }
-//            
-//        }
+
 	}
 }
 
