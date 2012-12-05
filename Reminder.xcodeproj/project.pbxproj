@@ -72,6 +72,8 @@
 		D6CCB36F16604D8600A1B361 /* carat.png in Resources */ = {isa = PBXBuildFile; fileRef = D6CCB36C16604D8600A1B361 /* carat.png */; };
 		D6CCB37316604F2200A1B361 /* MessageUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D6CCB37216604F2200A1B361 /* MessageUI.framework */; };
 		D6CCB37516604F5F00A1B361 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D6CCB37416604F5F00A1B361 /* QuartzCore.framework */; };
+		D6F7C421166EBBEF00B58265 /* PlaceCategoryViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D6F7C41F166EBBEF00B58265 /* PlaceCategoryViewController.m */; };
+		D6F7C422166EBBEF00B58265 /* PlaceCategoryViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = D6F7C420166EBBEF00B58265 /* PlaceCategoryViewController.xib */; };
 		D6FF80C2166BBAA100D2DC4F /* Icon.png in Resources */ = {isa = PBXBuildFile; fileRef = D6FF80BC166BBAA100D2DC4F /* Icon.png */; };
 		D6FF80C3166BBAA100D2DC4F /* Reminder_icon.png in Resources */ = {isa = PBXBuildFile; fileRef = D6FF80BD166BBAA100D2DC4F /* Reminder_icon.png */; };
 		D6FF80C4166BBAA100D2DC4F /* Icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = D6FF80BE166BBAA100D2DC4F /* Icon@2x.png */; };
@@ -189,6 +191,9 @@
 		D6CCB37016604E6B00A1B361 /* MainStoryboard.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = MainStoryboard.storyboard; sourceTree = "<group>"; };
 		D6CCB37216604F2200A1B361 /* MessageUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MessageUI.framework; path = System/Library/Frameworks/MessageUI.framework; sourceTree = SDKROOT; };
 		D6CCB37416604F5F00A1B361 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
+		D6F7C41E166EBBEF00B58265 /* PlaceCategoryViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PlaceCategoryViewController.h; path = GoogleLocations/PlaceCategoryViewController.h; sourceTree = "<group>"; };
+		D6F7C41F166EBBEF00B58265 /* PlaceCategoryViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PlaceCategoryViewController.m; path = GoogleLocations/PlaceCategoryViewController.m; sourceTree = "<group>"; };
+		D6F7C420166EBBEF00B58265 /* PlaceCategoryViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = PlaceCategoryViewController.xib; path = GoogleLocations/PlaceCategoryViewController.xib; sourceTree = "<group>"; };
 		D6FF80BC166BBAA100D2DC4F /* Icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = Icon.png; path = images/Icon.png; sourceTree = "<group>"; };
 		D6FF80BD166BBAA100D2DC4F /* Reminder_icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = Reminder_icon.png; path = images/Reminder_icon.png; sourceTree = "<group>"; };
 		D6FF80BE166BBAA100D2DC4F /* Icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Icon@2x.png"; path = "images/Icon@2x.png"; sourceTree = "<group>"; };
@@ -248,6 +253,9 @@
 				D6CCB3381660379500A1B361 /* CustomTextField.h */,
 				28FB88840FCCA80500EBA711 /* TagSelectionController.h */,
 				28FB88850FCCA80500EBA711 /* TagSelectionController.m */,
+				D6F7C41E166EBBEF00B58265 /* PlaceCategoryViewController.h */,
+				D6F7C41F166EBBEF00B58265 /* PlaceCategoryViewController.m */,
+				D6F7C420166EBBEF00B58265 /* PlaceCategoryViewController.xib */,
 			);
 			name = "View Controllers";
 			path = Classes;
@@ -589,6 +597,7 @@
 				D6FF80C5166BBAA100D2DC4F /* Icon-Small@2x.png in Resources */,
 				D6FF80C6166BBAA100D2DC4F /* Icon-72.png in Resources */,
 				D6FF80C7166BBAA100D2DC4F /* Icon-72@2x.png in Resources */,
+				D6F7C422166EBBEF00B58265 /* PlaceCategoryViewController.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -638,6 +647,7 @@
 				D6FF80E7166BE42100D2DC4F /* FPTouchView.m in Sources */,
 				D6FF80E8166BE42100D2DC4F /* UIViewController+KNSemiModal.m in Sources */,
 				D6FF80E9166BE42100D2DC4F /* TTTTimeIntervalFormatter.m in Sources */,
+				D6F7C421166EBBEF00B58265 /* PlaceCategoryViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
