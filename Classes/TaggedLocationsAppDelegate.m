@@ -10,41 +10,13 @@
 
 #import "TaggedLocationsAppDelegate.h"
 #import "RootViewController.h"
-
-//@interface ToDoItem : NSObject  {
-//    NSInteger year;
-//    NSInteger month;
-//    NSInteger day;
-//    NSInteger hour;
-//    NSInteger minute;
-//    NSInteger second;
-//    NSString *eventName;
-//}
-//
-//@property (nonatomic, readwrite) NSInteger year;
-//@property (nonatomic, readwrite) NSInteger month;
-//@property (nonatomic, readwrite) NSInteger day;
-//@property (nonatomic, readwrite) NSInteger hour;
-//@property (nonatomic, readwrite) NSInteger minute;
-//@property (nonatomic, readwrite) NSInteger second;
-//@property (nonatomic, copy) NSString *eventName;
-//
-//@end
-//
-//@implementation ToDoItem
-//
-//@synthesize year, month, day, hour, minute, second, eventName;
-//
-//@end
+#import "SettingsViewController.h"
 
 @implementation TaggedLocationsAppDelegate
 
-//#define ToDoItemKey @"EVENTKEY1"
-//#define MessageTitleKey @"MSGKEY1"
-
 @synthesize window;
 @synthesize navigationController, rootViewController;
-
+@synthesize settingsViewController;
 
 #pragma mark -
 #pragma mark Application lifecycle
@@ -61,10 +33,20 @@
 	}
 	rootViewController.managedObjectContext = context;
 	
+    // main
 	UINavigationController *aNavigationController = [[UINavigationController alloc] initWithRootViewController:rootViewController];
 	self.navigationController = aNavigationController;
 	
-	[window addSubview:[navigationController view]];
+    // Settings
+    settingsViewController = [[SettingsViewController alloc] initWithStyle:UITableViewStyleGrouped];
+    UINavigationController *navController = [[UINavigationController alloc] initWithRootViewController:settingsViewController];
+    
+    self.tabBarController = [[UITabBarController alloc] init];
+    self.tabBarController.viewControllers = @[self.navigationController, navController];
+
+    [window addSubview:self.tabBarController.view];
+
+//	[window addSubview:[navigationController view]];
 	[window makeKeyAndVisible];
     
     // Override point for customization after application launch
@@ -127,20 +109,20 @@
      */
 	
 	// Reset the icon badge number to zero.
-	[UIApplication sharedApplication].applicationIconBadgeNumber = 0;
-	
-	if ([CLLocationManager significantLocationChangeMonitoringAvailable]) {
-		// Stop normal location updates and start significant location change updates for battery efficiency.
-        //		[viewController.locationManager stopUpdatingLocation];
-		[rootViewController.locationManager startMonitoringSignificantLocationChanges];
-        NSLog(@"location manager enter background:%@",rootViewController.locationManager);
-	}
-	else {
-		NSLog(@"Significant location change monitoring is not available.");
-	}
+//	[UIApplication sharedApplication].applicationIconBadgeNumber = 0;
+//	
+//	if ([CLLocationManager significantLocationChangeMonitoringAvailable]) {
+//		// Stop normal location updates and start significant location change updates for battery efficiency.
+//        //		[viewController.locationManager stopUpdatingLocation];
+//		[rootViewController.locationManager startMonitoringSignificantLocationChanges];
+//        NSLog(@"location manager enter background:%@",rootViewController.locationManager);
+//	}
+//	else {
+//		NSLog(@"Significant location change monitoring is not available.");
+//	}
     
     // Handel local notification
-    NSLog(@"Application entered background state.");
+//    NSLog(@"Application entered background state.");
     // UIBackgroundTaskIdentifier bgTask is instance variable
     // UIInvalidBackgroundTask has been renamed to UIBackgroundTaskInvalid
 //    NSAssert(self->bgTask == UIBackgroundTaskInvalid, nil);
@@ -190,15 +172,15 @@
      Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
      */
 	
-	if ([CLLocationManager significantLocationChangeMonitoringAvailable]) {
-		// Stop significant location updates and start normal location updates again since the app is in the forefront.
-		[rootViewController.locationManager stopMonitoringSignificantLocationChanges];
-        //		[viewController.locationManager startUpdatingLocation];
-        NSLog(@"location manager become activie:%@",rootViewController.locationManager);
-	}
-	else {
-		NSLog(@"Significant location change monitoring is not available.");
-	}
+//	if ([CLLocationManager significantLocationChangeMonitoringAvailable]) {
+//		// Stop significant location updates and start normal location updates again since the app is in the forefront.
+//		[rootViewController.locationManager stopMonitoringSignificantLocationChanges];
+//        //		[viewController.locationManager startUpdatingLocation];
+//        NSLog(@"location manager become activie:%@",rootViewController.locationManager);
+//	}
+//	else {
+//		NSLog(@"Significant location change monitoring is not available.");
+//	}
 	
 //	if (!rootViewcontroller.updatesTableView.hidden) {
 //		// Reload the updates table view to reflect update events that were recorded in the background.

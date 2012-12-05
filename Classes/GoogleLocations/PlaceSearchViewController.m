@@ -21,18 +21,17 @@
 #import "GooglePlacesObject.h"
 #import "DetailViewController.h"
 #import "SVProgressHUD.h"
+#import "PlaceCategoryViewController.h"
 
 @implementation PlaceSearchViewController
 
 @synthesize resultsLoaded;
 @synthesize locationManager;
 @synthesize currentLocation;
-@synthesize urlConnection;
 @synthesize locations;
 @synthesize searchString;
-//NEW - to handle filtering
 @synthesize locationsFilterResults;
-@synthesize categories;
+@synthesize category;
 
 - (void)didReceiveMemoryWarning
 {
@@ -47,53 +46,22 @@
 
 - (void)showFilters:(id)sender
 {
+    PlaceCategoryViewController *placeCategory =[[PlaceCategoryViewController alloc] initWithStyle:UITableViewStylePlain];
     
-    UIActionSheet *filterSheet = [[UIActionSheet alloc] initWithTitle:@"Filter" delegate:self cancelButtonTitle:@"Cancel" destructiveButtonTitle:nil otherButtonTitles:nil];
-    [filterSheet addButtonWithTitle:@"Bar"];
-    [filterSheet addButtonWithTitle:@"SuperMarket"];
+    [placeCategory setCancelBlock:^(PlaceCategoryViewController *controller, NSString *cat){
+        [self dismissViewControllerAnimated:YES completion:nil];
+    }];
     
+    [placeCategory setSaveBlock:^(PlaceCategoryViewController *controller, NSString *cat) {
+        [self dismissViewControllerAnimated:YES completion:nil];
+        self.category = cat;
+        [self updateSearchString:self.searchBar.text];
+    }];
     
-    
-    [filterSheet showFromBarButtonItem:self.navigationItem.rightBarButtonItem animated:YES];
+    UINavigationController *navController = [[UINavigationController alloc] initWithRootViewController:placeCategory];
+    [self presentViewController:navController animated:YES completion:nil];
 }
 
-#pragma mark - UIActionSheet Delegate
-- (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex
-{
-    if (buttonIndex == actionSheet.cancelButtonIndex) {
-        [actionSheet dismissWithClickedButtonIndex:buttonIndex animated:YES];
-    } else {
-        NSString *sortKey = @"";
-        NSSortDescriptor *sortdis;
-        
-        switch (buttonIndex) {
-            case 0: //Price
-                sortKey = @"AppraisedValue";
-                break;
-            case 1: // Status
-                sortKey = @"Status";
-                break;
-            case 2: // Name
-                sortKey = @"VehicleTitle";
-                break;
-            case 3:  // last modified date
-                sortKey = @"LastModifiedTime";
-                break;
-                
-            default:
-                break;
-        }
-        
-        sortdis = [[NSSortDescriptor alloc] initWithKey:sortKey ascending:YES];
-        NSArray *discriptor = [NSArray arrayWithObjects:sortdis,nil];
-//        NSArray *sortedArray =  [listContent sortedArrayUsingDescriptors:discriptor];
-//        listContent = [NSMutableArray arrayWithArray:sortedArray];
-        
-        [self.tableView reloadData];
-    }
-    
-    
-}
 
 #pragma mark - View lifecycle
 
@@ -104,20 +72,13 @@
     UIBarButtonItem *doneItem = [[UIBarButtonItem alloc] initWithTitle:@"Done" style:UIBarButtonSystemItemCancel target:self action:@selector(onDone:)];
     self.navigationItem.leftBarButtonItem = doneItem;
     
-//    UIBarButtonItem *mapBarItem = [[UIBarButtonItem alloc] initWithTitle:@"Map" style:UIBarButtonItemStylePlain target:self action:@selector(displayPlacemarks)];
-//    self.navigationItem.rightBarButtonItem = mapBarItem;
-
     // Filters
     UIBarButtonItem *filterBarItem = [[UIBarButtonItem alloc] initWithTitle:@"Filter" style:UIBarButtonItemStylePlain target:self action:@selector(showFilters:)];
     self.navigationItem.rightBarButtonItem = filterBarItem;
     
     self.navigationItem.rightBarButtonItem.enabled = YES;
     
-    // don't want to put those long strings here
-    [self setCategoryValues];
-    
     [self.refreshHeaderView setLastRefreshDate:nil];
-    
     
     [[self locationManager] startUpdatingLocation];
     
@@ -132,15 +93,25 @@
         self.searchBar.text = searchString;
         [self buildSearchArrayFrom:searchString];
     }
+    
+    self.category = [NSString stringWithFormat:@"%@|%@|%@|%@|%@|%@|%@|%@|%@|%@",
+                kBar,
+                kRestaurant,
+                kCafe,
+                kBakery,
+                kFood,
+                kLodging,
+                kMealDelivery,
+                kMealTakeaway,
+                kNightClub,
+                kGrocerySupermarket
+                ];
 }
 
 - (void)viewDidUnload
 {
     [super viewDidUnload];
-    // Release any retained subviews of the main view.
-    // e.g. self.myOutlet = nil;
-    [self setUrlConnection:nil];
-
+    self.tableView = nil;
 }
 
 
@@ -158,25 +129,12 @@
 
 - (void)updateSearchString:(NSString*)aSearchString
 {
-    searchString = [[NSString alloc]initWithString:aSearchString];
+    searchString = [[NSString alloc] initWithString:aSearchString];
     
     //What places to search for
-    NSString *searchLocations = [NSString stringWithFormat:@"%@|%@|%@|%@|%@|%@|%@|%@|%@", 
-                                 kBar, 
-                                 kRestaurant,
-                                 kCafe,
-                                 kBakery,
-                                 kFood,
-                                 kLodging,
-                                 kMealDelivery,
-                                 kMealTakeaway,
-                                 kNightClub
-                                 ];
-    
-    
     [googlePlacesConnection getGoogleObjectsWithQuery:searchString 
                                        andCoordinates:CLLocationCoordinate2DMake(currentLocation.coordinate.latitude, currentLocation.coordinate.longitude) 
-                                             andTypes:searchLocations];
+                                             andTypes:self.category];
     
     [tableView reloadData];
 }
@@ -205,7 +163,6 @@
 {
     tableView.allowsSelection   = YES;
     tableView.scrollEnabled     = YES;
-    
     [self updateSearchString:theSearchBar.text];
 }
 
@@ -275,7 +232,7 @@
 - (NSInteger)tableView:(UITableView *)theTableView numberOfRowsInSection:(NSInteger)section
 {
     //return [locations count];
-    return [locationsFilterResults count] + 1;
+    return [locationsFilterResults count];
 }
 
 //UPDATE - to handle filtering
@@ -294,14 +251,15 @@
     GooglePlacesObject *place     = [[GooglePlacesObject alloc] init];
     
     //UPDATED from locations to locationFilter results
-    if (indexPath.row < [locationsFilterResults count]) {
+//    if (indexPath.row < [locationsFilterResults count]) {
         place                       = [locationsFilterResults objectAtIndex:[indexPath row]];
         
         cell.textLabel.text                         = place.name;
         cell.detailTextLabel.text                   = [NSString stringWithFormat:@"%@ - Distance %@ miles", place.vicinity, place.distanceInMilesString];
-    } else {
-        cell.textLabel.text  = @"Not in the list, let's narraw the search down";
-    }
+//    }
+//    else {
+//        cell.textLabel.text  = @"Not in the list, let's narraw the search down";
+//    }
     
     cell.textLabel.adjustsFontSizeToFitWidth    = YES;
 	cell.textLabel.font                         = [UIFont systemFontOfSize:12.0];
@@ -384,29 +342,28 @@
     currentLocation = newLocation;
     
     //What places to search for
-    NSString *searchLocations = [NSString stringWithFormat:@"%@|%@|%@|%@|%@|%@|%@|%@|%@|%@", 
-                                 kBar, 
-                                 kRestaurant,
-                                 kCafe,
-                                 kBakery,
-                                 kFood,
-                                 kLodging,
-                                 kMealDelivery,
-                                 kMealTakeaway,
-                                 kNightClub,
-                                 kGrocerySupermarket
-                                 ];
+//    NSString *searchLocations = [NSString stringWithFormat:@"%@|%@|%@|%@|%@|%@|%@|%@|%@|%@", 
+//                                 kBar, 
+//                                 kRestaurant,
+//                                 kCafe,
+//                                 kBakery,
+//                                 kFood,
+//                                 kLodging,
+//                                 kMealDelivery,
+//                                 kMealTakeaway,
+//                                 kNightClub,
+//                                 kGrocerySupermarket
+//                                 ];
     
     [googlePlacesConnection getGoogleObjects:CLLocationCoordinate2DMake(newLocation.coordinate.latitude, newLocation.coordinate.longitude) 
-                                    andTypes:searchLocations];
+                                    andTypes:self.category];
     
 }
 
 - (void)locationManager:(CLLocationManager *)manager
        didFailWithError:(NSError *)error 
 {
-    NSLog(@"locationManager FAIL");
-    NSLog(@"%@", [error description]);
+    [SVProgressHUD showErrorWithStatus:[error localizedDescription]];
 }
 
 #pragma mark -
@@ -417,12 +374,6 @@
 {
     
     if ([objects count] == 0) {
-//        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"No matches found near this location" 
-//                                                        message:@"Try another place name or address" 
-//                                                       delegate:nil 
-//                                              cancelButtonTitle:@"OK" 
-//                                              otherButtonTitles: nil];
-//        [alert show];
         [SVProgressHUD showErrorWithStatus:@"No matches found near this location"];
     } else {
         locations = objects;
@@ -434,118 +385,7 @@
 
 - (void) googlePlacesConnection:(GooglePlacesConnection *)conn didFailWithError:(NSError *)error
 {
-//    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Error finding place - Try again" 
-//                                                    message:[error localizedDescription] 
-//                                                   delegate:nil 
-//                                          cancelButtonTitle:@"OK" 
-//                                          otherButtonTitles: nil];
-//    [alert show];
     [SVProgressHUD showErrorWithStatus:[error localizedDescription]];
-}
-
-
-#pragma mark - categories
-- (void)setCategoryValues
-{
-    self.categories = @[
-    @"accounting",
-    @"airport",
-    @"amusement_park",
-    @"aquarium",
-    @"art_gallery",
-    @"atm",
-    @"bakery",
-    @"bank",
-    @"bar",
-    @"beauty_salon",
-    @"bicycle_store",
-    @"book_store",
-    @"bowling_alley",
-    @"bus_station",
-    @"cafe",
-    @"campground",
-    @"car_dealer",
-    @"car_rental",
-    @"car_repair",
-    @"car_wash",
-    @"casino",
-    @"cemetery",
-    @"church",
-    @"city_hall",
-    @"clothing_store",
-    @"convenience_store",
-    @"courthouse",
-    @"dentist",
-    @"department_store",
-    @"doctor",
-    @"electrician",
-    @"electronics_store",
-    @"embassy",
-    @"establishment",
-    @"finance",
-    @"fire_station",
-    @"florist",
-    @"food",
-    @"funeral_home",
-    @"furniture_store",
-    @"gas_station",
-    @"general_contractor",
-    @"geocode",
-    @"grocery_or_supermarket",
-    @"gym",
-    @"hair_care",
-    @"hardware_store",
-    @"health",
-    @"hindu_temple",
-    @"home_goods_store",
-    @"hospital",
-    @"insurance_agency",
-    @"jewelry_store",
-    @"laundry",
-    @"lawyer",
-    @"library",
-    @"liquor_store",
-    @"local_government_office",
-    @"locksmith",
-    @"lodging",
-    @"meal_delivery",
-    @"meal_takeaway",
-    @"mosque",
-    @"movie_rental",
-    @"movie_theater",
-    @"moving_company",
-    @"museum",
-    @"night_club",
-    @"painter",
-    @"park",
-    @"parking",
-    @"pet_store",
-    @"pharmacy",
-    @"physiotherapist",
-    @"place_of_worship",
-    @"plumber",
-    @"police",
-    @"post_office",
-    @"real_estate_agency", 
-    @"restaurant", 
-    @"roofing_contractor", 
-    @"rv_park", 
-    @"school", 
-    @"shoe_store", 
-    @"shopping_mall", 
-    @"spa", 
-    @"stadium", 
-    @"storage", 
-    @"store", 
-    @"subway_station", 
-    @"synagogue", 
-    @"taxi_stand", 
-    @"train_station", 
-    @"travel_agency", 
-    @"university", 
-    @"veterinary_care", 
-    @"zoo"
-    ];
 }
 
 @end

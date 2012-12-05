@@ -18,7 +18,6 @@
 #import "Tag.h"
 #import "EventTableViewCell.h"
 #import "TagSelectionController.h"
-#import "ItemDetailViewController.h"
 #import "TableViewController.h"
 #import "AppCalendar.h"
 #import "PlaceSearchViewController.h"
@@ -50,15 +49,14 @@
     
     UIBarButtonItem *aButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self action:@selector(addEvent)];
 	self.addButton = aButton;
-	
-	addButton.enabled = NO;
+	addButton.enabled = YES;
     self.navigationItem.rightBarButtonItem = addButton;
     
     // detect shake
     [self becomeFirstResponder];
     
 	// Start the location manager.
-	[[self locationManager] startUpdatingLocation];
+//	[[self locationManager] startUpdatingLocation];
 	
 	/*
 	 Fetch existing events.
@@ -217,10 +215,9 @@
 }
 
 
-- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-
-	
-    Event *event;
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    Event *event = nil;
 	
     if (tableView == self.searchDisplayController.searchResultsTableView)
     {
@@ -241,10 +238,7 @@
         
         
     }
-    
-   
-    
-//    [self showEvent:event animated:YES];
+ 
 }
 
 
@@ -253,7 +247,9 @@
 -(void)alertView:(UIAlertView *)alertView didDismissWithButtonIndex:(NSInteger)buttonIndex
 {
     int row = [self.tableView indexPathForSelectedRow].row;
-    Event *event;
+    
+    Event *event = nil;
+    
     if (self.tableView == self.searchDisplayController.searchResultsTableView)
     {
         event = (self.filteredListContent)[row];
@@ -264,12 +260,11 @@
     }
     
     if (buttonIndex == alertView.cancelButtonIndex) {
-        [alertView dismissWithClickedButtonIndex:buttonIndex animated:YES];
         
-        //TODO: MAKE SURE THOSE ALERT WON'T SHOW AGAIN ONCE THE USER SELECTS NO
-//        int row = [self.tableView indexPathForSelectedRow].row;
-        //        [self addShow:[shows objectAtIndex:row]
-        //           toCalendar: [AppCalendar calendar]];
+        // User cancels so we set the preference value
+        event.useGeoFencing = NO;
+        
+        [alertView dismissWithClickedButtonIndex:buttonIndex animated:YES];
         
         EKEventStore *store = [AppCalendar eventStore];
         [store requestAccessToEntityType:EKEntityTypeEvent completion:^(BOOL granted, NSError *error) {
@@ -305,6 +300,8 @@
         }];
 
     } else {
+        event.useGeoFencing = YES;
+        
         UIStoryboard *storyBoard = [UIStoryboard storyboardWithName:@"LocationStoryboard" bundle:nil];
         UINavigationController *controller = [storyBoard instantiateInitialViewController];
         PlaceSearchViewController *searchViewController = (PlaceSearchViewController*)controller.viewControllers[0];
@@ -331,99 +328,22 @@
     [frm setDateFormat:@"MM/dd/yyyy HH:mm zzz"];
     [frm setLocale:[[NSLocale alloc] initWithLocaleIdentifier:@"en_US"]];
     
+    
+    NSString *question = @"to use coupon when entering Walmart at 5 pm, tomorrow.";
     // Set up the content
     Event *localReminder = reminder;
-    
-    NSString *question = @"Remind to use coupon when entering Walmart at 5 pm, tomorrow.";
-    
     localReminder.name = question;
     
-    NSLinguisticTaggerOptions options = NSLinguisticTaggerOmitWhitespace | NSLinguisticTaggerOmitPunctuation | NSLinguisticTaggerJoinNames;
-    NSLinguisticTagger *tagger = [[NSLinguisticTagger alloc] initWithTagSchemes: [NSLinguisticTagger availableTagSchemesForLanguage:@"en"] options:options];
-    tagger.string = question;
+    NSDictionary *parsedQuestion = [self parsingLinguistic:question];
+    localReminder.what = parsedQuestion[@"what"];
+    localReminder.when = parsedQuestion[@"when"];
+    localReminder.where = parsedQuestion[@"where"];
     
-    // I need a better algorithm for this
-    __block NSMutableArray *tagArrays = [NSMutableArray array];
-    [tagger enumerateTagsInRange:NSMakeRange(0, [question length]) scheme:NSLinguisticTagSchemeNameTypeOrLexicalClass options:options usingBlock:^(NSString *tag, NSRange tokenRange, NSRange sentenceRange, BOOL *stop) {
-        NSString *token = [question substringWithRange:tokenRange];
-        NSDictionary *dict = @{@"tag":tag, @"token":token};
-        [tagArrays addObject:dict];
-    }];
-    
-    // I know this is stupid
-    __block NSUInteger conjunctionIndex = 0;
-    __block NSUInteger particleIndex = 0;
-    __block NSUInteger prepositionIndex = 0;
-    [tagArrays enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
-        NSDictionary *dict = (NSDictionary *)obj;
-        if ([dict[@"tag"] isEqualToString:@"Particle"]) {
-            particleIndex = idx;
-        }
-        if ([dict[@"tag"] isEqualToString:@"Conjunction"]) {
-            conjunctionIndex = idx;
-        }
-        if ([dict[@"tag"] isEqualToString:@"Preposition"]) {
-            prepositionIndex = idx;
-        }
-        
-    }];
-        //    NSLog(@"par:%d, con:%d,  prep: %d",particleIndex, conjunctionIndex, prepositionIndex);
-        //
-        //
-        __block NSMutableString *whatString = [NSMutableString string];
-    
-    if  (conjunctionIndex - (particleIndex+1) > 0)
-    {
-        NSRange whatRange = NSMakeRange(particleIndex+1, conjunctionIndex-(particleIndex+ 1));
-        NSArray *whatArray = [tagArrays objectsAtIndexes:[NSIndexSet indexSetWithIndexesInRange:whatRange]];
-        
-        if (whatArray.count>0) {
-            [whatArray enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
-                [whatString appendString:[NSString stringWithFormat:@"%@ ",((NSDictionary *)obj)[@"token"]]];
-            }];
-        }
-        NSLog(@"what :%@",whatString);
-        localReminder.what = whatString;
-    }
-    
-    __block NSMutableString *whereString = [NSMutableString string];
-    if (prepositionIndex-(conjunctionIndex+1) > 0) {
-        NSRange whereRange = NSMakeRange(conjunctionIndex+1, prepositionIndex-(conjunctionIndex+ 1));
-        NSArray *whereArray = [tagArrays objectsAtIndexes:[NSIndexSet indexSetWithIndexesInRange:whereRange]];
-        if (whereArray.count>0) {
-            [whereArray enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
-                [whereString appendString:[NSString stringWithFormat:@"%@ ",((NSDictionary *)obj)[@"token"]]];
-            }];
-        }
-        NSLog(@"where :%@",whereString);
-        localReminder.where = whereString;
-    }
-    
-    __block NSMutableString *whenString = [NSMutableString string];
-    if (tagArrays.count-(prepositionIndex+1) > 0) {
-        NSRange whenRange = NSMakeRange(prepositionIndex+1, tagArrays.count-(prepositionIndex+ 1));
-        NSArray *whenArray = [tagArrays objectsAtIndexes:[NSIndexSet indexSetWithIndexesInRange:whenRange]];
-        if (whenArray.count>0) {
-            [whenArray enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
-                [whenString appendString:[NSString stringWithFormat:@"%@ ",((NSDictionary *)obj)[@"token"]]];
-            }];
-        }
-        NSLog(@"when :%@",whenString);
-        localReminder.when = whenString;
-    }
-    
-        
-        //    event.startDate = [frm dateFromString: [show objectForKey:@"startDate"]];
-        //    event.endDate   = [frm dateFromString: [show objectForKey:@"endDate"]];
-        
-    event.title = localReminder.name; //[show objectForKey:@"title"];
-    //    event.URL = [NSURL URLWithString:[show objectForKey:@"url"]];
-    event.location = localReminder.where; //@"The living room";
+    event.title = localReminder.name;
+    event.location = localReminder.where;
     event.notes = localReminder.how ;
-        //    event.notes = [show objectForKey:@"tip"];
         
-        
-        // this is how we want to set up the how.
+    // this is how we want to set up the how.
     NSNumber* weekDay = [NSNumber numberWithInt:1]; //[show objectForKey:@"dayOfTheWeek"];
     //1
     EKRecurrenceDayOfWeek* showDay = [EKRecurrenceDayOfWeek dayOfWeek: [weekDay intValue] ];
@@ -824,10 +744,11 @@
 	 */
  	for (Event *event in self.eventsArray)
 	{
-        NSString *name = event.name;
-		if ([scope isEqualToString:@"Name"] || [name isEqualToString:scope])
+
+		if ([scope isEqualToString:@"Title"])
 		{
             // A weak search
+            NSString *name = event.name;
 			NSComparisonResult result = [name compare:searchText options:(NSCaseInsensitiveSearch|NSDiacriticInsensitiveSearch) range:NSMakeRange(0, [searchText length])];
             if (result == NSOrderedSame)
 			{
@@ -835,11 +756,24 @@
             }
 		} else if ([scope isEqualToString:@"Tag"])// search by tag
         {
-            NSRange nameRange = [name rangeOfString:searchText options:NSCaseInsensitiveSearch];
+            NSSet *tags = event.tags;
+            [tags enumerateObjectsUsingBlock:^(id obj, BOOL *stop) {
+                NSString *name = ((Tag *)obj).name;
+                NSRange nameRange = [name rangeOfString:searchText options:NSCaseInsensitiveSearch];
+                if(nameRange.location != NSNotFound)
+                {
+                    [self.filteredListContent addObject:event];
+                }
+            }];
+        } else if ([scope isEqualToString:@"Location"])
+        {
+            NSString *location = event.where;
+            NSRange nameRange = [location rangeOfString:searchText options:NSCaseInsensitiveSearch];
             if(nameRange.location != NSNotFound)
             {
                 [self.filteredListContent addObject:event];
             }
+            
         }
 
 	}
@@ -880,35 +814,6 @@
     return;
 }
 
-#pragma mark - 
-- (void)scheduleNotificationWithItem:(Event *)event interval:(int)minutesBefore {
-    NSCalendar *calendar = [NSCalendar autoupdatingCurrentCalendar];
-    NSDateComponents *dateComps = [[NSDateComponents alloc] init];
-//    [dateComps setDay:item.day];
-//    [dateComps setMonth:item.month];
-//    [dateComps setYear:item.year];
-//    [dateComps setHour:item.hour];
-//    [dateComps setMinute:item.minute];
-    NSDate *itemDate = [calendar dateFromComponents:dateComps];
-    
-    UILocalNotification *localNotif = [[UILocalNotification alloc] init];
-    if (localNotif == nil)
-        return;
-    localNotif.fireDate = [itemDate dateByAddingTimeInterval:-(minutesBefore*60)];
-    localNotif.timeZone = [NSTimeZone defaultTimeZone];
-    
-    localNotif.alertBody = [NSString stringWithFormat:NSLocalizedString(@"%@ in %i minutes.", nil),
-                            event.name, minutesBefore];
-    localNotif.alertAction = NSLocalizedString(@"View Details", nil);
-    
-    localNotif.soundName = UILocalNotificationDefaultSoundName;
-    localNotif.applicationIconBadgeNumber = 1;
-    
-    NSDictionary *infoDict = [NSDictionary dictionaryWithObject:event.name forKey:@"ToDoItemKey"];
-    localNotif.userInfo = infoDict;
-    
-    [[UIApplication sharedApplication] scheduleLocalNotification:localNotif];
-}
 
 #pragma mark - Sort options
 - (BOOL)canBecomeFirstResponder
@@ -946,6 +851,88 @@
     
     return [_timeIntervalFormatter stringForTimeInterval:timeInterval];
     
+}
+
+#pragma mark - Parsing Linguistic
+- (NSDictionary *)parsingLinguistic:(NSString *)title
+{
+
+    NSLinguisticTaggerOptions options = NSLinguisticTaggerOmitWhitespace | NSLinguisticTaggerOmitPunctuation | NSLinguisticTaggerJoinNames;
+    NSLinguisticTagger *tagger = [[NSLinguisticTagger alloc] initWithTagSchemes: [NSLinguisticTagger availableTagSchemesForLanguage:@"en"] options:options];
+    tagger.string = title;
+
+    // I need a better algorithm for this
+    __block NSMutableArray *tagArrays = [NSMutableArray array];
+    [tagger enumerateTagsInRange:NSMakeRange(0, [title length]) scheme:NSLinguisticTagSchemeNameTypeOrLexicalClass options:options usingBlock:^(NSString *tag, NSRange tokenRange, NSRange sentenceRange, BOOL *stop) {
+        NSString *token = [title substringWithRange:tokenRange];
+        NSDictionary *dict = @{@"tag":tag, @"token":token};
+        [tagArrays addObject:dict];
+    }];
+
+    // I know this is stupid
+    __block NSUInteger conjunctionIndex = 0;
+    __block NSUInteger particleIndex = 0;
+    __block NSUInteger prepositionIndex = 0;
+    [tagArrays enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+        NSDictionary *dict = (NSDictionary *)obj;
+        if ([dict[@"tag"] isEqualToString:@"Particle"]) {
+            particleIndex = idx;
+        }
+        if ([dict[@"tag"] isEqualToString:@"Conjunction"]) {
+            conjunctionIndex = idx;
+        }
+        if ([dict[@"tag"] isEqualToString:@"Preposition"]) {
+            prepositionIndex = idx;
+        }
+        
+    }];
+
+    NSLog(@"par:%d, con:%d,  prep: %d",particleIndex, conjunctionIndex, prepositionIndex);
+//
+//
+    __block NSMutableString *whatString = [NSMutableString string];
+
+    if  (conjunctionIndex - (particleIndex+1) > 0)
+    {
+        NSRange whatRange = NSMakeRange(particleIndex+1, conjunctionIndex-(particleIndex+ 1));
+        NSArray *whatArray = [tagArrays objectsAtIndexes:[NSIndexSet indexSetWithIndexesInRange:whatRange]];
+        
+        if (whatArray.count>0) {
+            [whatArray enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+                [whatString appendString:[NSString stringWithFormat:@"%@ ",((NSDictionary *)obj)[@"token"]]];
+            }];
+        }
+        NSLog(@"what :%@",whatString);
+//        localReminder.what = whatString;
+    }
+
+    __block NSMutableString *whereString = [NSMutableString string];
+    if (prepositionIndex-(conjunctionIndex+1) > 0) {
+        NSRange whereRange = NSMakeRange(conjunctionIndex+1, prepositionIndex-(conjunctionIndex+ 1));
+        NSArray *whereArray = [tagArrays objectsAtIndexes:[NSIndexSet indexSetWithIndexesInRange:whereRange]];
+        if (whereArray.count>0) {
+            [whereArray enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+                [whereString appendString:[NSString stringWithFormat:@"%@ ",((NSDictionary *)obj)[@"token"]]];
+            }];
+        }
+        NSLog(@"where :%@",whereString);
+//        localReminder.where = whereString;
+    }
+
+    __block NSMutableString *whenString = [NSMutableString string];
+    if (tagArrays.count-(prepositionIndex+1) > 0) {
+        NSRange whenRange = NSMakeRange(prepositionIndex+1, tagArrays.count-(prepositionIndex+ 1));
+        NSArray *whenArray = [tagArrays objectsAtIndexes:[NSIndexSet indexSetWithIndexesInRange:whenRange]];
+        if (whenArray.count>0) {
+            [whenArray enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+                [whenString appendString:[NSString stringWithFormat:@"%@ ",((NSDictionary *)obj)[@"token"]]];
+            }];
+        }
+        NSLog(@"when :%@",whenString);
+//        localReminder.when = whenString;
+    }
+    
+    return @{@"what":whatString, @"where":whereString, @"when":whenString};
 }
 
 @end

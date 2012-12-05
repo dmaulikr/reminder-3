@@ -62,6 +62,8 @@
 @property (nonatomic, strong) NSString *how;
 @property (nonatomic, strong) NSString *expired;
 
+@property (nonatomic, assign) BOOL useGeoFencing;
+
 @property (nonatomic, strong) NSNumber *priority;
 @property (nonatomic, strong) NSNumber *inAdvance;
 @property (nonatomic, strong) NSNumber *frequency;

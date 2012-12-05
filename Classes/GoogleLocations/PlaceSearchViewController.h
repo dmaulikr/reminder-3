@@ -39,12 +39,10 @@
 
 @property (nonatomic, retain) CLLocationManager *locationManager;
 @property (nonatomic, retain) CLLocation        *currentLocation;
-
-@property (nonatomic, retain) NSURLConnection   *urlConnection;
 @property (nonatomic, retain) NSMutableArray    *locations;
 @property (nonatomic, retain) NSMutableArray    *locationsFilterResults;
 @property (nonatomic, strong) NSString *searchString;
-@property (nonatomic, strong) NSArray *categories;
+@property (nonatomic, strong) NSString *category;
 
 -(void)buildSearchArrayFrom:(NSString *)matchString;
 
