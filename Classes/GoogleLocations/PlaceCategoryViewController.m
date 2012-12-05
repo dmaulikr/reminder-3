@@ -10,10 +10,28 @@
 
 @interface PlaceCategoryViewController ()
 @property (nonatomic, strong) NSArray *placeCategory;
+@property (nonatomic, strong) NSString *selectedCategory;
+@property (nonatomic, strong) NSIndexPath *lastIndexPath;
 @end
 
 @implementation PlaceCategoryViewController
 @synthesize placeCategory;
+@synthesize cancelBlock = cancelBlock_, saveBlock = saveBlock_;
+@synthesize selectedCategory;
+@synthesize lastIndexPath;
+
+- (void)onDone:(id)sender
+{
+//    [self dismissViewControllerAnimated:YES completion:nil];
+    saveBlock_(self,self.selectedCategory);
+}
+
+- (void)onCancel:(id)sender
+{
+    cancelBlock_(self,nil);
+}
+
+#pragma mark - View Cycle
 - (id)initWithStyle:(UITableViewStyle)style
 {
     self = [super initWithStyle:style];
@@ -27,11 +45,25 @@
 {
     [super viewDidLoad];
 
-    self.clearsSelectionOnViewWillAppear = NO;
- 
-    self.tableView.sectionIndexMinimumDisplayRowCount=10;
+    self.clearsSelectionOnViewWillAppear = YES;
     
+    // Right
+    UIBarButtonItem *doneButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(onDone:)];
+    self.navigationItem.rightBarButtonItem = doneButton;
+    self.navigationItem.rightBarButtonItem.enabled = NO;
+    
+    // left
+    UIBarButtonItem *cancelButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCancel target:self action:@selector(onCancel:)];
+    self.navigationItem.leftBarButtonItem = cancelButton;
+ 
+    // last Indexpath
+    lastIndexPath = [NSIndexPath indexPathForRow:0 inSection:0];
+    
+    // we init the place category in this way
     [self setCategoryValues];
+    
+    //    self.tableView.sectionIndexMinimumDisplayRowCount=10;
+
 }
 
 - (void)didReceiveMemoryWarning
@@ -56,7 +88,7 @@
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     // Return the number of rows in the section.
-    return 1;
+    return self.placeCategory.count;
 }
 
 //- (NSArray *)sectionIndexTitlesForTableView:(UITableView *)tableView {
@@ -99,6 +131,7 @@
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
     if (cell == nil) {
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
+        cell.accessoryType = UITableViewCellAccessoryNone;
     }
     
     // Configure the cell...
@@ -114,49 +147,25 @@
     return NO;
 }
 
-
-/*
-// Override to support editing the table view.
-- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    if (editingStyle == UITableViewCellEditingStyleDelete) {
-        // Delete the row from the data source
-        [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
-    }   
-    else if (editingStyle == UITableViewCellEditingStyleInsert) {
-        // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
-    }   
-}
-*/
-
-/*
-// Override to support rearranging the table view.
-- (void)tableView:(UITableView *)tableView moveRowAtIndexPath:(NSIndexPath *)fromIndexPath toIndexPath:(NSIndexPath *)toIndexPath
-{
-}
-*/
-
-/*
-// Override to support conditional rearranging of the table view.
-- (BOOL)tableView:(UITableView *)tableView canMoveRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    // Return NO if you do not want the item to be re-orderable.
-    return YES;
-}
-*/
-
 #pragma mark - Table view delegate
-
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    // Navigation logic may go here. Create and push another view controller.
-    /*
-     <#DetailViewController#> *detailViewController = [[<#DetailViewController#> alloc] initWithNibName:@"<#Nib name#>" bundle:nil];
-     // ...
-     // Pass the selected object to the new view controller.
-     [self.navigationController pushViewController:detailViewController animated:YES];
-     */
     [tableView deselectRowAtIndexPath:indexPath animated:NO];
+    
+    UITableViewCell* newCell = [tableView cellForRowAtIndexPath:indexPath];
+    int newRow = [indexPath row];
+    int oldRow = (lastIndexPath != nil) ? [lastIndexPath row] : -1;
+    
+    if(newRow != oldRow)
+    {
+        newCell.accessoryType = UITableViewCellAccessoryCheckmark;
+        UITableViewCell* oldCell = [tableView cellForRowAtIndexPath:lastIndexPath];
+        oldCell.accessoryType = UITableViewCellAccessoryNone;
+        lastIndexPath = indexPath;
+        self.navigationItem.rightBarButtonItem.enabled = YES;
+        self.selectedCategory = self.placeCategory[indexPath.row];
+    }
+    
 }
 
 

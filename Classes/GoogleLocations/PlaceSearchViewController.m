@@ -30,9 +30,8 @@
 @synthesize currentLocation;
 @synthesize locations;
 @synthesize searchString;
-//NEW - to handle filtering
 @synthesize locationsFilterResults;
-@synthesize categories;
+@synthesize category;
 
 - (void)didReceiveMemoryWarning
 {
@@ -48,6 +47,17 @@
 - (void)showFilters:(id)sender
 {
     PlaceCategoryViewController *placeCategory =[[PlaceCategoryViewController alloc] initWithStyle:UITableViewStylePlain];
+    
+    [placeCategory setCancelBlock:^(PlaceCategoryViewController *controller, NSString *cat){
+        [self dismissViewControllerAnimated:YES completion:nil];
+    }];
+    
+    [placeCategory setSaveBlock:^(PlaceCategoryViewController *controller, NSString *cat) {
+        [self dismissViewControllerAnimated:YES completion:nil];
+        self.category = cat;
+        [self updateSearchString:self.searchBar.text];
+    }];
+    
     UINavigationController *navController = [[UINavigationController alloc] initWithRootViewController:placeCategory];
     [self presentViewController:navController animated:YES completion:nil];
 }
@@ -83,6 +93,19 @@
         self.searchBar.text = searchString;
         [self buildSearchArrayFrom:searchString];
     }
+    
+    self.category = [NSString stringWithFormat:@"%@|%@|%@|%@|%@|%@|%@|%@|%@|%@",
+                kBar,
+                kRestaurant,
+                kCafe,
+                kBakery,
+                kFood,
+                kLodging,
+                kMealDelivery,
+                kMealTakeaway,
+                kNightClub,
+                kGrocerySupermarket
+                ];
 }
 
 - (void)viewDidUnload
@@ -109,22 +132,9 @@
     searchString = [[NSString alloc] initWithString:aSearchString];
     
     //What places to search for
-    NSString *searchLocations = [NSString stringWithFormat:@"%@|%@|%@|%@|%@|%@|%@|%@|%@", 
-                                 kBar, 
-                                 kRestaurant,
-                                 kCafe,
-                                 kBakery,
-                                 kFood,
-                                 kLodging,
-                                 kMealDelivery,
-                                 kMealTakeaway,
-                                 kNightClub
-                                 ];
-    
-    
     [googlePlacesConnection getGoogleObjectsWithQuery:searchString 
                                        andCoordinates:CLLocationCoordinate2DMake(currentLocation.coordinate.latitude, currentLocation.coordinate.longitude) 
-                                             andTypes:searchLocations];
+                                             andTypes:self.category];
     
     [tableView reloadData];
 }
@@ -222,7 +232,7 @@
 - (NSInteger)tableView:(UITableView *)theTableView numberOfRowsInSection:(NSInteger)section
 {
     //return [locations count];
-    return [locationsFilterResults count] + 1;
+    return [locationsFilterResults count];
 }
 
 //UPDATE - to handle filtering
@@ -241,14 +251,15 @@
     GooglePlacesObject *place     = [[GooglePlacesObject alloc] init];
     
     //UPDATED from locations to locationFilter results
-    if (indexPath.row < [locationsFilterResults count]) {
+//    if (indexPath.row < [locationsFilterResults count]) {
         place                       = [locationsFilterResults objectAtIndex:[indexPath row]];
         
         cell.textLabel.text                         = place.name;
         cell.detailTextLabel.text                   = [NSString stringWithFormat:@"%@ - Distance %@ miles", place.vicinity, place.distanceInMilesString];
-    } else {
-        cell.textLabel.text  = @"Not in the list, let's narraw the search down";
-    }
+//    }
+//    else {
+//        cell.textLabel.text  = @"Not in the list, let's narraw the search down";
+//    }
     
     cell.textLabel.adjustsFontSizeToFitWidth    = YES;
 	cell.textLabel.font                         = [UIFont systemFontOfSize:12.0];
@@ -331,29 +342,28 @@
     currentLocation = newLocation;
     
     //What places to search for
-    NSString *searchLocations = [NSString stringWithFormat:@"%@|%@|%@|%@|%@|%@|%@|%@|%@|%@", 
-                                 kBar, 
-                                 kRestaurant,
-                                 kCafe,
-                                 kBakery,
-                                 kFood,
-                                 kLodging,
-                                 kMealDelivery,
-                                 kMealTakeaway,
-                                 kNightClub,
-                                 kGrocerySupermarket
-                                 ];
+//    NSString *searchLocations = [NSString stringWithFormat:@"%@|%@|%@|%@|%@|%@|%@|%@|%@|%@", 
+//                                 kBar, 
+//                                 kRestaurant,
+//                                 kCafe,
+//                                 kBakery,
+//                                 kFood,
+//                                 kLodging,
+//                                 kMealDelivery,
+//                                 kMealTakeaway,
+//                                 kNightClub,
+//                                 kGrocerySupermarket
+//                                 ];
     
     [googlePlacesConnection getGoogleObjects:CLLocationCoordinate2DMake(newLocation.coordinate.latitude, newLocation.coordinate.longitude) 
-                                    andTypes:searchLocations];
+                                    andTypes:self.category];
     
 }
 
 - (void)locationManager:(CLLocationManager *)manager
        didFailWithError:(NSError *)error 
 {
-    NSLog(@"locationManager FAIL");
-    NSLog(@"%@", [error description]);
+    [SVProgressHUD showErrorWithStatus:[error localizedDescription]];
 }
 
 #pragma mark -

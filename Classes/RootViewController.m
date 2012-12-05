@@ -50,15 +50,14 @@
     
     UIBarButtonItem *aButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self action:@selector(addEvent)];
 	self.addButton = aButton;
-	
-	addButton.enabled = NO;
+	addButton.enabled = YES;
     self.navigationItem.rightBarButtonItem = addButton;
     
     // detect shake
     [self becomeFirstResponder];
     
 	// Start the location manager.
-	[[self locationManager] startUpdatingLocation];
+//	[[self locationManager] startUpdatingLocation];
 	
 	/*
 	 Fetch existing events.
@@ -217,10 +216,9 @@
 }
 
 
-- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-
-	
-    Event *event;
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    Event *event = nil;
 	
     if (tableView == self.searchDisplayController.searchResultsTableView)
     {
@@ -250,7 +248,9 @@
 -(void)alertView:(UIAlertView *)alertView didDismissWithButtonIndex:(NSInteger)buttonIndex
 {
     int row = [self.tableView indexPathForSelectedRow].row;
-    Event *event;
+    
+    Event *event = nil;
+    
     if (self.tableView == self.searchDisplayController.searchResultsTableView)
     {
         event = (self.filteredListContent)[row];

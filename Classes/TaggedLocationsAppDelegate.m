@@ -127,20 +127,20 @@
      */
 	
 	// Reset the icon badge number to zero.
-	[UIApplication sharedApplication].applicationIconBadgeNumber = 0;
-	
-	if ([CLLocationManager significantLocationChangeMonitoringAvailable]) {
-		// Stop normal location updates and start significant location change updates for battery efficiency.
-        //		[viewController.locationManager stopUpdatingLocation];
-		[rootViewController.locationManager startMonitoringSignificantLocationChanges];
-        NSLog(@"location manager enter background:%@",rootViewController.locationManager);
-	}
-	else {
-		NSLog(@"Significant location change monitoring is not available.");
-	}
+//	[UIApplication sharedApplication].applicationIconBadgeNumber = 0;
+//	
+//	if ([CLLocationManager significantLocationChangeMonitoringAvailable]) {
+//		// Stop normal location updates and start significant location change updates for battery efficiency.
+//        //		[viewController.locationManager stopUpdatingLocation];
+//		[rootViewController.locationManager startMonitoringSignificantLocationChanges];
+//        NSLog(@"location manager enter background:%@",rootViewController.locationManager);
+//	}
+//	else {
+//		NSLog(@"Significant location change monitoring is not available.");
+//	}
     
     // Handel local notification
-    NSLog(@"Application entered background state.");
+//    NSLog(@"Application entered background state.");
     // UIBackgroundTaskIdentifier bgTask is instance variable
     // UIInvalidBackgroundTask has been renamed to UIBackgroundTaskInvalid
 //    NSAssert(self->bgTask == UIBackgroundTaskInvalid, nil);
@@ -190,15 +190,15 @@
      Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
      */
 	
-	if ([CLLocationManager significantLocationChangeMonitoringAvailable]) {
-		// Stop significant location updates and start normal location updates again since the app is in the forefront.
-		[rootViewController.locationManager stopMonitoringSignificantLocationChanges];
-        //		[viewController.locationManager startUpdatingLocation];
-        NSLog(@"location manager become activie:%@",rootViewController.locationManager);
-	}
-	else {
-		NSLog(@"Significant location change monitoring is not available.");
-	}
+//	if ([CLLocationManager significantLocationChangeMonitoringAvailable]) {
+//		// Stop significant location updates and start normal location updates again since the app is in the forefront.
+//		[rootViewController.locationManager stopMonitoringSignificantLocationChanges];
+//        //		[viewController.locationManager startUpdatingLocation];
+//        NSLog(@"location manager become activie:%@",rootViewController.locationManager);
+//	}
+//	else {
+//		NSLog(@"Significant location change monitoring is not available.");
+//	}
 	
 //	if (!rootViewcontroller.updatesTableView.hidden) {
 //		// Reload the updates table view to reflect update events that were recorded in the background.

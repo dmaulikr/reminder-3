@@ -8,6 +8,16 @@
 
 #import <UIKit/UIKit.h>
 
-@interface PlaceCategoryViewController : UITableViewController
+@class PlaceCategoryViewController;
+typedef void(^PlaceCategoryViewControllerResponse)(PlaceCategoryViewController *controller, NSString *cat);
+
+@interface PlaceCategoryViewController : UITableViewController{
+    PlaceCategoryViewControllerResponse cancelBlock_;
+    PlaceCategoryViewControllerResponse saveBlock_;
+    
+}
+
+@property (nonatomic, copy) PlaceCategoryViewControllerResponse cancelBlock;
+@property (nonatomic, copy) PlaceCategoryViewControllerResponse saveBlock;
 
 @end
