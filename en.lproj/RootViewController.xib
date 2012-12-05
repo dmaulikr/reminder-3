@@ -43,7 +43,7 @@
 					<object class="IBUISearchBar" id="966243308">
 						<reference key="NSNextResponder" ref="603392894"/>
 						<int key="NSvFlags">290</int>
-						<string key="NSFrameSize">{320, 44}</string>
+						<string key="NSFrameSize">{320, 88}</string>
 						<reference key="NSSuperview" ref="603392894"/>
 						<reference key="NSWindow"/>
 						<bool key="IBUIOpaque">NO</bool>
@@ -56,10 +56,11 @@
 						</object>
 						<object class="NSArray" key="IBScopeButtonTitles">
 							<bool key="EncodedWithXMLCoder">YES</bool>
-							<string>Name</string>
+							<string>Title</string>
 							<string>Tag</string>
 							<string>Location</string>
 						</object>
+						<bool key="IBShowsScopeBar">YES</bool>
 					</object>
 				</object>
 				<string key="NSFrame">{{0, 20}, {320, 460}}</string>
@@ -246,7 +247,7 @@
 						<object class="NSArray" key="dict.sortedKeys">
 							<bool key="EncodedWithXMLCoder">YES</bool>
 							<string>creationDateLabel</string>
-							<string>locationLabel</string>
+							<string>expiredDateLabel</string>
 							<string>nameField</string>
 							<string>tagsButton</string>
 							<string>tagsField</string>
@@ -265,7 +266,7 @@
 						<object class="NSArray" key="dict.sortedKeys">
 							<bool key="EncodedWithXMLCoder">YES</bool>
 							<string>creationDateLabel</string>
-							<string>locationLabel</string>
+							<string>expiredDateLabel</string>
 							<string>nameField</string>
 							<string>tagsButton</string>
 							<string>tagsField</string>
@@ -277,7 +278,7 @@
 								<string key="candidateClassName">UILabel</string>
 							</object>
 							<object class="IBToOneOutletInfo">
-								<string key="name">locationLabel</string>
+								<string key="name">expiredDateLabel</string>
 								<string key="candidateClassName">UILabel</string>
 							</object>
 							<object class="IBToOneOutletInfo">

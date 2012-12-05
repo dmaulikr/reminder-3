@@ -46,7 +46,8 @@
  
  */
 @class RootViewController;
-@interface TaggedLocationsAppDelegate : NSObject <UIApplicationDelegate> {
+@class SettingsViewController;
+@interface TaggedLocationsAppDelegate : NSObject <UIApplicationDelegate, UITabBarControllerDelegate> {
     
     UIWindow *window;
     UINavigationController *navigationController;
@@ -55,12 +56,14 @@
     NSManagedObjectModel *managedObjectModel;
     NSManagedObjectContext *managedObjectContext;
     
-    UIBackgroundTaskIdentifier bgTask;
+//    UIBackgroundTaskIdentifier bgTask;
 }
 
 @property (nonatomic, strong) IBOutlet UIWindow *window;
 @property (nonatomic, strong) UINavigationController *navigationController;
 @property (nonatomic, strong) RootViewController *rootViewController;
+@property (nonatomic, strong) SettingsViewController *settingsViewController;
+@property (strong, nonatomic) UITabBarController *tabBarController;
 
 - (IBAction)saveAction:sender;
 

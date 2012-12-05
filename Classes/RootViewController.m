@@ -18,7 +18,6 @@
 #import "Tag.h"
 #import "EventTableViewCell.h"
 #import "TagSelectionController.h"
-#import "ItemDetailViewController.h"
 #import "TableViewController.h"
 #import "AppCalendar.h"
 #import "PlaceSearchViewController.h"
@@ -745,10 +744,11 @@
 	 */
  	for (Event *event in self.eventsArray)
 	{
-        NSString *name = event.name;
-		if ([scope isEqualToString:@"Name"] || [name isEqualToString:scope])
+
+		if ([scope isEqualToString:@"Title"])
 		{
             // A weak search
+            NSString *name = event.name;
 			NSComparisonResult result = [name compare:searchText options:(NSCaseInsensitiveSearch|NSDiacriticInsensitiveSearch) range:NSMakeRange(0, [searchText length])];
             if (result == NSOrderedSame)
 			{
@@ -756,11 +756,24 @@
             }
 		} else if ([scope isEqualToString:@"Tag"])// search by tag
         {
-            NSRange nameRange = [name rangeOfString:searchText options:NSCaseInsensitiveSearch];
+            NSSet *tags = event.tags;
+            [tags enumerateObjectsUsingBlock:^(id obj, BOOL *stop) {
+                NSString *name = ((Tag *)obj).name;
+                NSRange nameRange = [name rangeOfString:searchText options:NSCaseInsensitiveSearch];
+                if(nameRange.location != NSNotFound)
+                {
+                    [self.filteredListContent addObject:event];
+                }
+            }];
+        } else if ([scope isEqualToString:@"Location"])
+        {
+            NSString *location = event.where;
+            NSRange nameRange = [location rangeOfString:searchText options:NSCaseInsensitiveSearch];
             if(nameRange.location != NSNotFound)
             {
                 [self.filteredListContent addObject:event];
             }
+            
         }
 
 	}
@@ -801,35 +814,6 @@
     return;
 }
 
-#pragma mark - 
-- (void)scheduleNotificationWithItem:(Event *)event interval:(int)minutesBefore {
-    NSCalendar *calendar = [NSCalendar autoupdatingCurrentCalendar];
-    NSDateComponents *dateComps = [[NSDateComponents alloc] init];
-//    [dateComps setDay:item.day];
-//    [dateComps setMonth:item.month];
-//    [dateComps setYear:item.year];
-//    [dateComps setHour:item.hour];
-//    [dateComps setMinute:item.minute];
-    NSDate *itemDate = [calendar dateFromComponents:dateComps];
-    
-    UILocalNotification *localNotif = [[UILocalNotification alloc] init];
-    if (localNotif == nil)
-        return;
-    localNotif.fireDate = [itemDate dateByAddingTimeInterval:-(minutesBefore*60)];
-    localNotif.timeZone = [NSTimeZone defaultTimeZone];
-    
-    localNotif.alertBody = [NSString stringWithFormat:NSLocalizedString(@"%@ in %i minutes.", nil),
-                            event.name, minutesBefore];
-    localNotif.alertAction = NSLocalizedString(@"View Details", nil);
-    
-    localNotif.soundName = UILocalNotificationDefaultSoundName;
-    localNotif.applicationIconBadgeNumber = 1;
-    
-    NSDictionary *infoDict = [NSDictionary dictionaryWithObject:event.name forKey:@"ToDoItemKey"];
-    localNotif.userInfo = infoDict;
-    
-    [[UIApplication sharedApplication] scheduleLocalNotification:localNotif];
-}
 
 #pragma mark - Sort options
 - (BOOL)canBecomeFirstResponder

@@ -10,41 +10,13 @@
 
 #import "TaggedLocationsAppDelegate.h"
 #import "RootViewController.h"
-
-//@interface ToDoItem : NSObject  {
-//    NSInteger year;
-//    NSInteger month;
-//    NSInteger day;
-//    NSInteger hour;
-//    NSInteger minute;
-//    NSInteger second;
-//    NSString *eventName;
-//}
-//
-//@property (nonatomic, readwrite) NSInteger year;
-//@property (nonatomic, readwrite) NSInteger month;
-//@property (nonatomic, readwrite) NSInteger day;
-//@property (nonatomic, readwrite) NSInteger hour;
-//@property (nonatomic, readwrite) NSInteger minute;
-//@property (nonatomic, readwrite) NSInteger second;
-//@property (nonatomic, copy) NSString *eventName;
-//
-//@end
-//
-//@implementation ToDoItem
-//
-//@synthesize year, month, day, hour, minute, second, eventName;
-//
-//@end
+#import "SettingsViewController.h"
 
 @implementation TaggedLocationsAppDelegate
 
-//#define ToDoItemKey @"EVENTKEY1"
-//#define MessageTitleKey @"MSGKEY1"
-
 @synthesize window;
 @synthesize navigationController, rootViewController;
-
+@synthesize settingsViewController;
 
 #pragma mark -
 #pragma mark Application lifecycle
@@ -61,10 +33,20 @@
 	}
 	rootViewController.managedObjectContext = context;
 	
+    // main
 	UINavigationController *aNavigationController = [[UINavigationController alloc] initWithRootViewController:rootViewController];
 	self.navigationController = aNavigationController;
 	
-	[window addSubview:[navigationController view]];
+    // Settings
+    settingsViewController = [[SettingsViewController alloc] initWithStyle:UITableViewStyleGrouped];
+    UINavigationController *navController = [[UINavigationController alloc] initWithRootViewController:settingsViewController];
+    
+    self.tabBarController = [[UITabBarController alloc] init];
+    self.tabBarController.viewControllers = @[self.navigationController, navController];
+
+    [window addSubview:self.tabBarController.view];
+
+//	[window addSubview:[navigationController view]];
 	[window makeKeyAndVisible];
     
     // Override point for customization after application launch
