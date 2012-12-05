@@ -4,7 +4,7 @@
  Abstract: Application delegate to set up the Core Data stack and configure the view and navigation controllers.
   Version: 1.1
  
- Copyright (C) 2010 Apple Inc. All Rights Reserved.
+ Copyright (C) 2010 LJApps. All Rights Reserved.
  
  */
 

@@ -52,9 +52,9 @@
 								<string key="NSFrame">{{14, 29}, {149, 21}}</string>
 								<reference key="NSSuperview" ref="178414270"/>
 								<reference key="NSWindow"/>
-								<object class="NSColor" key="IBUIBackgroundColor" id="743343026">
+								<object class="NSColor" key="IBUIBackgroundColor" id="653829020">
 									<int key="NSColorSpace">3</int>
-									<bytes key="NSWhite">MQA</bytes>
+									<bytes key="NSWhite">MCAwAA</bytes>
 								</object>
 								<bool key="IBUIClipsSubviews">YES</bool>
 								<bool key="IBUIUserInteractionEnabled">NO</bool>
@@ -88,7 +88,10 @@
 								<string key="NSFrame">{{171, 29}, {143, 21}}</string>
 								<reference key="NSSuperview" ref="178414270"/>
 								<reference key="NSWindow"/>
-								<reference key="IBUIBackgroundColor" ref="743343026"/>
+								<object class="NSColor" key="IBUIBackgroundColor" id="743343026">
+									<int key="NSColorSpace">3</int>
+									<bytes key="NSWhite">MQA</bytes>
+								</object>
 								<bool key="IBUIClipsSubviews">YES</bool>
 								<bool key="IBUIUserInteractionEnabled">NO</bool>
 								<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
@@ -111,7 +114,7 @@
 								<string key="NSFrame">{{14, 3}, {300, 30}}</string>
 								<reference key="NSSuperview" ref="178414270"/>
 								<reference key="NSWindow"/>
-								<reference key="IBUIBackgroundColor" ref="743343026"/>
+								<reference key="IBUIBackgroundColor" ref="653829020"/>
 								<bool key="IBUIClearsContextBeforeDrawing">NO</bool>
 								<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
 								<bool key="IBUIEnabled">NO</bool>
@@ -180,6 +183,7 @@
 								<string key="NSFrame">{{14, 52}, {300, 19}}</string>
 								<reference key="NSSuperview" ref="178414270"/>
 								<reference key="NSWindow"/>
+								<reference key="IBUIBackgroundColor" ref="653829020"/>
 								<bool key="IBUIOpaque">NO</bool>
 								<bool key="IBUIClearsContextBeforeDrawing">NO</bool>
 								<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
@@ -210,10 +214,7 @@
 						<string key="NSFrameSize">{328, 76}</string>
 						<reference key="NSSuperview" ref="215007462"/>
 						<reference key="NSWindow"/>
-						<object class="NSColor" key="IBUIBackgroundColor">
-							<int key="NSColorSpace">3</int>
-							<bytes key="NSWhite">MCAwAA</bytes>
-						</object>
+						<reference key="IBUIBackgroundColor" ref="653829020"/>
 						<bool key="IBUIOpaque">NO</bool>
 						<bool key="IBUIClipsSubviews">YES</bool>
 						<int key="IBUIContentMode">4</int>
@@ -422,14 +423,12 @@
 							<bool key="EncodedWithXMLCoder">YES</bool>
 							<string>creationDateLabel</string>
 							<string>expiredDateLabel</string>
-							<string>locationLabel</string>
 							<string>nameField</string>
 							<string>tagsButton</string>
 							<string>tagsField</string>
 						</object>
 						<object class="NSArray" key="dict.values">
 							<bool key="EncodedWithXMLCoder">YES</bool>
-							<string>UILabel</string>
 							<string>UILabel</string>
 							<string>UILabel</string>
 							<string>UITextField</string>
@@ -443,7 +442,6 @@
 							<bool key="EncodedWithXMLCoder">YES</bool>
 							<string>creationDateLabel</string>
 							<string>expiredDateLabel</string>
-							<string>locationLabel</string>
 							<string>nameField</string>
 							<string>tagsButton</string>
 							<string>tagsField</string>
@@ -456,10 +454,6 @@
 							</object>
 							<object class="IBToOneOutletInfo">
 								<string key="name">expiredDateLabel</string>
-								<string key="candidateClassName">UILabel</string>
-							</object>
-							<object class="IBToOneOutletInfo">
-								<string key="name">locationLabel</string>
 								<string key="candidateClassName">UILabel</string>
 							</object>
 							<object class="IBToOneOutletInfo">

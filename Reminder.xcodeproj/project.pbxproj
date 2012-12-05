@@ -28,9 +28,6 @@
 		28FB88860FCCA80500EBA711 /* TagSelectionController.m in Sources */ = {isa = PBXBuildFile; fileRef = 28FB88850FCCA80500EBA711 /* TagSelectionController.m */; };
 		D651530E166FE38200CCDCE4 /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = D651530D166FE38200CCDCE4 /* Default-568h@2x.png */; };
 		D6515319166FF06700CCDCE4 /* SwitchTableCell.m in Sources */ = {isa = PBXBuildFile; fileRef = D6515318166FF06700CCDCE4 /* SwitchTableCell.m */; };
-		D651531D166FF07500CCDCE4 /* SettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D651531B166FF07500CCDCE4 /* SettingsViewController.m */; };
-		D651531E166FF07500CCDCE4 /* SettingsViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = D651531C166FF07500CCDCE4 /* SettingsViewController.xib */; };
-		D6515320166FF08500CCDCE4 /* Settings.plist in Resources */ = {isa = PBXBuildFile; fileRef = D651531F166FF08500CCDCE4 /* Settings.plist */; };
 		D65153A3166FF16C00CCDCE4 /* backButton.png in Resources */ = {isa = PBXBuildFile; fileRef = D6515323166FF16C00CCDCE4 /* backButton.png */; };
 		D65153A4166FF16C00CCDCE4 /* backButton@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = D6515324166FF16C00CCDCE4 /* backButton@2x.png */; };
 		D65153A5166FF16C00CCDCE4 /* backButtonHighlighted.png in Resources */ = {isa = PBXBuildFile; fileRef = D6515325166FF16C00CCDCE4 /* backButtonHighlighted.png */; };
@@ -156,6 +153,12 @@
 		D651541D166FF16C00CCDCE4 /* SSMetalTheme.m in Sources */ = {isa = PBXBuildFile; fileRef = D651539E166FF16C00CCDCE4 /* SSMetalTheme.m */; };
 		D651541E166FF16C00CCDCE4 /* SSSmallButton.m in Sources */ = {isa = PBXBuildFile; fileRef = D65153A0166FF16C00CCDCE4 /* SSSmallButton.m */; };
 		D651541F166FF16C00CCDCE4 /* SSTheme.m in Sources */ = {isa = PBXBuildFile; fileRef = D65153A2166FF16C00CCDCE4 /* SSTheme.m */; };
+		D6515429166FFC9500CCDCE4 /* SimpleSettings.plist in Resources */ = {isa = PBXBuildFile; fileRef = D6515428166FFC9500CCDCE4 /* SimpleSettings.plist */; };
+		D651542E166FFD4900CCDCE4 /* SettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D651542C166FFD4900CCDCE4 /* SettingsViewController.m */; };
+		D651542F166FFD4900CCDCE4 /* SettingsViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = D651542D166FFD4900CCDCE4 /* SettingsViewController.xib */; };
+		D651543A166FFF3300CCDCE4 /* DetailHeaderView.xib in Resources */ = {isa = PBXBuildFile; fileRef = D6515438166FFF3300CCDCE4 /* DetailHeaderView.xib */; };
+		D651543D166FFF6800CCDCE4 /* AboutViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D651543C166FFF6800CCDCE4 /* AboutViewController.m */; };
+		D651544016700E6100CCDCE4 /* Settings.plist in Resources */ = {isa = PBXBuildFile; fileRef = D651543E16700E6100CCDCE4 /* Settings.plist */; };
 		D6972DD41667B774002FD2AB /* AppCalendar.m in Sources */ = {isa = PBXBuildFile; fileRef = D6972DD31667B774002FD2AB /* AppCalendar.m */; };
 		D6972DD81667B83C002FD2AB /* EventKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D6972DD61667B83C002FD2AB /* EventKit.framework */; };
 		D6972DD91667B83C002FD2AB /* EventKitUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D6972DD71667B83C002FD2AB /* EventKitUI.framework */; };
@@ -239,10 +242,6 @@
 		D651530D166FE38200CCDCE4 /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x.png"; sourceTree = "<group>"; };
 		D6515317166FF06700CCDCE4 /* SwitchTableCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SwitchTableCell.h; sourceTree = "<group>"; };
 		D6515318166FF06700CCDCE4 /* SwitchTableCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SwitchTableCell.m; sourceTree = "<group>"; };
-		D651531A166FF07500CCDCE4 /* SettingsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SettingsViewController.h; sourceTree = "<group>"; };
-		D651531B166FF07500CCDCE4 /* SettingsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SettingsViewController.m; sourceTree = "<group>"; };
-		D651531C166FF07500CCDCE4 /* SettingsViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SettingsViewController.xib; sourceTree = "<group>"; };
-		D651531F166FF08500CCDCE4 /* Settings.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Settings.plist; sourceTree = "<group>"; };
 		D6515323166FF16C00CCDCE4 /* backButton.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = backButton.png; sourceTree = "<group>"; };
 		D6515324166FF16C00CCDCE4 /* backButton@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "backButton@2x.png"; sourceTree = "<group>"; };
 		D6515325166FF16C00CCDCE4 /* backButtonHighlighted.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = backButtonHighlighted.png; sourceTree = "<group>"; };
@@ -371,6 +370,14 @@
 		D65153A0166FF16C00CCDCE4 /* SSSmallButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSSmallButton.m; sourceTree = "<group>"; };
 		D65153A1166FF16C00CCDCE4 /* SSTheme.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSTheme.h; sourceTree = "<group>"; };
 		D65153A2166FF16C00CCDCE4 /* SSTheme.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSTheme.m; sourceTree = "<group>"; };
+		D6515428166FFC9500CCDCE4 /* SimpleSettings.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = SimpleSettings.plist; sourceTree = "<group>"; };
+		D651542B166FFD4900CCDCE4 /* SettingsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SettingsViewController.h; sourceTree = "<group>"; };
+		D651542C166FFD4900CCDCE4 /* SettingsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SettingsViewController.m; sourceTree = "<group>"; };
+		D651542D166FFD4900CCDCE4 /* SettingsViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SettingsViewController.xib; sourceTree = "<group>"; };
+		D6515438166FFF3300CCDCE4 /* DetailHeaderView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = DetailHeaderView.xib; sourceTree = "<group>"; };
+		D651543B166FFF6800CCDCE4 /* AboutViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AboutViewController.h; sourceTree = "<group>"; };
+		D651543C166FFF6800CCDCE4 /* AboutViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AboutViewController.m; sourceTree = "<group>"; };
+		D651543F16700E6100CCDCE4 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = en; path = en.lproj/Settings.plist; sourceTree = "<group>"; };
 		D6972DD21667B774002FD2AB /* AppCalendar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppCalendar.h; sourceTree = "<group>"; };
 		D6972DD31667B774002FD2AB /* AppCalendar.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AppCalendar.m; sourceTree = "<group>"; };
 		D6972DD61667B83C002FD2AB /* EventKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = EventKit.framework; path = System/Library/Frameworks/EventKit.framework; sourceTree = SDKROOT; };
@@ -472,6 +479,12 @@
 		080E96DDFE201D6D7F000001 /* View Controllers */ = {
 			isa = PBXGroup;
 			children = (
+				D651543B166FFF6800CCDCE4 /* AboutViewController.h */,
+				D651543C166FFF6800CCDCE4 /* AboutViewController.m */,
+				D6515438166FFF3300CCDCE4 /* DetailHeaderView.xib */,
+				D651542B166FFD4900CCDCE4 /* SettingsViewController.h */,
+				D651542C166FFD4900CCDCE4 /* SettingsViewController.m */,
+				D651542D166FFD4900CCDCE4 /* SettingsViewController.xib */,
 				D6972DD21667B774002FD2AB /* AppCalendar.h */,
 				D6972DD31667B774002FD2AB /* AppCalendar.m */,
 				D6B52B241662F924002A339D /* feedback */,
@@ -479,9 +492,6 @@
 				D6CCB33A1660387500A1B361 /* EventDetail.plist */,
 				28C286DF0D94DF7D0034E888 /* RootViewController.h */,
 				28C286E00D94DF7D0034E888 /* RootViewController.m */,
-				D651531A166FF07500CCDCE4 /* SettingsViewController.h */,
-				D651531B166FF07500CCDCE4 /* SettingsViewController.m */,
-				D651531C166FF07500CCDCE4 /* SettingsViewController.xib */,
 				28FB88840FCCA80500EBA711 /* TagSelectionController.h */,
 				28FB88850FCCA80500EBA711 /* TagSelectionController.m */,
 			);
@@ -564,7 +574,8 @@
 		29B97317FDCFA39411CA2CEA /* Resources */ = {
 			isa = PBXGroup;
 			children = (
-				D651531F166FF08500CCDCE4 /* Settings.plist */,
+				D651543E16700E6100CCDCE4 /* Settings.plist */,
+				D6515428166FFC9500CCDCE4 /* SimpleSettings.plist */,
 				D6FF80BC166BBAA100D2DC4F /* Icon.png */,
 				D6FF80BD166BBAA100D2DC4F /* Reminder_icon.png */,
 				D6FF80BE166BBAA100D2DC4F /* Icon@2x.png */,
@@ -965,8 +976,6 @@
 				D6FF80C7166BBAA100D2DC4F /* Icon-72@2x.png in Resources */,
 				D6F7C422166EBBEF00B58265 /* PlaceCategoryViewController.xib in Resources */,
 				D651530E166FE38200CCDCE4 /* Default-568h@2x.png in Resources */,
-				D651531E166FF07500CCDCE4 /* SettingsViewController.xib in Resources */,
-				D6515320166FF08500CCDCE4 /* Settings.plist in Resources */,
 				D65153A3166FF16C00CCDCE4 /* backButton.png in Resources */,
 				D65153A4166FF16C00CCDCE4 /* backButton@2x.png in Resources */,
 				D65153A5166FF16C00CCDCE4 /* backButtonHighlighted.png in Resources */,
@@ -1089,6 +1098,10 @@
 				D651541A166FF16C00CCDCE4 /* toolbarBackgroundLandscape@2x.png in Resources */,
 				D651541B166FF16C00CCDCE4 /* topShadow.png in Resources */,
 				D651541C166FF16C00CCDCE4 /* topShadow@2x.png in Resources */,
+				D6515429166FFC9500CCDCE4 /* SimpleSettings.plist in Resources */,
+				D651542F166FFD4900CCDCE4 /* SettingsViewController.xib in Resources */,
+				D651543A166FFF3300CCDCE4 /* DetailHeaderView.xib in Resources */,
+				D651544016700E6100CCDCE4 /* Settings.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1133,10 +1146,11 @@
 				D6FF80E9166BE42100D2DC4F /* TTTTimeIntervalFormatter.m in Sources */,
 				D6F7C421166EBBEF00B58265 /* PlaceCategoryViewController.m in Sources */,
 				D6515319166FF06700CCDCE4 /* SwitchTableCell.m in Sources */,
-				D651531D166FF07500CCDCE4 /* SettingsViewController.m in Sources */,
 				D651541D166FF16C00CCDCE4 /* SSMetalTheme.m in Sources */,
 				D651541E166FF16C00CCDCE4 /* SSSmallButton.m in Sources */,
 				D651541F166FF16C00CCDCE4 /* SSTheme.m in Sources */,
+				D651542E166FFD4900CCDCE4 /* SettingsViewController.m in Sources */,
+				D651543D166FFF6800CCDCE4 /* AboutViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1173,6 +1187,14 @@
 				1825964711D13136000B79F7 /* en */,
 			);
 			name = MainWindow.xib;
+			sourceTree = "<group>";
+		};
+		D651543E16700E6100CCDCE4 /* Settings.plist */ = {
+			isa = PBXVariantGroup;
+			children = (
+				D651543F16700E6100CCDCE4 /* en */,
+			);
+			name = Settings.plist;
 			sourceTree = "<group>";
 		};
 		D6972E4B1667CB2D002FD2AB /* LocationStoryboard.storyboard */ = {

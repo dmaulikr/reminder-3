@@ -20,7 +20,7 @@
  provided that if you redistribute the Apple Software in its entirety and
  without modifications, you must retain this notice and the following
  text and disclaimers in all such redistributions of the Apple Software.
- Neither the name, trademarks, service marks or logos of Apple Inc. may
+ Neither the name, trademarks, service marks or logos of LJApps. may
  be used to endorse or promote products derived from the Apple Software
  without specific prior written permission from Apple.  Except as
  expressly stated in this notice, no other rights or licenses, express or
@@ -43,7 +43,7 @@
  STRICT LIABILITY OR OTHERWISE, EVEN IF APPLE HAS BEEN ADVISED OF THE
  POSSIBILITY OF SUCH DAMAGE.
  
- Copyright (C) 2010 Apple Inc. All Rights Reserved.
+ Copyright (C) 2010 LJApps. All Rights Reserved.
  
  */
 
@@ -54,6 +54,8 @@
 
 @property (nonatomic, strong) NSString *name;
 @property (nonatomic, strong) NSDate *creationDate;
+@property (nonatomic, strong) NSDate *expiredDate;
+
 @property (nonatomic, strong) NSNumber *latitude;
 @property (nonatomic, strong) NSNumber *longitude;
 @property (nonatomic, strong) NSString *when;

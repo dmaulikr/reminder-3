@@ -43,6 +43,7 @@
     
 	self.tableView.rowHeight = 77;
 	
+//    [SSThemeManager customizeTableView:self.tableView];
 	
 	// Configure the add and edit buttons.
     self.navigationItem.leftBarButtonItem = self.editButtonItem;
@@ -55,14 +56,12 @@
     // detect shake
     [self becomeFirstResponder];
     
-	// Start the location manager.
-//	[[self locationManager] startUpdatingLocation];
-	
 	/*
 	 Fetch existing events.
 	 Create a fetch request; find the Event entity and assign it to the request; add a sort descriptor; then execute the fetch.
 	 */
-	NSFetchRequest *request = [[NSFetchRequest alloc] init];
+    
+    NSFetchRequest *request = [[NSFetchRequest alloc] init];
 	NSEntityDescription *entity = [NSEntityDescription entityForName:@"Event" inManagedObjectContext:managedObjectContext];
 	[request setEntity:entity];
 	
@@ -162,14 +161,6 @@
 		[dateFormatter setDateStyle:NSDateFormatterShortStyle];
 	}
 	
-//	// A number formatter for the latitude and longitude.
-//	static NSNumberFormatter *numberFormatter = nil;
-//	if (numberFormatter == nil) {
-//		numberFormatter = [[NSNumberFormatter alloc] init];
-//		[numberFormatter setNumberStyle:NSNumberFormatterDecimalStyle];
-//		[numberFormatter setMaximumFractionDigits:3];
-//	}
-	
     static NSString *CellIdentifier = @"EventTableViewCell";
 
     EventTableViewCell *cell = (EventTableViewCell *)[tableView dequeueReusableCellWithIdentifier:CellIdentifier];
@@ -197,6 +188,12 @@
 	cell.creationDateLabel.text = [dateFormatter stringFromDate:[event creationDate]];
     
     cell.expiredDateLabel.text = (event.expired !=nil)?event.expired:@"";
+    
+    NSDate *now = [NSDate date];
+    //The receiver, now, is later in time than anotherDate, NSOrderedDescending
+    if ([now compare:event.expiredDate] == NSOrderedDescending) {
+        cell.userInteractionEnabled = NO;
+    }
 	
     NSMutableArray *eventTagNames = [NSMutableArray array];
 	for (Tag *tag in event.tags) {
@@ -211,6 +208,10 @@
 	
 	cell.nameField.tag = indexPath.row;
 	cell.tagsButton.tag = indexPath.row;
+//    cell.nameField.backgroundColor = [UIColor clearColor];
+//    cell.creationDateLabel.backgroundColor = [UIColor clearColor];
+//    cell.tagsField.backgroundColor = [UIColor clearColor];
+//    cell.contentView.backgroundColor = [UIColor clearColor];
 	return cell;
 }
 
@@ -267,38 +268,54 @@
         [alertView dismissWithClickedButtonIndex:buttonIndex animated:YES];
         
         EKEventStore *store = [AppCalendar eventStore];
-        [store requestAccessToEntityType:EKEntityTypeEvent completion:^(BOOL granted, NSError *error) {
-            // handle access here
-            if (error != nil) {
-                [[[UIAlertView alloc] initWithTitle:@"Oops"
-                                            message:@"Unexpected Error:"
-                                           delegate:self
-                                  cancelButtonTitle:@"Okay"
-                                  otherButtonTitles:nil] show];
-                
-            } else {
-                if (granted) {
-                    EKCalendarChooser* chooseCal = [[EKCalendarChooser alloc] initWithSelectionStyle:EKCalendarChooserSelectionStyleSingle
-                                                                                        displayStyle:EKCalendarChooserDisplayWritableCalendarsOnly
-                                                                                          eventStore:[AppCalendar eventStore] ];
-                    chooseCal.delegate = self;
-                    chooseCal.showsDoneButton = YES;
-                    
-                    // have to make it on main thread or very slow to load
-                    dispatch_async(dispatch_get_main_queue(), ^{
-                        [self.navigationController pushViewController:chooseCal animated:YES];
-                    });
-                } else {
+        
+        if ([store respondsToSelector:@selector(requestAccessToEntityType:completion:)]) {
+            [store requestAccessToEntityType:EKEntityTypeEvent completion:^(BOOL granted, NSError *error) {
+                // handle access here
+                if (error != nil) {
                     [[[UIAlertView alloc] initWithTitle:@"Oops"
-                                                message:@"The app needs to use your calendar"
+                                                message:@"Unexpected Error:"
                                                delegate:self
                                       cancelButtonTitle:@"Okay"
                                       otherButtonTitles:nil] show];
                     
+                } else {
+                    if (granted) {
+                        EKCalendarChooser* chooseCal = [[EKCalendarChooser alloc] initWithSelectionStyle:EKCalendarChooserSelectionStyleSingle
+                                                                                            displayStyle:EKCalendarChooserDisplayWritableCalendarsOnly
+                                                                                              eventStore:[AppCalendar eventStore] ];
+                        chooseCal.delegate = self;
+                        chooseCal.showsDoneButton = YES;
+                        
+                        // have to make it on main thread or very slow to load
+                        dispatch_async(dispatch_get_main_queue(), ^{
+                            [self.navigationController pushViewController:chooseCal animated:YES];
+                        });
+                    } else {
+                        [[[UIAlertView alloc] initWithTitle:@"Oops"
+                                                    message:@"The app needs to use your calendar"
+                                                   delegate:self
+                                          cancelButtonTitle:@"Okay"
+                                          otherButtonTitles:nil] show];
+                        
+                    }
                 }
-            }
-        }];
-
+            }];
+        } else  //TODO: COMBINE THE DUPLICATE CODE
+        {
+            EKCalendarChooser* chooseCal = [[EKCalendarChooser alloc] initWithSelectionStyle:EKCalendarChooserSelectionStyleSingle
+                                                                                displayStyle:EKCalendarChooserDisplayWritableCalendarsOnly
+                                                                                  eventStore:[AppCalendar eventStore] ];
+            chooseCal.delegate = self;
+            chooseCal.showsDoneButton = YES;
+            
+            // have to make it on main thread or very slow to load
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [self.navigationController pushViewController:chooseCal animated:YES];
+            });
+            
+        }
+        
     } else {
         event.useGeoFencing = YES;
         
@@ -397,10 +414,12 @@
 //            NSLog(@"returned event: %@",returnedEvent);
             NSIndexPath *selectedPath = [self.tableView indexPathForSelectedRow];
             
+            // let's update the database & update the tableview
             // need to update this one
             Event *event = eventsArray[selectedPath.row];
             event.name = returnedEvent.title;
             event.expired = [self relativeDate:returnedEvent.endDate];
+            event.expiredDate = returnedEvent.endDate;
             
             // Commit the change.
             NSError *error;
@@ -419,7 +438,7 @@
     }
     [controller dismissViewControllerAnimated:YES completion:nil];
     
-    // let's update the database & update the tableview
+    
 }
 
 - (void)updateCellInfo {
@@ -457,9 +476,6 @@
         [self addShow:event toEventStore:[AppCalendar eventStore] toCalendar:selectedCalendar];
     });
 
-//    [self addReminder:event
-//           toCalendar: selectedCalendar];
-    //4
     [self.navigationController popViewControllerAnimated:YES];
 }
 
@@ -562,21 +578,10 @@
  */
 - (void)addEvent {
 	
-	// If it's not possible to get a location, then return.
-//	CLLocation *location = [locationManager location];
-//	if (!location) {
-//		return;
-//	}
-	
 	/*
 	 Create a new instance of the Event entity.
 	 */
 	Event *event = (Event *)[NSEntityDescription insertNewObjectForEntityForName:@"Event" inManagedObjectContext:managedObjectContext];
-	
-	// Configure the new event with information from the location.
-//	CLLocationCoordinate2D coordinate = [location coordinate];
-//	[event setLatitude:@(coordinate.latitude)];
-//	[event setLongitude:@(coordinate.longitude)];
 	
 	// Should be the location's timestamp, but this will be constant for simulator.
 	// [event setCreationDate:[location timestamp]];
@@ -609,93 +614,7 @@
 }
 
 
-#pragma mark -
-#pragma mark Location manager
 
-/**
- Return a location manager -- create one if necessary.
- */
-//- (CLLocationManager *)locationManager {
-//	
-//    if (locationManager != nil) {
-//		return locationManager;
-//	}
-//	
-//	locationManager = [[CLLocationManager alloc] init];
-//	[locationManager setDesiredAccuracy:kCLLocationAccuracyNearestTenMeters];
-//	[locationManager setDelegate:self];
-//	
-//	return locationManager;
-//}
-
-
-/**
- Conditionally enable the Add button:
- If the location manager is generating updates, then enable the button;
- If the location manager is failing, then disable the button.
- */
-//- (void)locationManager:(CLLocationManager *)manager
-//    didUpdateToLocation:(CLLocation *)newLocation
-//           fromLocation:(CLLocation *)oldLocation {
-//    if (!self.editing) {
-//		addButton.enabled = YES;
-//	}
-//}
-//
-//- (void)locationManager:(CLLocationManager *)manager
-//       didFailWithError:(NSError *)error {
-//    addButton.enabled = NO;
-//}
-
-#pragma mark - Region Managerment
-
-- (void)locationManager:(CLLocationManager *)manager didEnterRegion:(CLRegion *)region  {
-	NSString *event = [NSString stringWithFormat:@"You are entering %@.", region.identifier];
-	[self updateWithEvent:event];
-}
-
-
-- (void)locationManager:(CLLocationManager *)manager didExitRegion:(CLRegion *)region {
-	NSString *event = [NSString stringWithFormat:@"You are leaving t%@.", region.identifier];
-	[self updateWithEvent:event];
-}
-
-
-- (void)locationManager:(CLLocationManager *)manager monitoringDidFailForRegion:(CLRegion *)region withError:(NSError *)error {
-	NSString *event = [NSString stringWithFormat:@"Monitoring fail for %@", region.identifier];
-	[self updateWithEvent:event];
-}
-
-- (void)updateWithEvent:(NSString *)message {
-    
-    // Update the icon badge number.
-	[UIApplication sharedApplication].applicationIconBadgeNumber++;
-    
-    UILocalNotification *localNotification = [[UILocalNotification alloc] init];
-    localNotification.alertBody = message;
-    localNotification.soundName = UILocalNotificationDefaultSoundName;
-    [[UIApplication sharedApplication] presentLocalNotificationNow:localNotification];
-}
-
-- (void)registerGeoFencing:(NSArray *)events
-{
-    // We dont' want to mointor those regions have been monitored
-    NSArray *monitoredRegions = [[locationManager monitoredRegions] allObjects];
-    // Define regions
-    [events enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
-        
-        Event *event = (Event *)obj;
-        
-        CLLocationCoordinate2D cord = CLLocationCoordinate2DMake([event.latitude doubleValue], [event.longitude doubleValue]);
-        //        CLLocationCoordinate2D cord = CLLocationCoordinate2DMake(30.359771, -97.746520);
-        CLRegion *whereRegion = [[CLRegion alloc] initCircularRegionWithCenter:cord radius:50.0 identifier:event.where];
-        if (![monitoredRegions containsObject:whereRegion]) {
-            [locationManager startMonitoringForRegion:whereRegion desiredAccuracy:kCLLocationAccuracyBest];
-        }
-    }];
-    
-    
-}
 #pragma mark -
 #pragma mark Editing text fields
 
@@ -826,11 +745,61 @@
 {
     if (motion == UIEventSubtypeMotionShake)
     {
-        UIActionSheet *actionSheet = [[UIActionSheet alloc] initWithTitle:@"Sort By" delegate:self cancelButtonTitle:@"Cancel" destructiveButtonTitle:nil otherButtonTitles:@"Status",@"Expired Time",@"Name",@"Prority", nil];
-        actionSheet.destructiveButtonIndex = 3; // Priority will be highlighted
+        UIActionSheet *actionSheet = [[UIActionSheet alloc] initWithTitle:@"Sort By" delegate:self cancelButtonTitle:@"Cancel" destructiveButtonTitle:nil otherButtonTitles:@"Name",@"Expired Date",@"Prority", nil];
+        actionSheet.destructiveButtonIndex = 1; // Priority will be highlighted
         [actionSheet showInView:self.tableView];
 
     }
+}
+
+#pragma mark - UIActionSheet Delegate Method
+- (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex
+{
+    if (buttonIndex == actionSheet.cancelButtonIndex) {
+        [actionSheet dismissWithClickedButtonIndex:buttonIndex animated:YES];
+    } else {
+        NSString *sortKey = @"";
+        NSSortDescriptor *sortdis;
+        
+        switch (buttonIndex) {
+            case 0: //
+                sortKey = @"name";
+                break;
+            case 1: // Status
+                sortKey = @"expiredDate";
+                break;
+            case 2: // Name
+                sortKey = @"priority";
+                break;
+            default:
+                break;
+        }
+        
+        // I think this sort approach is better (more general in terms of the usage
+        sortdis = [[NSSortDescriptor alloc] initWithKey:sortKey ascending:YES];
+        NSArray *discriptor = [NSArray arrayWithObjects:sortdis,nil];
+        NSArray *sortedArray =  [self.eventsArray sortedArrayUsingDescriptors:discriptor];
+        self.eventsArray = [NSMutableArray arrayWithArray:sortedArray];
+        
+        // The block based approach works as well.
+//        NSArray *sortedArray;
+//        sortedArray = [self.eventsArray sortedArrayUsingComparator:^NSComparisonResult(id a, id b) {
+//            NSDate *first = [(Event*)a expiredDate];
+//            NSDate *second = [(Event*)b expiredDate];
+//            return [first compare:second];
+//        }];
+//        self.eventsArray = [NSMutableArray arrayWithArray:sortedArray];
+        
+        [self.tableView reloadData];
+    }
+	
+}
+
+
+- (void)actionSheet:(UIActionSheet *)actionSheet didDismissWithButtonIndex:(NSInteger)buttonIndex
+{
+    
+    
 }
 
 
@@ -935,5 +904,93 @@
     return @{@"what":whatString, @"where":whereString, @"when":whenString};
 }
 
+
+#pragma mark -
+#pragma mark Location manager
+
+/**
+ Return a location manager -- create one if necessary.
+ */
+//- (CLLocationManager *)locationManager {
+//
+//    if (locationManager != nil) {
+//		return locationManager;
+//	}
+//
+//	locationManager = [[CLLocationManager alloc] init];
+//	[locationManager setDesiredAccuracy:kCLLocationAccuracyNearestTenMeters];
+//	[locationManager setDelegate:self];
+//
+//	return locationManager;
+//}
+
+
+/**
+ Conditionally enable the Add button:
+ If the location manager is generating updates, then enable the button;
+ If the location manager is failing, then disable the button.
+ */
+//- (void)locationManager:(CLLocationManager *)manager
+//    didUpdateToLocation:(CLLocation *)newLocation
+//           fromLocation:(CLLocation *)oldLocation {
+//    if (!self.editing) {
+//		addButton.enabled = YES;
+//	}
+//}
+//
+//- (void)locationManager:(CLLocationManager *)manager
+//       didFailWithError:(NSError *)error {
+//    addButton.enabled = NO;
+//}
+
+#pragma mark - Region Managerment
+
+//- (void)locationManager:(CLLocationManager *)manager didEnterRegion:(CLRegion *)region  {
+//	NSString *event = [NSString stringWithFormat:@"You are entering %@.", region.identifier];
+//	[self updateWithEvent:event];
+//}
+//
+//
+//- (void)locationManager:(CLLocationManager *)manager didExitRegion:(CLRegion *)region {
+//	NSString *event = [NSString stringWithFormat:@"You are leaving t%@.", region.identifier];
+//	[self updateWithEvent:event];
+//}
+//
+//
+//- (void)locationManager:(CLLocationManager *)manager monitoringDidFailForRegion:(CLRegion *)region withError:(NSError *)error {
+//	NSString *event = [NSString stringWithFormat:@"Monitoring fail for %@", region.identifier];
+//	[self updateWithEvent:event];
+//}
+//
+//- (void)updateWithEvent:(NSString *)message {
+//
+//    // Update the icon badge number.
+//	[UIApplication sharedApplication].applicationIconBadgeNumber++;
+//
+//    UILocalNotification *localNotification = [[UILocalNotification alloc] init];
+//    localNotification.alertBody = message;
+//    localNotification.soundName = UILocalNotificationDefaultSoundName;
+//    [[UIApplication sharedApplication] presentLocalNotificationNow:localNotification];
+//}
+//
+//- (void)registerGeoFencing:(NSArray *)events
+//{
+//    // We dont' want to mointor those regions have been monitored
+//    NSArray *monitoredRegions = [[locationManager monitoredRegions] allObjects];
+//    // Define regions
+//    [events enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+//
+//        Event *event = (Event *)obj;
+//
+//        CLLocationCoordinate2D cord = CLLocationCoordinate2DMake([event.latitude doubleValue], [event.longitude doubleValue]);
+//        //        CLLocationCoordinate2D cord = CLLocationCoordinate2DMake(30.359771, -97.746520);
+//        CLRegion *whereRegion = [[CLRegion alloc] initCircularRegionWithCenter:cord radius:50.0 identifier:event.where];
+//        if (![monitoredRegions containsObject:whereRegion]) {
+//            [locationManager startMonitoringForRegion:whereRegion desiredAccuracy:kCLLocationAccuracyBest];
+//        }
+//    }];
+//
+//
+//}
 @end
 

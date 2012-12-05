@@ -6,7 +6,7 @@
  
   Version: 2.0
  
- Copyright (C) 2011 Apple Inc. All Rights Reserved.
+ Copyright (C) 2011 LJApps. All Rights Reserved.
  
  */
 

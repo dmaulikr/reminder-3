@@ -7,7 +7,7 @@
  
  
  
- Copyright (C) 2010 Apple Inc. All Rights Reserved.
+ Copyright (C) 2010 LJApps. All Rights Reserved.
  
  */
 
@@ -18,6 +18,7 @@
 
 @dynamic name;
 @dynamic creationDate;
+@dynamic expiredDate;
 @dynamic latitude;
 @dynamic longitude;
 @dynamic tags;
