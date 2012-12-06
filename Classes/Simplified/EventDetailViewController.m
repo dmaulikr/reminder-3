@@ -69,13 +69,13 @@ static NSString *kViewKey = @"viewKey";
 
 @property (nonatomic, strong) NSArray *dataSourceArray;
 @property (nonatomic, strong) NSMutableArray *dataArray;
-@property (nonatomic, strong) NSArray *eventInfoArray;
+
 @property (nonatomic, strong) NSDictionary *howDataDictionary;
 @end
 
 @implementation EventDetailViewController
 
-@synthesize dataSourceArray, dataArray, eventInfoArray;
+@synthesize dataSourceArray, dataArray;
 @synthesize howDataDictionary;
 
 - (id)initWithStyle:(UITableViewStyle)style
@@ -94,8 +94,6 @@ static NSString *kViewKey = @"viewKey";
     self.clearsSelectionOnViewWillAppear = NO;
  
     self.title = NSLocalizedString(@"Detail", @"Detail");
-    
-    self.eventInfoArray = @[NSLocalizedString(@"Suggestion",@""),NSLocalizedString(@"Complaint",@""),NSLocalizedString(@"Problem",@""),NSLocalizedString(@"Other",@"")];
     
     self.dataSourceArray = @[
                            [NSDictionary dictionaryWithObjectsAndKeys:
@@ -125,7 +123,7 @@ static NSString *kViewKey = @"viewKey";
     self.dataArray = [NSMutableArray arrayWithCapacity:[self.dataSourceArray count]];
     
     // Set up the how, such as entering/leaving, alert frequency
-    NSArray *repeatOptions = @[@"None",@"Every Day",@"Every Week",@"Every 2 Weeks",@"Every Month", @"Every Year"];
+//    NSArray *repeatOptions = @[@"None",@"Every Day",@"Every Week",@"Every 2 Weeks",@"Every Month", @"Every Year"];
     
     NSArray *locationOptions = @[@"Both", @"Arriving", @"Leaving"];
     
@@ -133,7 +131,7 @@ static NSString *kViewKey = @"viewKey";
     
     NSArray *inAdvanceOptions = @[@"5 Mins", @"15 Mins",@"30 Mins",@"1 Hour", @"2 Hour",@"1 Day"];
     
-    howDataDictionary = @{@"repeat":repeatOptions, @"location":locationOptions, @"inAdvance":inAdvanceOptions, @"priority":priorityOptions};
+    howDataDictionary = @{@"location":locationOptions, @"inAdvance":inAdvanceOptions, @"priority":priorityOptions};
     
 }
 
@@ -310,21 +308,23 @@ static NSString *kViewKey = @"viewKey";
             categoryPicker.frame = pickerRect;
         }];
 
-        
+        UILabel *descLabel = [[UILabel alloc] initWithFrame:CGRectMake(0.0, 0.0, 320.0, 44.0)];
+        descLabel.text = @"    Priority | Geo-Fencing | Alert Before";
+        textField.inputAccessoryView = descLabel;
     }
     
 }
 
 #pragma mark - UITextView Delegate method
-- (void)textViewDidBeginEditing:(UITextView *)textView
-{
-    selected = textView.tag-10;
-}
-
-- (void)textViewDidEndEditing:(UITextView *)textView
-{
-    [textView resignFirstResponder];
-}
+//- (void)textViewDidBeginEditing:(UITextView *)textView
+//{
+//    selected = textView.tag-10;
+//}
+//
+//- (void)textViewDidEndEditing:(UITextView *)textView
+//{
+//    [textView resignFirstResponder];
+//}
 
 #pragma mark - private method
 
@@ -336,24 +336,23 @@ static NSString *kViewKey = @"viewKey";
     if ([activeCell.accessoryView isKindOfClass:[UITextField class]])
     {
         UITextField *textField = (UITextField*)activeCell.accessoryView;
-        if (textField.tag == 11) // for phone
+        if (textField.tag == 11) // for where
         {
-//            feedback.phone = textField.text;
-        } else if (textField.tag == 13) // for category
+        } else if (textField.tag == 13) // for how
         {
-//            feedback.category = textField.text;
         }
         
         [textField resignFirstResponder];
-    } else if ([activeCell.accessoryView isKindOfClass:[UITextView class]])
-    {
-        UITextView *textView = (UITextView *)activeCell.accessoryView;
-//        feedback.comments = textView.text;
-        [textView resignFirstResponder];
-    } else  // rest should be just textfield
-    {
-        [(UITextField *)activeCell.accessoryView resignFirstResponder];
     }
+    
+//    else if ([activeCell.accessoryView isKindOfClass:[UITextView class]])
+//    {
+//        UITextView *textView = (UITextView *)activeCell.accessoryView;
+//        [textView resignFirstResponder];
+//    } else  // rest should be just textfield
+//    {
+//        [(UITextField *)activeCell.accessoryView resignFirstResponder];
+//    }
 }
 
 #pragma mark -
@@ -361,10 +360,10 @@ static NSString *kViewKey = @"viewKey";
 
 - (void)pickerView:(UIPickerView *)pickerView didSelectRow:(NSInteger)row inComponent:(NSInteger)component
 {
-//    // since we have only one textfield having a picker, so we hardcode where it is.
-//    NSIndexPath *pickerIndexPath = [NSIndexPath indexPathForRow:3 inSection:0];
-//    CustomTableViewCell *cell = (CustomTableViewCell *)[self.tableView cellForRowAtIndexPath:pickerIndexPath];
-//    // we need to update the UI
+    // since we have only one textfield having a picker, so we hardcode where it is.
+    NSIndexPath *pickerIndexPath = [NSIndexPath indexPathForRow:3 inSection:0];
+    CustomTableViewCell *cell = (CustomTableViewCell *)[self.tableView cellForRowAtIndexPath:pickerIndexPath];
+    // we need to update the UI
 //    cell.textField.text = self.eventInfoArray[row];
 }
 
@@ -394,7 +393,6 @@ static NSString *kViewKey = @"viewKey";
         NSString *key = [howDataDictionary allKeys][component];
         return ((NSArray *)howDataDictionary[key])[row];
     }
-    
 	return returnStr;
 }
 
@@ -410,11 +408,11 @@ static NSString *kViewKey = @"viewKey";
                 componentWidth = 80.0;
                 break;
             case 2:
-                componentWidth = 60.0;
+                componentWidth = 130.0;
                 break;
-            case 3:
-                componentWidth = 70.0;
-                break;
+//            case 3:
+//                componentWidth = 70.0;
+//                break;
             default:
                 break;
         }
@@ -439,7 +437,7 @@ static NSString *kViewKey = @"viewKey";
 
 - (NSInteger)numberOfComponentsInPickerView:(UIPickerView *)pickerView
 {
-    return (pickerView.tag == 101)?4:1;
+    return (pickerView.tag == 101)?3:1;
 }
 
 @end
