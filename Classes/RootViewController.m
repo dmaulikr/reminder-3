@@ -18,12 +18,11 @@
 #import "Tag.h"
 #import "EventTableViewCell.h"
 #import "TagSelectionController.h"
-#import "TableViewController.h"
-#import "AppCalendar.h"
 #import "PlaceSearchViewController.h"
-#import "TaggedLocationsAppDelegate.h"
+#import "AppCalendar.h"
 #import "TTTTimeIntervalFormatter.h"
 #import "SVProgressHUD.h"
+#import "EventDetailViewController.h"
 
 @implementation RootViewController
 
@@ -555,31 +554,43 @@
 	// Should be the location's timestamp, but this will be constant for simulator.
 	// [event setCreationDate:[location timestamp]];
 	[event setCreationDate:[NSDate date]];
-	
-	/*
-	 Since this is a new event, and events are displayed with most recent events at the top of the list, add the new event to the beginning of the events array, then:
-	 * Add a new row to the table view
-	 * Scroll to make the row visible
-	 * Start editing the name field
-	 */
-    [eventsArray insertObject:event atIndex:0];
-	NSIndexPath *indexPath = [NSIndexPath indexPathForRow:0 inSection:0];
-	
-    [self.tableView insertRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
-	
-	[self updateRowTags];
+    
+  	EventDetailViewController *detailViewController = [[EventDetailViewController alloc] initWithNibName:@"EventDetailViewController" bundle:nil];
+    detailViewController.event = event;
+    
+    [detailViewController setCancelBlock:^(EventDetailViewController *controller, Event *anEvent){
+        [self dismissViewControllerAnimated:YES completion:nil];
+    }];
+    
+    [detailViewController setSaveBlock:^(EventDetailViewController *controller, Event *anEvent) {
+        [self dismissViewControllerAnimated:YES completion:nil];
+        /*
+         Since this is a new event, and events are displayed with most recent events at the top of the list, add the new event to the beginning of the events array, then:
+         * Add a new row to the table view
+         * Scroll to make the row visible
+         * Start editing the name field
+         */
+        [eventsArray insertObject:event atIndex:0];
+        NSIndexPath *indexPath = [NSIndexPath indexPathForRow:0 inSection:0];
+        
+        [self.tableView insertRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
+        
+        [self updateRowTags];
+        
+        [self.tableView scrollToRowAtIndexPath:indexPath atScrollPosition:UITableViewScrollPositionTop animated:YES];
+        
+        [self setEditing:YES animated:YES];
+        EventTableViewCell *cell = (EventTableViewCell *)[self.tableView cellForRowAtIndexPath:indexPath];
+        [cell.nameField becomeFirstResponder];
+    }];
 
-	[self.tableView scrollToRowAtIndexPath:indexPath atScrollPosition:UITableViewScrollPositionTop animated:YES];
-
-	[self setEditing:YES animated:YES];
-	EventTableViewCell *cell = (EventTableViewCell *)[self.tableView cellForRowAtIndexPath:indexPath];
-	[cell.nameField becomeFirstResponder];
+    
+    UINavigationController *navController = [[UINavigationController alloc] initWithRootViewController:detailViewController];
+    
+    [self presentViewController:navController animated:YES completion:nil];
+    
 	
-	/*
-	 Don't save yet -- the name is not optional:
-	 * The user should add a name before the event is saved.
-	 * If the user doesn't add a name, it will be set to @"" when they press Done.
-	 */
+	
 }
 
 

@@ -7,6 +7,7 @@
 //
 
 #import "EventDetailViewController.h"
+#import "Event.h"
 
 static NSString *kTitleKey = @"sectionTitleKey";
 static NSString *kSourceKey = @"sourceKey";
@@ -14,6 +15,15 @@ static NSString *kViewKey = @"viewKey";
 
 #define kTextFieldWidth	195.0
 #define kTextHeight		34.0
+
+//#define kSliderHeight			7.0
+//#define kProgressIndicatorSize	40.0
+//
+//#define kUIProgressBarWidth		160.0
+//#define kUIProgressBarHeight	24.0
+//
+//#define kViewTag				1		// for tagging our embedded controls for removal at cell recycle time
+
 
 @interface CustomTableViewCell : UITableViewCell
 @property (nonatomic, strong) UITextField *textField;
@@ -69,7 +79,7 @@ static NSString *kViewKey = @"viewKey";
 
 @property (nonatomic, strong) NSArray *dataSourceArray;
 @property (nonatomic, strong) NSMutableArray *dataArray;
-
+//@property (nonatomic, retain, readonly) UIActivityIndicatorView *progressInd;
 @property (nonatomic, strong) NSDictionary *howDataDictionary;
 @end
 
@@ -77,6 +87,38 @@ static NSString *kViewKey = @"viewKey";
 
 @synthesize dataSourceArray, dataArray;
 @synthesize howDataDictionary;
+@synthesize event;
+@synthesize cancelBlock, saveBlock;
+//@synthesize progressInd;
+
+- (void)onDone:(id)sender
+{
+//    NSArray *visibelCells = [self.tableView visibleCells];
+//    [visibelCells enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+//        CustomTableViewCell *customCell = (CustomTableViewCell *)obj;
+//        switch (customCell.textField.tag) {
+//            case 10:
+//                event.name = customCell.textField.text;
+//                break;
+//            case 11:
+//                event.when = customCell.textField.text;
+//                break;
+//            case 12:
+//                event.where = customCell.textField.text;
+//                break;
+//                
+//            default:
+//                break;
+//        }
+//    }];
+    
+    saveBlock(self,event);
+}
+
+- (void)onCancel:(id)sender
+{
+    cancelBlock(self,nil);
+}
 
 - (id)initWithStyle:(UITableViewStyle)style
 {
@@ -91,6 +133,16 @@ static NSString *kViewKey = @"viewKey";
 {
     [super viewDidLoad];
 
+    
+    // Right
+    UIBarButtonItem *doneButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(onDone:)];
+    self.navigationItem.rightBarButtonItem = doneButton;
+    self.navigationItem.rightBarButtonItem.enabled = NO;
+    
+    // left
+    UIBarButtonItem *cancelButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCancel target:self action:@selector(onCancel:)];
+    self.navigationItem.leftBarButtonItem = cancelButton;
+    
     self.clearsSelectionOnViewWillAppear = NO;
  
     self.title = NSLocalizedString(@"Detail", @"Detail");
@@ -151,7 +203,7 @@ static NSString *kViewKey = @"viewKey";
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     // Return the number of rows in the section.
-    return [self.dataSourceArray count];
+    return 4; //[self.dataSourceArray count];
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section
@@ -189,8 +241,43 @@ static NSString *kViewKey = @"viewKey";
         cell.textField.delegate = self;
         cell.textField.tag = indexPath.row + 10;
         // Configure the cell...
-        NSDictionary *infoDict = self.dataSourceArray[indexPath.row];
-        [cell setContentForTableCellLabel:infoDict[kTitleKey] andTextField:infoDict[kSourceKey] andKeyBoardType:infoDict[kViewKey]];
+//        NSDictionary *infoDict = self.dataSourceArray[indexPath.row];
+//        [cell setContentForTableCellLabel:infoDict[kTitleKey] andTextField:infoDict[kSourceKey] andKeyBoardType:infoDict[kViewKey]];
+    
+        NSString *title = @"";
+        NSString *content = @"";
+    switch (indexPath.row) {
+        case 0:
+        {
+            title = @"What";
+            content = event.name;
+            break;
+        }
+        case 1:
+        {
+            title = @"Where";
+            content = event.where;
+            break;
+        }
+        case 2:
+        {
+            title = @"When";
+            content = event.when;
+            break;
+        }
+        case 3:
+        {
+            title = @"How";
+            content = [NSString stringWithFormat:@"%@, %@, %@", event.priority, event.geoFencingPreference, event.inAdvance];//event.how;
+            break;
+        }
+        default:
+            break;
+    }
+    
+    cell.textLabel.text = title;
+    cell.textField.text = content;
+    
         tableViewCell = cell;
 //    }
 //    else
@@ -233,26 +320,31 @@ static NSString *kViewKey = @"viewKey";
 #pragma mark - UITextField Delegate
 - (BOOL)textFieldShouldReturn:(UITextField *)textField
 {
-    NSDictionary *contentDictionary = nil;
-    NSString *key = nil;
-    // just don't want to iterate to rewrite those key titles again
-    NSInteger index = textField.tag / 10;
+    switch (textField.tag) {
+        case 10:
+            event.name = textField.text;
+            break;
+        case 11:
+            event.where = textField.text;
+            break;
+        case 12:
+            event.when = textField.text;
+            break;
+        case 13:
+            event.how = textField.text;
+            break;
+        default:
+            break;
+    }
     
-    contentDictionary = self.dataSourceArray[index];
-    key = contentDictionary[kTitleKey];  // we only care the section title
-    [self.dataArray addObject:@{key:textField.text}];
     
   	[textField resignFirstResponder];
-    self.navigationItem.rightBarButtonItem = nil;
-     
-	return YES;
+  	return YES;
 }
 
 - (void)textFieldDidBeginEditing:(UITextField *)textField
 {
-    // create a "done" item as the right barButtonItem so user can dismiss the keyboard
-    UIBarButtonItem *doneItem = [[UIBarButtonItem alloc] initWithTitle:@"Done" style:UIBarButtonItemStyleDone target:self action:@selector(onDone:)];
-    self.navigationItem.rightBarButtonItem = doneItem;
+    
     selected = textField.tag - 10;
     
     if (textField.tag == 12) //for date
@@ -311,6 +403,9 @@ static NSString *kViewKey = @"viewKey";
         UILabel *descLabel = [[UILabel alloc] initWithFrame:CGRectMake(0.0, 0.0, 320.0, 44.0)];
         descLabel.text = @"    Priority | Geo-Fencing | Alert Before";
         textField.inputAccessoryView = descLabel;
+    } else {
+        textField.keyboardType = UIKeyboardTypeDefault;
+        
     }
     
 }
@@ -328,32 +423,32 @@ static NSString *kViewKey = @"viewKey";
 
 #pragma mark - private method
 
-- (void)onDone:(id)sender
-{
-    // we resign the textfield
-    
-    UITableViewCell *activeCell = [self.tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:selected inSection:0]];
-    if ([activeCell.accessoryView isKindOfClass:[UITextField class]])
-    {
-        UITextField *textField = (UITextField*)activeCell.accessoryView;
-        if (textField.tag == 11) // for where
-        {
-        } else if (textField.tag == 13) // for how
-        {
-        }
-        
-        [textField resignFirstResponder];
-    }
-    
-//    else if ([activeCell.accessoryView isKindOfClass:[UITextView class]])
+//- (void)onDone:(id)sender
+//{
+//    // we resign the textfield
+//    
+//    UITableViewCell *activeCell = [self.tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:selected inSection:0]];
+//    if ([activeCell.accessoryView isKindOfClass:[UITextField class]])
 //    {
-//        UITextView *textView = (UITextView *)activeCell.accessoryView;
-//        [textView resignFirstResponder];
-//    } else  // rest should be just textfield
-//    {
-//        [(UITextField *)activeCell.accessoryView resignFirstResponder];
+//        UITextField *textField = (UITextField*)activeCell.accessoryView;
+//        if (textField.tag == 11) // for where
+//        {
+//        } else if (textField.tag == 13) // for how
+//        {
+//        }
+//        
+//        [textField resignFirstResponder];
 //    }
-}
+//    
+////    else if ([activeCell.accessoryView isKindOfClass:[UITextView class]])
+////    {
+////        UITextView *textView = (UITextView *)activeCell.accessoryView;
+////        [textView resignFirstResponder];
+////    } else  // rest should be just textfield
+////    {
+////        [(UITextField *)activeCell.accessoryView resignFirstResponder];
+////    }
+//}
 
 #pragma mark -
 #pragma mark UIPickerViewDelegate
@@ -365,6 +460,23 @@ static NSString *kViewKey = @"viewKey";
     CustomTableViewCell *cell = (CustomTableViewCell *)[self.tableView cellForRowAtIndexPath:pickerIndexPath];
     // we need to update the UI
 //    cell.textField.text = self.eventInfoArray[row];
+    NSString *key = [howDataDictionary allKeys][component];
+    NSString *selected = ((NSArray *)howDataDictionary[key])[row];
+    
+    switch (component) {
+        case 0:
+            event.priority = selected;
+            break;
+        case 1:
+            event.inAdvance = selected;
+            break;
+        case 2:
+            event.geoFencingPreference = selected;
+            break;
+        default:
+            break;
+    }
+    
 }
 
 
@@ -439,5 +551,23 @@ static NSString *kViewKey = @"viewKey";
 {
     return (pickerView.tag == 101)?3:1;
 }
+
+#pragma mark - Progress Ind
+//- (UIActivityIndicatorView *)progressInd
+//{
+//    if (progressInd == nil)
+//    {
+//        CGRect frame = CGRectMake(265.0, 12.0, kProgressIndicatorSize, kProgressIndicatorSize);
+//        
+//        progressInd = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
+//        progressInd.frame = frame;
+//        [progressInd startAnimating];
+//        progressInd.activityIndicatorViewStyle = UIActivityIndicatorViewStyleGray;
+//        [progressInd sizeToFit];
+//		
+//		progressInd.tag = kViewTag;	// tag this view for later so we can remove it from recycled table cells
+//    }
+//    return progressInd;
+//}
 
 @end

@@ -8,6 +8,16 @@
 
 #import <UIKit/UIKit.h>
 
+@class EventDetailViewController;
+@class Event;
+typedef void(^EventDetailViewControllerResponse)(EventDetailViewController *controller, Event *anEvent);
+
+
+@class Event;
 @interface EventDetailViewController : UITableViewController
 
+@property (nonatomic, copy) EventDetailViewControllerResponse cancelBlock;
+@property (nonatomic, copy) EventDetailViewControllerResponse saveBlock;
+
+@property (nonatomic, strong) Event *event;
 @end
