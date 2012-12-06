@@ -12,20 +12,16 @@
  
  */
 
-#import "RootViewController.h"
+#import "HistoryViewController.h"
 #import "TaggedLocationsAppDelegate.h"
 #import "Event.h"
 #import "Tag.h"
 #import "EventTableViewCell.h"
-#import "TagSelectionController.h"
 #import "TableViewController.h"
 #import "AppCalendar.h"
-#import "PlaceSearchViewController.h"
-#import "TaggedLocationsAppDelegate.h"
 #import "TTTTimeIntervalFormatter.h"
-#import "SVProgressHUD.h"
 
-@implementation RootViewController
+@implementation HistoryViewController
 
 
 @synthesize eventsArray, managedObjectContext, addButton, locationManager, eventTableViewCell;
@@ -33,13 +29,23 @@
 
 #pragma mark -
 #pragma mark View lifecycle
+- (id)initWithStyle:(UITableViewStyle)style
+{
+    self = [super initWithStyle:style];
+    if (self) {
+        
+    }
+    
+    return self;
+}
+
 
 - (void)viewDidLoad {
 	
     [super viewDidLoad];
 	
 	// Set the title.
-    self.title = NSLocalizedString(@"Reminders", @"Reminders");
+    self.title = NSLocalizedString(@"History", @"History");
     
 	self.tableView.rowHeight = 77;
 	
@@ -48,11 +54,11 @@
 	// Configure the add and edit buttons.
     self.navigationItem.leftBarButtonItem = self.editButtonItem;
     
-    UIBarButtonItem *aButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self action:@selector(addEvent)];
-	self.addButton = aButton;
-	addButton.enabled = YES;
-    self.navigationItem.rightBarButtonItem = addButton;
-    
+//    UIBarButtonItem *aButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self action:@selector(addEvent)];
+//	self.addButton = aButton;
+//	addButton.enabled = YES;
+//    self.navigationItem.rightBarButtonItem = addButton;
+//    
     // detect shake
     [self becomeFirstResponder];
     
@@ -63,10 +69,12 @@
     
     NSFetchRequest *request = [[NSFetchRequest alloc] init];
 	NSEntityDescription *entity = [NSEntityDescription entityForName:@"Event" inManagedObjectContext:managedObjectContext];
-	[request setEntity:entity];
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"(expiredDate <= %@)", [NSDate date]];
+  	[request setEntity:entity];
+    [request setPredicate:predicate];
 	
-	// Order the events by creation date, most recent first.
-	NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"creationDate" ascending:NO];
+	// Order the events by expirated date, most recent first.
+	NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"expiredDate" ascending:YES];
 	NSArray *sortDescriptors = @[sortDescriptor];
 	[request setSortDescriptors:sortDescriptors];
 	
@@ -130,6 +138,7 @@
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
 	// Only one section.
+    // question: by month or by year ?!
     return 1;
 }
 
@@ -172,7 +181,6 @@
     
 	// Get the event corresponding to the current index path and configure the table view cell.
 	Event *event;
-	
     if (tableView == self.searchDisplayController.searchResultsTableView)
     {
         event = (self.filteredListContent)[indexPath.row];
@@ -182,19 +190,12 @@
         event = (Event *)eventsArray[indexPath.row];
     }
 
-    
 	cell.nameField.text = event.name;
 	
 	cell.creationDateLabel.text = [dateFormatter stringFromDate:[event creationDate]];
     
     cell.expiredDateLabel.text = (event.expired !=nil)?event.expired:@"";
     
-    NSDate *now = [NSDate date];
-    //The receiver, now, is later in time than anotherDate, NSOrderedDescending
-    if ([now compare:event.expiredDate] == NSOrderedDescending) {
-        cell.userInteractionEnabled = NO;
-    }
-	
     NSMutableArray *eventTagNames = [NSMutableArray array];
 	for (Tag *tag in event.tags) {
 		[eventTagNames addObject:tag.name];
@@ -214,6 +215,8 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
+    // we only allow the user to activate an expired event
+    
     Event *event = nil;
 	
     if (tableView == self.searchDisplayController.searchResultsTableView)
@@ -408,25 +411,7 @@
         event.useGeoFencing = NO;
         [alertView dismissWithClickedButtonIndex:buttonIndex animated:YES];
     } else {
-        event.useGeoFencing = YES;
-        UIStoryboard *storyBoard = [UIStoryboard storyboardWithName:@"LocationStoryboard" bundle:nil];
-        UINavigationController *controller = [storyBoard instantiateInitialViewController];
-        PlaceSearchViewController *searchViewController = (PlaceSearchViewController*)controller.viewControllers[0];
-//        event.where = @"target";
-//        NSLog(@"where it is? %@",event.where);
-        searchViewController.searchString = event.where;
-        [self presentViewController:controller animated:YES completion:nil];
-    }
-}
-
-#pragma mark - Cell update after a new event created
-
-- (void)updateCellInfo {
-    NSArray *visibleCells = [self.tableView visibleCells];
-    for (EventTableViewCell *cell in visibleCells) {
-        NSInteger tag = [[self.tableView indexPathForCell:cell] row];
-        cell.nameField.tag = tag;
-        cell.tagsButton.tag = tag;
+       
     }
 }
 
@@ -519,20 +504,6 @@
 }
 	
 
-- (IBAction)editTags:(UIButton *)button {
-	
-	NSInteger row = button.tag;
-	
-	// Ensure that if the user is editing the name field then the change is committed before pushing the new view controller.
-	EventTableViewCell *cell = (EventTableViewCell *)[self.tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:row inSection:0]];
-	[cell.nameField endEditing:YES];
-								
-	TagSelectionController *tagSelectionController = [[TagSelectionController alloc] initWithStyle:UITableViewStyleGrouped];
-	tagSelectionController.event = eventsArray[row];
-	[self.navigationController pushViewController:tagSelectionController animated:YES];
-}
-
-
 - (void)updateRowTags {
 	NSArray *visibleCells = [self.tableView visibleCells];	
 	for (EventTableViewCell *cell in visibleCells) {
@@ -541,85 +512,6 @@
 		cell.tagsButton.tag = tag;
 	}
 }
-
-
-#pragma mark -
-#pragma mark Add an event
-
-/**
- Add an event.
- */
-- (void)addEvent {
-	
-	/*
-	 Create a new instance of the Event entity.
-	 */
-	Event *event = (Event *)[NSEntityDescription insertNewObjectForEntityForName:@"Event" inManagedObjectContext:managedObjectContext];
-	
-	// Should be the location's timestamp, but this will be constant for simulator.
-	// [event setCreationDate:[location timestamp]];
-	[event setCreationDate:[NSDate date]];
-	
-	/*
-	 Since this is a new event, and events are displayed with most recent events at the top of the list, add the new event to the beginning of the events array, then:
-	 * Add a new row to the table view
-	 * Scroll to make the row visible
-	 * Start editing the name field
-	 */
-    [eventsArray insertObject:event atIndex:0];
-	NSIndexPath *indexPath = [NSIndexPath indexPathForRow:0 inSection:0];
-	
-    [self.tableView insertRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
-	
-	[self updateRowTags];
-
-	[self.tableView scrollToRowAtIndexPath:indexPath atScrollPosition:UITableViewScrollPositionTop animated:YES];
-
-	[self setEditing:YES animated:YES];
-	EventTableViewCell *cell = (EventTableViewCell *)[self.tableView cellForRowAtIndexPath:indexPath];
-	[cell.nameField becomeFirstResponder];
-	
-	/*
-	 Don't save yet -- the name is not optional:
-	 * The user should add a name before the event is saved.
-	 * If the user doesn't add a name, it will be set to @"" when they press Done.
-	 */
-}
-
-
-
-#pragma mark -
-#pragma mark Editing text fields
-
-- (BOOL)textFieldShouldEndEditing:(UITextField *)textField {
-	
-	Event *event = eventsArray[textField.tag];
-	event.name = textField.text;
-	
-	// Commit the change.
-	NSError *error;
-	if (![managedObjectContext save:&error]) {
-		// Handle the error.
-		NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
-		exit(-1);  // Fail
-	}
-	
-	return YES;
-}	
-
-
-- (void)textFieldDidEndEditing:(UITextField *)textField {
-	// Ensure that a text field for a row for a newly-inserted object is disabled when the user finishes editing.
-	textField.enabled = self.editing;
-}
-
-
-- (BOOL)textFieldShouldReturn:(UITextField *)textField {	
-	[textField resignFirstResponder];
-	return YES;	
-}
-
-
 #pragma mark -
 #pragma mark Memory management
 
@@ -767,14 +659,6 @@
     }
 	
 }
-
-
-- (void)actionSheet:(UIActionSheet *)actionSheet didDismissWithButtonIndex:(NSInteger)buttonIndex
-{
-    
-    
-}
-
 
 #pragma mark - helper method
 #pragma mark - get relative Date String

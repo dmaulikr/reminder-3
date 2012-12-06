@@ -11,6 +11,7 @@
 #import "TaggedLocationsAppDelegate.h"
 #import "RootViewController.h"
 #import "SettingsViewController.h"
+#import "HistoryViewController.h"
 
 @implementation TaggedLocationsAppDelegate
 
@@ -37,13 +38,31 @@
 	UINavigationController *aNavigationController = [[UINavigationController alloc] initWithRootViewController:rootViewController];
 	self.navigationController = aNavigationController;
 	
+    // History
+    HistoryViewController *historyViewController = [[HistoryViewController alloc] initWithStyle:UITableViewStyleGrouped];
+    historyViewController.managedObjectContext = context;
+    UINavigationController *historyNavController = [[UINavigationController alloc] initWithRootViewController:historyViewController];
+    
     // Settings
     settingsViewController = [[SettingsViewController alloc] initWithStyle:UITableViewStyleGrouped];
     UINavigationController *navController = [[UINavigationController alloc] initWithRootViewController:settingsViewController];
     
     self.tabBarController = [[UITabBarController alloc] init];
-    self.tabBarController.viewControllers = @[self.navigationController, navController];
+    self.tabBarController.viewControllers = @[self.navigationController, historyNavController, navController];
 
+    [[self.tabBarController.tabBar.items objectAtIndex:0] setTitle:NSLocalizedString(@"List", @"")];
+    [[self.tabBarController.tabBar.items objectAtIndex:1] setTitle:NSLocalizedString(@"History", @"")];
+    [[self.tabBarController.tabBar.items objectAtIndex:2] setTitle:NSLocalizedString(@"Settings", @"")];
+    
+    UITabBarItem *item1 = [self.navigationController tabBarItem];
+    [SSThemeManager customizeTabBarItem:item1 forTab:SSThemeTabPower];
+    
+    UITabBarItem *item2 = [navController tabBarItem];
+    [SSThemeManager customizeTabBarItem:item2 forTab:SSThemeTabDoor];
+    
+    UITabBarItem *item3 = [navController tabBarItem];
+    [SSThemeManager customizeTabBarItem:item3 forTab:SSThemeTabControls];
+    
     [window addSubview:self.tabBarController.view];
 
 //	[window addSubview:[navigationController view]];

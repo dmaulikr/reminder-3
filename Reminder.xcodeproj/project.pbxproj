@@ -159,6 +159,7 @@
 		D651543A166FFF3300CCDCE4 /* DetailHeaderView.xib in Resources */ = {isa = PBXBuildFile; fileRef = D6515438166FFF3300CCDCE4 /* DetailHeaderView.xib */; };
 		D651543D166FFF6800CCDCE4 /* AboutViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D651543C166FFF6800CCDCE4 /* AboutViewController.m */; };
 		D651544016700E6100CCDCE4 /* Settings.plist in Resources */ = {isa = PBXBuildFile; fileRef = D651543E16700E6100CCDCE4 /* Settings.plist */; };
+		D65154541670EAC300CCDCE4 /* HistoryViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D65154521670EAC200CCDCE4 /* HistoryViewController.m */; };
 		D6972DD41667B774002FD2AB /* AppCalendar.m in Sources */ = {isa = PBXBuildFile; fileRef = D6972DD31667B774002FD2AB /* AppCalendar.m */; };
 		D6972DD81667B83C002FD2AB /* EventKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D6972DD61667B83C002FD2AB /* EventKit.framework */; };
 		D6972DD91667B83C002FD2AB /* EventKitUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D6972DD71667B83C002FD2AB /* EventKitUI.framework */; };
@@ -378,6 +379,8 @@
 		D651543B166FFF6800CCDCE4 /* AboutViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AboutViewController.h; sourceTree = "<group>"; };
 		D651543C166FFF6800CCDCE4 /* AboutViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AboutViewController.m; sourceTree = "<group>"; };
 		D651543F16700E6100CCDCE4 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = en; path = en.lproj/Settings.plist; sourceTree = "<group>"; };
+		D65154521670EAC200CCDCE4 /* HistoryViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HistoryViewController.m; sourceTree = "<group>"; };
+		D65154531670EAC200CCDCE4 /* HistoryViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HistoryViewController.h; sourceTree = "<group>"; };
 		D6972DD21667B774002FD2AB /* AppCalendar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppCalendar.h; sourceTree = "<group>"; };
 		D6972DD31667B774002FD2AB /* AppCalendar.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AppCalendar.m; sourceTree = "<group>"; };
 		D6972DD61667B83C002FD2AB /* EventKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = EventKit.framework; path = System/Library/Frameworks/EventKit.framework; sourceTree = SDKROOT; };
@@ -479,6 +482,8 @@
 		080E96DDFE201D6D7F000001 /* View Controllers */ = {
 			isa = PBXGroup;
 			children = (
+				D65154521670EAC200CCDCE4 /* HistoryViewController.m */,
+				D65154531670EAC200CCDCE4 /* HistoryViewController.h */,
 				D651543B166FFF6800CCDCE4 /* AboutViewController.h */,
 				D651543C166FFF6800CCDCE4 /* AboutViewController.m */,
 				D6515438166FFF3300CCDCE4 /* DetailHeaderView.xib */,
@@ -1151,6 +1156,7 @@
 				D651541F166FF16C00CCDCE4 /* SSTheme.m in Sources */,
 				D651542E166FFD4900CCDCE4 /* SettingsViewController.m in Sources */,
 				D651543D166FFF6800CCDCE4 /* AboutViewController.m in Sources */,
+				D65154541670EAC300CCDCE4 /* HistoryViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
