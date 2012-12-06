@@ -314,16 +314,17 @@
     
     //1 save the event to the calendar
     NSError* error = nil;
-    [[AppCalendar eventStore] saveEvent:event span:EKSpanFutureEvents commit:YES error:&error];
+    [store saveEvent:event span:EKSpanFutureEvents commit:YES error:&error];
     
     //2 show the edit event dialogue
     EKEventEditViewController* editEvent = [[EKEventEditViewController alloc] init];
-    editEvent.eventStore = [AppCalendar eventStore];
+    editEvent.eventStore = store;
     editEvent.event = event;
     editEvent.editViewDelegate = self;
     [self presentViewController:editEvent animated:YES completion:^{
-//                    UINavigationItem* item = [editEvent.navigationBar.items objectAtIndex:0];
-//                    item.leftBarButtonItem = nil;
+        // we already saved so we don't handle "cancel" anymore
+                    UINavigationItem* item = [editEvent.navigationBar.items objectAtIndex:0];
+                    item.leftBarButtonItem = nil;
     }];
 
 }
@@ -768,21 +769,11 @@
 	
 }
 
-
-- (void)actionSheet:(UIActionSheet *)actionSheet didDismissWithButtonIndex:(NSInteger)buttonIndex
-{
-    
-    
-}
-
-
 #pragma mark - helper method
 #pragma mark - get relative Date String
 - (NSString *)relativeDate:(NSDate*)pastDate
 {
-    
     NSDate* rightNow = [NSDate date];
-    
     NSTimeInterval timeInterval = [pastDate timeIntervalSinceDate:rightNow];
     static TTTTimeIntervalFormatter *_timeIntervalFormatter = nil;
     static dispatch_once_t onceToken;
@@ -790,9 +781,7 @@
         _timeIntervalFormatter = [[TTTTimeIntervalFormatter alloc] init];
         [_timeIntervalFormatter setLocale:[NSLocale currentLocale]];
     });
-    
     return [_timeIntervalFormatter stringForTimeInterval:timeInterval];
-    
 }
 
 #pragma mark - Parsing Linguistic

@@ -24,6 +24,9 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     
+    [SSThemeManager customizeAppAppearance];
+    
+    // Event View Controller
     rootViewController = [[RootViewController alloc] initWithNibName:@"RootViewController" bundle:nil];
 	
 	NSManagedObjectContext *context = [self managedObjectContext];
@@ -39,7 +42,8 @@
 	self.navigationController = aNavigationController;
 	
     // History
-    HistoryViewController *historyViewController = [[HistoryViewController alloc] initWithStyle:UITableViewStyleGrouped];
+//    HistoryViewController *historyViewController = [[HistoryViewController alloc] initWithStyle:UITableViewStyleGrouped];
+    HistoryViewController *historyViewController = [[HistoryViewController alloc] initWithNibName:@"RootViewController" bundle:nil];
     historyViewController.managedObjectContext = context;
     UINavigationController *historyNavController = [[UINavigationController alloc] initWithRootViewController:historyViewController];
     
@@ -47,6 +51,7 @@
     settingsViewController = [[SettingsViewController alloc] initWithStyle:UITableViewStyleGrouped];
     UINavigationController *navController = [[UINavigationController alloc] initWithRootViewController:settingsViewController];
     
+    // TODO: can I make the following better?!
     self.tabBarController = [[UITabBarController alloc] init];
     self.tabBarController.viewControllers = @[self.navigationController, historyNavController, navController];
 
@@ -64,7 +69,8 @@
     [SSThemeManager customizeTabBarItem:item3 forTab:SSThemeTabControls];
     
     [window addSubview:self.tabBarController.view];
-
+    
+    self.window.rootViewController = self.tabBarController;
 //	[window addSubview:[navigationController view]];
 	[window makeKeyAndVisible];
     
