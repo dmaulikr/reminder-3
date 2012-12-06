@@ -75,9 +75,8 @@
     // Uncomment the following line to preserve selection between presentations.
     self.clearsSelectionOnViewWillAppear = NO;
     
-//    [SSThemeManager customizeTableView:self.tableView];
-    // let's make something like
-    isEditing = NO;
+    [SSThemeManager customizeTableView:self.tableView];
+  
     self.navigationItem.rightBarButtonItem = self.editButtonItem;
     
     UIBarButtonItem *cancelItem = [[UIBarButtonItem alloc] initWithTitle:@"Cancel" style:UIBarButtonSystemItemCancel target:self action:@selector(onCancel:)];

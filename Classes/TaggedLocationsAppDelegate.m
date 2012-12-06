@@ -12,6 +12,8 @@
 #import "RootViewController.h"
 #import "SettingsViewController.h"
 #import "HistoryViewController.h"
+#import "ItemDetailViewController.h"
+#import "EventDetailViewController.h"
 
 @implementation TaggedLocationsAppDelegate
 
@@ -42,10 +44,10 @@
 	self.navigationController = aNavigationController;
 	
     // History
-//    HistoryViewController *historyViewController = [[HistoryViewController alloc] initWithStyle:UITableViewStyleGrouped];
-    HistoryViewController *historyViewController = [[HistoryViewController alloc] initWithNibName:@"RootViewController" bundle:nil];
-    historyViewController.managedObjectContext = context;
-    UINavigationController *historyNavController = [[UINavigationController alloc] initWithRootViewController:historyViewController];
+    EventDetailViewController *detailViewController = [[EventDetailViewController alloc] initWithNibName:@"EventDetailViewController" bundle:nil];
+//    HistoryViewController *historyViewController = [[HistoryViewController alloc] initWithNibName:@"RootViewController" bundle:nil];
+//    historyViewController.managedObjectContext = context;
+    UINavigationController *historyNavController = [[UINavigationController alloc] initWithRootViewController:detailViewController];
     
     // Settings
     settingsViewController = [[SettingsViewController alloc] initWithStyle:UITableViewStyleGrouped];

@@ -159,6 +159,15 @@
 		D651543A166FFF3300CCDCE4 /* DetailHeaderView.xib in Resources */ = {isa = PBXBuildFile; fileRef = D6515438166FFF3300CCDCE4 /* DetailHeaderView.xib */; };
 		D651543D166FFF6800CCDCE4 /* AboutViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D651543C166FFF6800CCDCE4 /* AboutViewController.m */; };
 		D65154541670EAC300CCDCE4 /* HistoryViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D65154521670EAC200CCDCE4 /* HistoryViewController.m */; };
+		D6669F8C1671390000769D5D /* ItemDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D6669F8A1671390000769D5D /* ItemDetailViewController.m */; };
+		D6669F9B1671391900769D5D /* CustomTextField.m in Sources */ = {isa = PBXBuildFile; fileRef = D6669F901671391900769D5D /* CustomTextField.m */; };
+		D6669F9C1671391900769D5D /* HowCell.m in Sources */ = {isa = PBXBuildFile; fileRef = D6669F921671391900769D5D /* HowCell.m */; };
+		D6669F9D1671391900769D5D /* NameCell.m in Sources */ = {isa = PBXBuildFile; fileRef = D6669F941671391900769D5D /* NameCell.m */; };
+		D6669F9E1671391900769D5D /* WhatCell.m in Sources */ = {isa = PBXBuildFile; fileRef = D6669F961671391900769D5D /* WhatCell.m */; };
+		D6669F9F1671391900769D5D /* WhenCell.m in Sources */ = {isa = PBXBuildFile; fileRef = D6669F981671391900769D5D /* WhenCell.m */; };
+		D6669FA01671391900769D5D /* WhereCell.m in Sources */ = {isa = PBXBuildFile; fileRef = D6669F9A1671391900769D5D /* WhereCell.m */; };
+		D6669FA416713B0100769D5D /* EventDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D6669FA116713B0100769D5D /* EventDetailViewController.m */; };
+		D6669FA516713B0100769D5D /* EventDetailViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = D6669FA316713B0100769D5D /* EventDetailViewController.xib */; };
 		D6972DD41667B774002FD2AB /* AppCalendar.m in Sources */ = {isa = PBXBuildFile; fileRef = D6972DD31667B774002FD2AB /* AppCalendar.m */; };
 		D6972DD81667B83C002FD2AB /* EventKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D6972DD61667B83C002FD2AB /* EventKit.framework */; };
 		D6972DD91667B83C002FD2AB /* EventKitUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D6972DD71667B83C002FD2AB /* EventKitUI.framework */; };
@@ -180,8 +189,6 @@
 		D6972EA41667CFBE002FD2AB /* PlacemarkViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = D6972EA21667CFBE002FD2AB /* PlacemarkViewController.xib */; };
 		D69C2E2F166A696900A68729 /* MainWindow-iPad.xib in Resources */ = {isa = PBXBuildFile; fileRef = D69C2E2D166A696900A68729 /* MainWindow-iPad.xib */; };
 		D6B52B231662805B002A339D /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D6B52B221662805B002A339D /* MapKit.framework */; };
-		D6B52B281662F924002A339D /* VaFeedbackViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D6B52B261662F924002A339D /* VaFeedbackViewController.m */; };
-		D6B52B291662F924002A339D /* VaFeedbackViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = D6B52B271662F924002A339D /* VaFeedbackViewController.xib */; };
 		D6BEA96716596B7400D05AFC /* RootViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = D6BEA96516596B7400D05AFC /* RootViewController.xib */; };
 		D6CCB3331660370400A1B361 /* ItemDetailViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = D6CCB32E1660370300A1B361 /* ItemDetailViewController.xib */; };
 		D6CCB33B1660387500A1B361 /* EventDetail.plist in Resources */ = {isa = PBXBuildFile; fileRef = D6CCB33A1660387500A1B361 /* EventDetail.plist */; };
@@ -379,6 +386,23 @@
 		D651543C166FFF6800CCDCE4 /* AboutViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AboutViewController.m; sourceTree = "<group>"; };
 		D65154521670EAC200CCDCE4 /* HistoryViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HistoryViewController.m; sourceTree = "<group>"; };
 		D65154531670EAC200CCDCE4 /* HistoryViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HistoryViewController.h; sourceTree = "<group>"; };
+		D6669F891671390000769D5D /* ItemDetailViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ItemDetailViewController.h; sourceTree = "<group>"; };
+		D6669F8A1671390000769D5D /* ItemDetailViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ItemDetailViewController.m; sourceTree = "<group>"; };
+		D6669F8F1671391900769D5D /* CustomTextField.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CustomTextField.h; sourceTree = "<group>"; };
+		D6669F901671391900769D5D /* CustomTextField.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CustomTextField.m; sourceTree = "<group>"; };
+		D6669F911671391900769D5D /* HowCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HowCell.h; sourceTree = "<group>"; };
+		D6669F921671391900769D5D /* HowCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HowCell.m; sourceTree = "<group>"; };
+		D6669F931671391900769D5D /* NameCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NameCell.h; sourceTree = "<group>"; };
+		D6669F941671391900769D5D /* NameCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NameCell.m; sourceTree = "<group>"; };
+		D6669F951671391900769D5D /* WhatCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WhatCell.h; sourceTree = "<group>"; };
+		D6669F961671391900769D5D /* WhatCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WhatCell.m; sourceTree = "<group>"; };
+		D6669F971671391900769D5D /* WhenCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WhenCell.h; sourceTree = "<group>"; };
+		D6669F981671391900769D5D /* WhenCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WhenCell.m; sourceTree = "<group>"; };
+		D6669F991671391900769D5D /* WhereCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WhereCell.h; sourceTree = "<group>"; };
+		D6669F9A1671391900769D5D /* WhereCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WhereCell.m; sourceTree = "<group>"; };
+		D6669FA116713B0100769D5D /* EventDetailViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EventDetailViewController.m; sourceTree = "<group>"; };
+		D6669FA216713B0100769D5D /* EventDetailViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EventDetailViewController.h; sourceTree = "<group>"; };
+		D6669FA316713B0100769D5D /* EventDetailViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = EventDetailViewController.xib; sourceTree = "<group>"; };
 		D6972DD21667B774002FD2AB /* AppCalendar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppCalendar.h; sourceTree = "<group>"; };
 		D6972DD31667B774002FD2AB /* AppCalendar.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AppCalendar.m; sourceTree = "<group>"; };
 		D6972DD61667B83C002FD2AB /* EventKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = EventKit.framework; path = System/Library/Frameworks/EventKit.framework; sourceTree = SDKROOT; };
@@ -412,9 +436,6 @@
 		D6972EA21667CFBE002FD2AB /* PlacemarkViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = PlacemarkViewController.xib; sourceTree = "<group>"; };
 		D69C2E2E166A696900A68729 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = "iPad/en.lproj/MainWindow-iPad.xib"; sourceTree = "<group>"; };
 		D6B52B221662805B002A339D /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
-		D6B52B251662F924002A339D /* VaFeedbackViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VaFeedbackViewController.h; sourceTree = "<group>"; };
-		D6B52B261662F924002A339D /* VaFeedbackViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VaFeedbackViewController.m; sourceTree = "<group>"; };
-		D6B52B271662F924002A339D /* VaFeedbackViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = VaFeedbackViewController.xib; sourceTree = "<group>"; };
 		D6BEA96616596B7400D05AFC /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/RootViewController.xib; sourceTree = "<group>"; };
 		D6CCB32E1660370300A1B361 /* ItemDetailViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ItemDetailViewController.xib; sourceTree = "<group>"; };
 		D6CCB33A1660387500A1B361 /* EventDetail.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = EventDetail.plist; sourceTree = "<group>"; };
@@ -490,7 +511,6 @@
 				D651542D166FFD4900CCDCE4 /* SettingsViewController.xib */,
 				D6972DD21667B774002FD2AB /* AppCalendar.h */,
 				D6972DD31667B774002FD2AB /* AppCalendar.m */,
-				D6B52B241662F924002A339D /* feedback */,
 				D6CCB32E1660370300A1B361 /* ItemDetailViewController.xib */,
 				D6CCB33A1660387500A1B361 /* EventDetail.plist */,
 				28C286DF0D94DF7D0034E888 /* RootViewController.h */,
@@ -547,6 +567,8 @@
 		29B97314FDCFA39411CA2CEA /* CustomTemplate */ = {
 			isa = PBXGroup;
 			children = (
+				D6669F8E1671391900769D5D /* Cells */,
+				D6669F861671390000769D5D /* Simplified */,
 				D6515321166FF16C00CCDCE4 /* Theme */,
 				D651530D166FE38200CCDCE4 /* Default-568h@2x.png */,
 				D6972E951667CEB0002FD2AB /* ThirdParty */,
@@ -756,6 +778,39 @@
 			path = Metal;
 			sourceTree = "<group>";
 		};
+		D6669F861671390000769D5D /* Simplified */ = {
+			isa = PBXGroup;
+			children = (
+				D6669FA116713B0100769D5D /* EventDetailViewController.m */,
+				D6669FA216713B0100769D5D /* EventDetailViewController.h */,
+				D6669FA316713B0100769D5D /* EventDetailViewController.xib */,
+				D6669F891671390000769D5D /* ItemDetailViewController.h */,
+				D6669F8A1671390000769D5D /* ItemDetailViewController.m */,
+			);
+			name = Simplified;
+			path = Classes/Simplified;
+			sourceTree = "<group>";
+		};
+		D6669F8E1671391900769D5D /* Cells */ = {
+			isa = PBXGroup;
+			children = (
+				D6669F8F1671391900769D5D /* CustomTextField.h */,
+				D6669F901671391900769D5D /* CustomTextField.m */,
+				D6669F911671391900769D5D /* HowCell.h */,
+				D6669F921671391900769D5D /* HowCell.m */,
+				D6669F931671391900769D5D /* NameCell.h */,
+				D6669F941671391900769D5D /* NameCell.m */,
+				D6669F951671391900769D5D /* WhatCell.h */,
+				D6669F961671391900769D5D /* WhatCell.m */,
+				D6669F971671391900769D5D /* WhenCell.h */,
+				D6669F981671391900769D5D /* WhenCell.m */,
+				D6669F991671391900769D5D /* WhereCell.h */,
+				D6669F9A1671391900769D5D /* WhereCell.m */,
+			);
+			name = Cells;
+			path = Classes/Cells;
+			sourceTree = "<group>";
+		};
 		D6972E411667CB2D002FD2AB /* GoogleLocations */ = {
 			isa = PBXGroup;
 			children = (
@@ -834,16 +889,6 @@
 				D69C2E2D166A696900A68729 /* MainWindow-iPad.xib */,
 			);
 			name = iPad;
-			sourceTree = "<group>";
-		};
-		D6B52B241662F924002A339D /* feedback */ = {
-			isa = PBXGroup;
-			children = (
-				D6B52B251662F924002A339D /* VaFeedbackViewController.h */,
-				D6B52B261662F924002A339D /* VaFeedbackViewController.m */,
-				D6B52B271662F924002A339D /* VaFeedbackViewController.xib */,
-			);
-			path = feedback;
 			sourceTree = "<group>";
 		};
 		D6CCB35116604D6600A1B361 /* Detail */ = {
@@ -961,7 +1006,6 @@
 				D6BEA96716596B7400D05AFC /* RootViewController.xib in Resources */,
 				D6CCB3331660370400A1B361 /* ItemDetailViewController.xib in Resources */,
 				D6CCB33B1660387500A1B361 /* EventDetail.plist in Resources */,
-				D6B52B291662F924002A339D /* VaFeedbackViewController.xib in Resources */,
 				D6972E781667CB2D002FD2AB /* blackArrow.png in Resources */,
 				D6972E791667CB2D002FD2AB /* blueArrow.png in Resources */,
 				D6972E7A1667CB2D002FD2AB /* blueArrow_new.png in Resources */,
@@ -1103,6 +1147,7 @@
 				D6515429166FFC9500CCDCE4 /* SimpleSettings.plist in Resources */,
 				D651542F166FFD4900CCDCE4 /* SettingsViewController.xib in Resources */,
 				D651543A166FFF3300CCDCE4 /* DetailHeaderView.xib in Resources */,
+				D6669FA516713B0100769D5D /* EventDetailViewController.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1129,7 +1174,6 @@
 				D6CCB36616604D6600A1B361 /* SectionHeaderView.m in Sources */,
 				D6CCB36716604D6600A1B361 /* SectionInfo.m in Sources */,
 				D6CCB36816604D6600A1B361 /* TableViewController.m in Sources */,
-				D6B52B281662F924002A339D /* VaFeedbackViewController.m in Sources */,
 				D6972DD41667B774002FD2AB /* AppCalendar.m in Sources */,
 				D6972E7B1667CB2D002FD2AB /* DetailViewController.m in Sources */,
 				D6972E7C1667CB2D002FD2AB /* EGORefreshTableHeaderView.m in Sources */,
@@ -1153,6 +1197,14 @@
 				D651542E166FFD4900CCDCE4 /* SettingsViewController.m in Sources */,
 				D651543D166FFF6800CCDCE4 /* AboutViewController.m in Sources */,
 				D65154541670EAC300CCDCE4 /* HistoryViewController.m in Sources */,
+				D6669F8C1671390000769D5D /* ItemDetailViewController.m in Sources */,
+				D6669F9B1671391900769D5D /* CustomTextField.m in Sources */,
+				D6669F9C1671391900769D5D /* HowCell.m in Sources */,
+				D6669F9D1671391900769D5D /* NameCell.m in Sources */,
+				D6669F9E1671391900769D5D /* WhatCell.m in Sources */,
+				D6669F9F1671391900769D5D /* WhenCell.m in Sources */,
+				D6669FA01671391900769D5D /* WhereCell.m in Sources */,
+				D6669FA416713B0100769D5D /* EventDetailViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
