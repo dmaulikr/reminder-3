@@ -51,13 +51,6 @@
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-    
-    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-    onOff = [defaults boolForKey:@"USE_DEFAULT_LOCATION"];
-    if (onOff) {
-        defaultHeb = [defaults objectForKey:@"DEFAULT_HEB_NAME"];
-//        NSLog(@"default heb: %@",defaultHeb);
-    }
     [self.tableView reloadData];
 }
 
@@ -69,7 +62,7 @@
     
     [SSThemeManager customizeTableView:self.tableView];
  
-    NSString* plistPath = [[NSBundle mainBundle] pathForResource:@"Settings" ofType:@"plist"];
+    NSString* plistPath = [[NSBundle mainBundle] pathForResource:@"SimpleSettings" ofType:@"plist"];
     self.contentList = [NSDictionary dictionaryWithContentsOfFile:plistPath];
 }
 

@@ -158,7 +158,6 @@
 		D651542F166FFD4900CCDCE4 /* SettingsViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = D651542D166FFD4900CCDCE4 /* SettingsViewController.xib */; };
 		D651543A166FFF3300CCDCE4 /* DetailHeaderView.xib in Resources */ = {isa = PBXBuildFile; fileRef = D6515438166FFF3300CCDCE4 /* DetailHeaderView.xib */; };
 		D651543D166FFF6800CCDCE4 /* AboutViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D651543C166FFF6800CCDCE4 /* AboutViewController.m */; };
-		D651544016700E6100CCDCE4 /* Settings.plist in Resources */ = {isa = PBXBuildFile; fileRef = D651543E16700E6100CCDCE4 /* Settings.plist */; };
 		D65154541670EAC300CCDCE4 /* HistoryViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D65154521670EAC200CCDCE4 /* HistoryViewController.m */; };
 		D6972DD41667B774002FD2AB /* AppCalendar.m in Sources */ = {isa = PBXBuildFile; fileRef = D6972DD31667B774002FD2AB /* AppCalendar.m */; };
 		D6972DD81667B83C002FD2AB /* EventKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D6972DD61667B83C002FD2AB /* EventKit.framework */; };
@@ -378,7 +377,6 @@
 		D6515438166FFF3300CCDCE4 /* DetailHeaderView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = DetailHeaderView.xib; sourceTree = "<group>"; };
 		D651543B166FFF6800CCDCE4 /* AboutViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AboutViewController.h; sourceTree = "<group>"; };
 		D651543C166FFF6800CCDCE4 /* AboutViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AboutViewController.m; sourceTree = "<group>"; };
-		D651543F16700E6100CCDCE4 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = en; path = en.lproj/Settings.plist; sourceTree = "<group>"; };
 		D65154521670EAC200CCDCE4 /* HistoryViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HistoryViewController.m; sourceTree = "<group>"; };
 		D65154531670EAC200CCDCE4 /* HistoryViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HistoryViewController.h; sourceTree = "<group>"; };
 		D6972DD21667B774002FD2AB /* AppCalendar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppCalendar.h; sourceTree = "<group>"; };
@@ -579,7 +577,6 @@
 		29B97317FDCFA39411CA2CEA /* Resources */ = {
 			isa = PBXGroup;
 			children = (
-				D651543E16700E6100CCDCE4 /* Settings.plist */,
 				D6515428166FFC9500CCDCE4 /* SimpleSettings.plist */,
 				D6FF80BC166BBAA100D2DC4F /* Icon.png */,
 				D6FF80BD166BBAA100D2DC4F /* Reminder_icon.png */,
@@ -1106,7 +1103,6 @@
 				D6515429166FFC9500CCDCE4 /* SimpleSettings.plist in Resources */,
 				D651542F166FFD4900CCDCE4 /* SettingsViewController.xib in Resources */,
 				D651543A166FFF3300CCDCE4 /* DetailHeaderView.xib in Resources */,
-				D651544016700E6100CCDCE4 /* Settings.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1193,14 +1189,6 @@
 				1825964711D13136000B79F7 /* en */,
 			);
 			name = MainWindow.xib;
-			sourceTree = "<group>";
-		};
-		D651543E16700E6100CCDCE4 /* Settings.plist */ = {
-			isa = PBXVariantGroup;
-			children = (
-				D651543F16700E6100CCDCE4 /* en */,
-			);
-			name = Settings.plist;
 			sourceTree = "<group>";
 		};
 		D6972E4B1667CB2D002FD2AB /* LocationStoryboard.storyboard */ = {

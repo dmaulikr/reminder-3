@@ -39,7 +39,6 @@
     return self;
 }
 
-
 - (void)viewDidLoad {
 	
     [super viewDidLoad];
@@ -54,15 +53,16 @@
 	// Configure the add and edit buttons.
     self.navigationItem.leftBarButtonItem = self.editButtonItem;
     
-//    UIBarButtonItem *aButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self action:@selector(addEvent)];
-//	self.addButton = aButton;
-//	addButton.enabled = YES;
-//    self.navigationItem.rightBarButtonItem = addButton;
-//    
     // detect shake
     [self becomeFirstResponder];
     
-	/*
+}
+
+
+- (void)viewWillAppear:(BOOL)animated {
+	[super viewWillAppear:animated];
+    
+    /*
 	 Fetch existing events.
 	 Create a fetch request; find the Event entity and assign it to the request; add a sort descriptor; then execute the fetch.
 	 */
@@ -84,7 +84,7 @@
 	if (mutableFetchResults == nil) {
 		// Handle the error.
 		NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
-		exit(-1);  // Fail		
+		exit(-1);  // Fail
 	}
 	
 	// Set self's events array to the mutable array, then clean up.
@@ -104,12 +104,6 @@
         
         self.savedSearchTerm = nil;
     }
-    
-}
-
-
-- (void)viewWillAppear:(BOOL)animated {
-	[super viewWillAppear:animated];
 	[self.tableView reloadData];
 }
 

@@ -182,11 +182,8 @@
         event = (Event *)eventsArray[indexPath.row];
     }
 
-    
-	cell.nameField.text = event.name;
-	
+ 	cell.nameField.text = event.name;
 	cell.creationDateLabel.text = [dateFormatter stringFromDate:[event creationDate]];
-    
     cell.expiredDateLabel.text = (event.expired !=nil)?event.expired:@"";
     
     NSDate *now = [NSDate date];
@@ -241,7 +238,7 @@
                 if (granted) {
                     EKCalendarChooser* chooseCal = [[EKCalendarChooser alloc] initWithSelectionStyle:EKCalendarChooserSelectionStyleSingle
                                                                                         displayStyle:EKCalendarChooserDisplayWritableCalendarsOnly
-                                                                                          eventStore:[AppCalendar eventStore] ];
+                                                                                          eventStore:store ];
                     chooseCal.delegate = self;
                     chooseCal.showsDoneButton = YES;
                     
@@ -271,11 +268,13 @@
 -(void)addEvent:(Event*)reminder toEventStore:(EKEventStore *)store toCalendar:(EKCalendar*)calendar
 {
     // we parse this event
-    NSDictionary *parsedQuestion = [self parsingLinguistic:reminder.name];
-    reminder.what = parsedQuestion[@"what"];
-    reminder.when = parsedQuestion[@"when"];
-    reminder.where = parsedQuestion[@"where"];
-    
+//    /* TODO: LONG WAY TO GO
+//    reminder.name = @"pick up kids at 4pm";
+//    NSDictionary *parsedQuestion = [self parsingLinguistic:reminder.name];
+//    reminder.what = parsedQuestion[@"what"];
+//    reminder.when = parsedQuestion[@"when"];
+//    reminder.where = parsedQuestion[@"where"];
+//    */
     // I wish I can handle better on this based on the Linguistic
     EKEvent* event = [EKEvent eventWithEventStore:store];
     event.calendar = calendar;
@@ -288,12 +287,11 @@
     [frm setLocale:[[NSLocale alloc] initWithLocaleIdentifier:@"en_US"]];
     
     event.title = reminder.name;
-    event.location = reminder.where;
-    event.notes = reminder.how ;
+//    event.location = reminder.where;
+//    event.notes = reminder.how ;
     
-    // TODO: need some sort of algo tO figure out how & when
     
-    // this is how we want to set up the "how", right now, it's really just hard-coded.
+    // this is how we want to set up the "how",
     NSNumber* weekDay = [NSNumber numberWithInt:1];
     //1
     EKRecurrenceDayOfWeek* showDay = [EKRecurrenceDayOfWeek dayOfWeek: [weekDay intValue] ];
@@ -345,7 +343,6 @@
         case EKEventEditViewActionSaved:
         {
             EKEvent* returnedEvent = controller.event;
-            //            NSLog(@"returned event: %@",returnedEvent);
             NSIndexPath *selectedPath = [self.tableView indexPathForSelectedRow];
             
             // let's update the database & update the tableview
@@ -413,8 +410,6 @@
         UIStoryboard *storyBoard = [UIStoryboard storyboardWithName:@"LocationStoryboard" bundle:nil];
         UINavigationController *controller = [storyBoard instantiateInitialViewController];
         PlaceSearchViewController *searchViewController = (PlaceSearchViewController*)controller.viewControllers[0];
-//        event.where = @"target";
-//        NSLog(@"where it is? %@",event.where);
         searchViewController.searchString = event.where;
         [self presentViewController:controller animated:YES completion:nil];
     }
@@ -755,15 +750,6 @@
         NSArray *sortedArray =  [self.eventsArray sortedArrayUsingDescriptors:discriptor];
         self.eventsArray = [NSMutableArray arrayWithArray:sortedArray];
         
-        // The block based approach works as well.
-//        NSArray *sortedArray;
-//        sortedArray = [self.eventsArray sortedArrayUsingComparator:^NSComparisonResult(id a, id b) {
-//            NSDate *first = [(Event*)a expiredDate];
-//            NSDate *second = [(Event*)b expiredDate];
-//            return [first compare:second];
-//        }];
-//        self.eventsArray = [NSMutableArray arrayWithArray:sortedArray];
-        
         [self.tableView reloadData];
     }
 	
@@ -800,10 +786,12 @@
         [tagArrays addObject:dict];
     }];
 
+    NSLog(@"the tags array: %@",tagArrays);
+
     // I know this is stupid
-    __block NSUInteger conjunctionIndex = 0;
-    __block NSUInteger particleIndex = 0;
-    __block NSUInteger prepositionIndex = 0;
+    __block int16_t conjunctionIndex = 0;
+    __block int16_t particleIndex = 0;
+    __block int16_t prepositionIndex = 0;
     [tagArrays enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
         NSDictionary *dict = (NSDictionary *)obj;
         if ([dict[@"tag"] isEqualToString:@"Particle"]) {
@@ -823,7 +811,7 @@
 //
     __block NSMutableString *whatString = [NSMutableString string];
 
-    if  (conjunctionIndex - (particleIndex+1) > 0)
+    if  ((conjunctionIndex - (particleIndex+1)) > 0)
     {
         NSRange whatRange = NSMakeRange(particleIndex+1, conjunctionIndex-(particleIndex+ 1));
         NSArray *whatArray = [tagArrays objectsAtIndexes:[NSIndexSet indexSetWithIndexesInRange:whatRange]];
@@ -834,11 +822,10 @@
             }];
         }
         NSLog(@"what :%@",whatString);
-//        localReminder.what = whatString;
     }
 
     __block NSMutableString *whereString = [NSMutableString string];
-    if (prepositionIndex-(conjunctionIndex+1) > 0) {
+    if ((prepositionIndex-(conjunctionIndex+1)) > 0) {
         NSRange whereRange = NSMakeRange(conjunctionIndex+1, prepositionIndex-(conjunctionIndex+ 1));
         NSArray *whereArray = [tagArrays objectsAtIndexes:[NSIndexSet indexSetWithIndexesInRange:whereRange]];
         if (whereArray.count>0) {
@@ -847,11 +834,11 @@
             }];
         }
         NSLog(@"where :%@",whereString);
-//        localReminder.where = whereString;
+
     }
 
     __block NSMutableString *whenString = [NSMutableString string];
-    if (tagArrays.count-(prepositionIndex+1) > 0) {
+    if ((tagArrays.count-(prepositionIndex+1)) > 0) {
         NSRange whenRange = NSMakeRange(prepositionIndex+1, tagArrays.count-(prepositionIndex+ 1));
         NSArray *whenArray = [tagArrays objectsAtIndexes:[NSIndexSet indexSetWithIndexesInRange:whenRange]];
         if (whenArray.count>0) {
@@ -860,7 +847,6 @@
             }];
         }
         NSLog(@"when :%@",whenString);
-//        localReminder.when = whenString;
     }
     
     return @{@"what":whatString, @"where":whereString, @"when":whenString};
