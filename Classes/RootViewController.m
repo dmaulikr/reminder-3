@@ -184,17 +184,7 @@ const float STRIKEOUT_THICKNESS = 2.0f;
     NSDate *now = [NSDate date];
     //The receiver, now, is later in time than anotherDate, NSOrderedDescending
     if ([now compare:event.startDate] == NSOrderedDescending) {
-        NSLog(@"supposed to be expired at: %d",indexPath.row);
-        cell.userInteractionEnabled = NO;
-        static CALayer *strikethroughLayer;
-        if (strikethroughLayer == nil) {
-            strikethroughLayer = [CALayer layer];
-            strikethroughLayer.backgroundColor = [[UIColor whiteColor] CGColor];
-            strikethroughLayer.frame = CGRectMake(0, cell.bounds.size.height/2,
-                                                   cell.bounds.size.width, STRIKEOUT_THICKNESS);
-            [cell.layer addSublayer:strikethroughLayer];
-        }
-        
+        cell.creationDateLabel.textColor = [UIColor redColor];
     }
 	
     NSMutableArray *eventTagNames = [NSMutableArray array];
