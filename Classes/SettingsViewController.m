@@ -8,10 +8,10 @@
 
 #import "SettingsViewController.h"
 #import "AboutViewController.h"
-#import "SwitchTableCell.h"
 #import  <MessageUI/MessageUI.h>
 #import <MessageUI/MFMailComposeViewController.h>
 #import "SSTheme.h"
+#import "CustomAlertView.h"
 
 #define kFont [UIFont boldSystemFontOfSize:14.0];
 
@@ -48,11 +48,8 @@
     [super viewDidLoad];
 
     self.title = NSLocalizedString(@"Settings", @"Settings");
-    
     [SSThemeManager customizeTableView:self.tableView];
- 
-//    NSString* plistPath = [[NSBundle mainBundle] pathForResource:@"SimpleSettings" ofType:@"plist"];
-//    self.contentList = [NSDictionary dictionaryWithContentsOfFile:plistPath];
+
 }
 
 - (void)viewDidDisappear:(BOOL)animated
@@ -81,7 +78,8 @@
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
 {
 //    return [[self.contentList allKeys] objectAtIndex:section];
-    return (section == 0)?@"Setting":[[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"];
+    NSString *aboutTitle = [NSString stringWithFormat:@"Version: %@",[[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"]];
+    return (section == 0)?@"Setting":aboutTitle;
 }
 
 
@@ -99,7 +97,7 @@
     // Return the number of rows in the section.
 //    NSString *key = [[self.contentList allKeys] objectAtIndex:section];
 //    return [[self.contentList objectForKey:key] count];
-    return (section == 0)?1:2;
+    return (section == 0)?1:3;
     
 }
 
@@ -113,11 +111,11 @@
     UITableViewCell *cell = nil;
     
     if (section == 0) {
-        cell = [self.tableView dequeueReusableCellWithIdentifier:kDisplayCell_ID];
-        if (cell == nil)
+        UITableViewCell* temp = [self.tableView dequeueReusableCellWithIdentifier:kDisplayCell_ID];
+        if (temp == nil)
         {
-            cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:kDisplayCell_ID];
-            cell.selectionStyle = UITableViewCellSelectionStyleNone;
+            temp = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:kDisplayCell_ID];
+            temp.selectionStyle = UITableViewCellSelectionStyleNone;
         }
         else
         {
@@ -128,14 +126,17 @@
                 [viewToRemove removeFromSuperview];
         }
         
-        cell.textLabel.text = @"In Advance notifcation";
+        temp.textLabel.text = @"In Advance notifcation";
         NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-        NSUInteger inAdvanceMinute = [defaults integerForKey:@"REMINDER_INADVANCE"];
-        
-    
-        cell.detailTextLabel.text = [NSString stringWithFormat:@"%d minutes", inAdvanceMinute] ;
-        UIControl *control = self.sliderCtl;
-        [cell.contentView addSubview:control];
+        int16_t inAdvanceMinute = [defaults integerForKey:@"REMINDER_INADVANCE"];
+      
+        if (inAdvanceMinute<=0) {
+            inAdvanceMinute = 5;
+        }
+        temp.detailTextLabel.text = [NSString stringWithFormat:@"%d minutes", inAdvanceMinute];
+        self.sliderCtl.value = inAdvanceMinute;
+        [temp.contentView addSubview:self.sliderCtl];
+        cell = temp;
     } else
     {
         UITableViewCell *aboutCell = [tableView dequeueReusableCellWithIdentifier:AboutCellIdentifier];
@@ -143,7 +144,21 @@
             aboutCell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:AboutCellIdentifier];
             aboutCell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
         }
-        aboutCell.textLabel.text = (row == 0)?@"About Us":@"Contact Us";
+        NSString *title = @"";
+        switch (row) {
+            case 0:
+                title = @"About Us";
+                break;
+            case 1:
+                title = @"Contact Us";
+                break;
+            case 2:
+                title = @"Privacy Policy";
+                break;
+            default:
+                break;
+        }
+        aboutCell.textLabel.text = title;
         cell = aboutCell;
     }
     
@@ -161,8 +176,16 @@
         if (indexPath.row == 0) {
             AboutViewController *about = [[AboutViewController alloc] initWithStyle:UITableViewStyleGrouped];
             [self.navigationController pushViewController:about animated:YES];
-        } else {
+        } else if (indexPath.row ==1) {
             [self displayComposerSheet];
+        } else {
+            [[[CustomAlertView alloc] initWithTitle:@"Privacy Policy"
+                                                message:@"This app doesn't collect any user information."
+                                               delegate:self
+                                      cancelButtonTitle:@"Okay"
+                                      otherButtonTitles:nil] show];
+            
+            
         }
     }
 }
@@ -239,11 +262,9 @@
         sliderCtl.backgroundColor = [UIColor clearColor];
         
         sliderCtl.minimumValue = 5.0;
-        sliderCtl.maximumValue = 100.0;
+        sliderCtl.maximumValue = 60.0;
         sliderCtl.continuous = YES;
     
-        sliderCtl.value = 10.0;
-        
 		// Add an accessibility label that describes the slider.
 		[sliderCtl setAccessibilityLabel:NSLocalizedString(@"StandardSlider", @"")];
 		

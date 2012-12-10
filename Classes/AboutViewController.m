@@ -47,10 +47,10 @@
     self.overviewTextField.text = @"A better reminder app";
     self.versionTextField.text = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"];
     
-    NSDictionary *developer = @{@"name":@"Liangjun Jiang, Mi Zhang", @"title":@"Developer"};
+    NSDictionary *developer = @{@"name":@"Liangjun Jiang, Mi Zhang", @"title":@"Developers"};
     NSDictionary *creative= @{@"name":@"Leah Wang", @"title":@"Creative"};
     self.authors = @[developer, creative];
-    self.credits = @[@"Custome Alert", @"Other Stuffs",@"Other Stuff2",@"Other Stuffs"];
+    self.credits = @[@"Custome Alert", @"TTTimerInterval",@"SVProgressHUD"];
     self.instructions = @[@"How to use it"];
     
 }

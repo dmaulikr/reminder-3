@@ -218,8 +218,13 @@ const float STRIKEOUT_THICKNESS = 2.0f;
     event.calendar = calendar;
     
     // TODO: set it to settings, and let the user decide how early
-    
-    EKAlarm* myAlarm = [EKAlarm alarmWithRelativeOffset: - 06*60 ];  // reminder in 6 mins before
+    int16_t inAdanvceMins = 0;
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    if ([defaults integerForKey:@"REMINDER_INADVANCE"]) {
+        inAdanvceMins = [defaults integerForKey:@"REMINDER_INADVANCE"];
+    } else
+        inAdanvceMins = 5;
+    EKAlarm* myAlarm = [EKAlarm alarmWithRelativeOffset: - inAdanvceMins*60 ];  // reminder in 5 mins before
     [event addAlarm: myAlarm];
     
     event.title = reminder.name;
@@ -689,11 +694,18 @@ const float STRIKEOUT_THICKNESS = 2.0f;
 		{
             // A weak search
             NSString *name = event.name;
-			NSComparisonResult result = [name compare:searchText options:(NSCaseInsensitiveSearch|NSDiacriticInsensitiveSearch) range:NSMakeRange(0, [searchText length])];
-            if (result == NSOrderedSame)
-			{
-				[self.filteredListContent addObject:event];
+            NSRange nameRange = [name rangeOfString:searchText options:NSCaseInsensitiveSearch];
+            if(nameRange.location != NSNotFound)
+            {
+                [self.filteredListContent addObject:event];
             }
+            
+            
+//			NSComparisonResult result = [name compare:searchText options:(NSCaseInsensitiveSearch|NSDiacriticInsensitiveSearch) range:NSMakeRange(0, [searchText length])];
+//            if (result == NSOrderedSame)
+//			{
+//				[self.filteredListContent addObject:event];
+//            }
 		} else if ([scope isEqualToString:@"Tag"])// search by tag
         {
             NSSet *tags = event.tags;
@@ -705,16 +717,17 @@ const float STRIKEOUT_THICKNESS = 2.0f;
                     [self.filteredListContent addObject:event];
                 }
             }];
-        } else if ([scope isEqualToString:@"Location"])
-        {
-            NSString *location = event.where;
-            NSRange nameRange = [location rangeOfString:searchText options:NSCaseInsensitiveSearch];
-            if(nameRange.location != NSNotFound)
-            {
-                [self.filteredListContent addObject:event];
-            }
-            
         }
+//        else if ([scope isEqualToString:@"Location"])
+//        {
+//            NSString *location = event.where;
+//            NSRange nameRange = [location rangeOfString:searchText options:NSCaseInsensitiveSearch];
+//            if(nameRange.location != NSNotFound)
+//            {
+//                [self.filteredListContent addObject:event];
+//            }
+//            
+//        }
 
 	}
 }
@@ -766,7 +779,7 @@ const float STRIKEOUT_THICKNESS = 2.0f;
 {
     if (motion == UIEventSubtypeMotionShake)
     {
-        UIActionSheet *actionSheet = [[UIActionSheet alloc] initWithTitle:@"Sort By" delegate:self cancelButtonTitle:@"Cancel" destructiveButtonTitle:nil otherButtonTitles:@"Name",@"Expired Date",@"Prority", nil];
+        UIActionSheet *actionSheet = [[UIActionSheet alloc] initWithTitle:@"Sort By" delegate:self cancelButtonTitle:@"Cancel" destructiveButtonTitle:nil otherButtonTitles:@"Name",@"Creatation Date", @"Starting Date", nil];
         actionSheet.destructiveButtonIndex = 1; // Priority will be highlighted
         [actionSheet showInView:self.tableView];
 
@@ -786,11 +799,11 @@ const float STRIKEOUT_THICKNESS = 2.0f;
             case 0: //
                 sortKey = @"name";
                 break;
-            case 1: // Status
-                sortKey = @"expiredDate";
+            case 1: // Creation Date
+                sortKey = @"CreatationDate";
                 break;
-            case 2: // Name
-                sortKey = @"priority";
+            case 2: // Starting Date
+                sortKey = @"StartDate";
                 break;
             default:
                 break;
