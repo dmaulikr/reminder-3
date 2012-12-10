@@ -18,6 +18,7 @@
 
 @dynamic name;
 @dynamic creationDate;
+@dynamic startDate;
 @dynamic expiredDate;
 @dynamic latitude;
 @dynamic longitude;

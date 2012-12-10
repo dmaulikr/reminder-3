@@ -151,6 +151,7 @@
     }
 }
 
+const float STRIKEOUT_THICKNESS = 2.0f;
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     
@@ -176,13 +177,24 @@
     }
 
  	cell.nameField.text = event.name;
-	cell.creationDateLabel.text = [[NSDateFormatter dateReader] stringFromDate:[event creationDate]];
+//	cell.creationDateLabel.text = [[NSDateFormatter dateWriter] stringFromDate:[event creationDate]];
+    cell.creationDateLabel.text = [self relativeDate:event.startDate];
     cell.expiredDateLabel.text = (event.expired !=nil)?event.expired:@"";
     
     NSDate *now = [NSDate date];
     //The receiver, now, is later in time than anotherDate, NSOrderedDescending
-    if ([now compare:event.expiredDate] == NSOrderedDescending) {
+    if ([now compare:event.startDate] == NSOrderedDescending) {
+        NSLog(@"supposed to be expired at: %d",indexPath.row);
         cell.userInteractionEnabled = NO;
+        static CALayer *strikethroughLayer;
+        if (strikethroughLayer == nil) {
+            strikethroughLayer = [CALayer layer];
+            strikethroughLayer.backgroundColor = [[UIColor whiteColor] CGColor];
+            strikethroughLayer.frame = CGRectMake(0, cell.bounds.size.height/2,
+                                                   cell.bounds.size.width, STRIKEOUT_THICKNESS);
+            [cell.layer addSublayer:strikethroughLayer];
+        }
+        
     }
 	
     NSMutableArray *eventTagNames = [NSMutableArray array];
@@ -195,7 +207,6 @@
 		tagsString = [eventTagNames componentsJoinedByString:@", "];
 	}
 	cell.tagsField.text = tagsString;
-	
 	cell.nameField.tag = indexPath.row;
 	cell.tagsButton.tag = indexPath.row;
 	return cell;
@@ -216,16 +227,22 @@
     EKEvent* event = [EKEvent eventWithEventStore:store];
     event.calendar = calendar;
     
+    // TODO: set it to settings, and let the user decide how early
+    
     EKAlarm* myAlarm = [EKAlarm alarmWithRelativeOffset: - 06*60 ];  // reminder in 6 mins before
     [event addAlarm: myAlarm];
     
-    NSDateFormatter* frm = [[NSDateFormatter alloc] init];
-    [frm setDateFormat:@"MM/dd/yyyy HH:mm zzz"];
-    [frm setLocale:[[NSLocale alloc] initWithLocaleIdentifier:@"en_US"]];
-    
     event.title = reminder.name;
+    event.startDate = reminder.startDate;
+    event.endDate = reminder.expiredDate;
+//    if (reminder.expiredDate != nil) {
+//        event.endDate = reminder.expiredDate;
+//    } else {
+//        event.endDate = [reminder.startDate dateByAddingTimeInterval:180];  // add 3 minutes
+//    }
     
-    // this is how we want to set up the "how",
+    // we don't need the recurrence rule since I don't know how to make this easy
+    /*
     NSNumber* weekDay = [NSNumber numberWithInt:1];
     //1
     EKRecurrenceDayOfWeek* showDay = [EKRecurrenceDayOfWeek dayOfWeek: [weekDay intValue] ];
@@ -243,21 +260,28 @@
                                              setPositions:nil
                                                       end:runFor3Months];
     [event addRecurrenceRule: myReccurrence];
+     */
     
     //1 save the event to the calendar
     NSError* error = nil;
-    [store saveEvent:event span:EKSpanFutureEvents commit:YES error:&error];
+    if([store saveEvent:event span:EKSpanFutureEvents commit:YES error:&error])
+    {
+        [SVProgressHUD showSuccessWithStatus:@"Saved"];
+    } else {
+        [SVProgressHUD showErrorWithStatus:[error localizedDescription]];
+    };
     
     //2 show the edit event dialogue
-    EKEventEditViewController* editEvent = [[EKEventEditViewController alloc] init];
-    editEvent.eventStore = store;
-    editEvent.event = event;
-    editEvent.editViewDelegate = self;
-    [self presentViewController:editEvent animated:YES completion:^{
-        // we already saved so we don't handle "cancel" anymore
-                    UINavigationItem* item = [editEvent.navigationBar.items objectAtIndex:0];
-                    item.leftBarButtonItem = nil;
-    }];
+    // we are not going to show the dialog - just straigh save it to calendar
+//    EKEventEditViewController* editEvent = [[EKEventEditViewController alloc] init];
+//    editEvent.eventStore = store;
+//    editEvent.event = event;
+//    editEvent.editViewDelegate = self;
+//    [self presentViewController:editEvent animated:YES completion:^{
+//        // we already saved so we don't handle "cancel" anymore
+//                    UINavigationItem* item = [editEvent.navigationBar.items objectAtIndex:0];
+//                    item.leftBarButtonItem = nil;
+//    }];
 
 }
 
@@ -274,6 +298,9 @@
         case EKEventEditViewActionDeleted:
             [[AppCalendar eventStore] removeEvent:controller.event span:EKSpanFutureEvents error:&error];
             break;
+            
+        // we don't allow editing so we actually don't need to handle the rest
+        /*
         case EKEventEditViewActionSaved:
         {
             EKEvent* returnedEvent = controller.event;
@@ -309,7 +336,7 @@
 
             break;
         }
-        
+        */
         default:break;
     }
     [controller dismissViewControllerAnimated:YES completion:nil];
@@ -437,7 +464,11 @@
                                               }
                                           }];
         if (targetEvent != nil) {
-           [[AppCalendar eventStore] removeEvent:targetEvent span:EKSpanFutureEvents error:&error]; 
+            if ([[AppCalendar eventStore] removeEvent:targetEvent span:EKSpanFutureEvents error:&error]) {
+                [SVProgressHUD showSuccessWithStatus:@"Success"];
+            } else {
+                [SVProgressHUD showErrorWithStatus:error.localizedDescription];
+            }
         }
         
 		[self performSelector:@selector(updateRowTags) withObject:nil afterDelay:0.0];
@@ -449,40 +480,6 @@
 
     [super setEditing:editing animated:animated];
 	self.navigationItem.rightBarButtonItem.enabled = !editing;
-    
-    if (!editing) {
-      
-        // we will make sure that only the first row is allowed to edit (change content)
-        NSIndexPath *indexPath = [NSIndexPath indexPathForRow:0 inSection:0];
-        EventTableViewCell *cell = (EventTableViewCell *)[self.tableView cellForRowAtIndexPath:indexPath];
-                                                          
-        // we do allow exempty text field
-        if (cell.nameField.text.length > 0) {
-            NSString *text = cell.nameField.text;
-            NSError *error = nil;
-            NSDataDetector *detector = [NSDataDetector dataDetectorWithTypes:NSTextCheckingTypeDate error:&error];
-            NSArray *matches = [detector matchesInString:text options:0 range:NSMakeRange(0, [text length])];
-            
-            if (matches.count > 0) {
-                NSString *message = @"";
-                if (matches.count == 1) {
-                    NSTextCheckingResult *match = matches[0];
-                    message = [NSString stringWithFormat:@"%@", [[NSDateFormatter dateReader] stringFromDate:match.date]];
-                } else if (matches.count == 2) { // we can also handle "ending date"
-                    NSTextCheckingResult *start = matches[0];
-                    NSTextCheckingResult *end = matches[1];
-                    
-                    message = [NSString stringWithFormat:@"start: %@, end: %@", [[NSDateFormatter dateReader] stringFromDate:start.date], [[NSDateFormatter dateReader] stringFromDate:end.date]];
-                    
-                }
-                [[[CustomAlertView alloc] initWithTitle:@"Sounds you mentioned a date time"
-                                                message:message
-                                               delegate:self
-                                      cancelButtonTitle:@"No"
-                                      otherButtonTitles:@"Yes",nil] show];
-            }
-        }
-    }
 }
 
 - (void)displayCalendarChooser
@@ -626,6 +623,37 @@
 	Event *event = eventsArray[textField.tag];
 	event.name = textField.text;
 	
+           
+    // we do allow exempty text field, so we need to handle it
+    if (event.name.length > 0) {
+        NSError *error = nil;
+        NSDataDetector *detector = [NSDataDetector dataDetectorWithTypes:NSTextCheckingTypeDate error:&error];
+        NSArray *matches = [detector matchesInString:event.name options:0 range:NSMakeRange(0, [event.name length])];
+        
+        if (matches.count > 0) {
+            NSString *message = @"";
+            if (matches.count == 1) {
+                NSTextCheckingResult *match = matches[0];
+                message = [NSString stringWithFormat:@"%@", [[NSDateFormatter dateWriter] stringFromDate:match.date]];
+                event.startDate = match.date;
+                event.expiredDate = [match.date dateByAddingTimeInterval:180]; // just fake a 3-min
+            } else if (matches.count == 2) { // we can also handle "ending date"
+                NSTextCheckingResult *start = matches[0];
+                NSTextCheckingResult *end = matches[1];
+                event.startDate = start.date;
+                event.expiredDate = end.date;
+                message = [NSString stringWithFormat:@"start: %@, end: %@", [[NSDateFormatter dateWriter] stringFromDate:start.date], [[NSDateFormatter dateWriter] stringFromDate:end.date]];
+                
+            }
+            [[[CustomAlertView alloc] initWithTitle:@"Sounds you mentioned a date time"
+                                            message:message
+                                           delegate:self
+                                  cancelButtonTitle:@"No"
+                                  otherButtonTitles:@"Yes",nil] show];
+        }
+    }
+    
+    
 	// Commit the change.
 	NSError *error;
 	if (![managedObjectContext save:&error]) {

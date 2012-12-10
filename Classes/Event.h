@@ -54,6 +54,8 @@
 
 @property (nonatomic, strong) NSString *name;
 @property (nonatomic, strong) NSDate *creationDate;
+@property (nonatomic, strong) NSDate *startDate;
+
 @property (nonatomic, strong) NSDate *expiredDate;
 
 @property (nonatomic, strong) NSNumber *latitude;

@@ -11,9 +11,9 @@
 #import "TaggedLocationsAppDelegate.h"
 #import "RootViewController.h"
 #import "SettingsViewController.h"
-#import "HistoryViewController.h"
-#import "ItemDetailViewController.h"
-#import "EventDetailViewController.h"
+//#import "HistoryViewController.h"
+//#import "ItemDetailViewController.h"
+//#import "EventDetailViewController.h"
 
 @implementation TaggedLocationsAppDelegate
 
@@ -44,10 +44,10 @@
 	self.navigationController = aNavigationController;
 	
     // History
-    EventDetailViewController *detailViewController = [[EventDetailViewController alloc] initWithNibName:@"EventDetailViewController" bundle:nil];
-//    HistoryViewController *historyViewController = [[HistoryViewController alloc] initWithNibName:@"RootViewController" bundle:nil];
-//    historyViewController.managedObjectContext = context;
-    UINavigationController *historyNavController = [[UINavigationController alloc] initWithRootViewController:detailViewController];
+//    EventDetailViewController *detailViewController = [[EventDetailViewController alloc] initWithNibName:@"EventDetailViewController" bundle:nil];
+////    HistoryViewController *historyViewController = [[HistoryViewController alloc] initWithNibName:@"RootViewController" bundle:nil];
+////    historyViewController.managedObjectContext = context;
+//    UINavigationController *historyNavController = [[UINavigationController alloc] initWithRootViewController:detailViewController];
     
     // Settings
     settingsViewController = [[SettingsViewController alloc] initWithStyle:UITableViewStyleGrouped];
@@ -55,17 +55,17 @@
     
     // TODO: can I make the following better?!
     self.tabBarController = [[UITabBarController alloc] init];
-    self.tabBarController.viewControllers = @[self.navigationController, historyNavController, navController];
+    self.tabBarController.viewControllers = @[self.navigationController, navController];
 
     [[self.tabBarController.tabBar.items objectAtIndex:0] setTitle:NSLocalizedString(@"List", @"")];
-    [[self.tabBarController.tabBar.items objectAtIndex:1] setTitle:NSLocalizedString(@"History", @"")];
-    [[self.tabBarController.tabBar.items objectAtIndex:2] setTitle:NSLocalizedString(@"Settings", @"")];
+//    [[self.tabBarController.tabBar.items objectAtIndex:1] setTitle:NSLocalizedString(@"History", @"")];
+    [[self.tabBarController.tabBar.items objectAtIndex:1] setTitle:NSLocalizedString(@"Settings", @"")];
     
     UITabBarItem *item1 = [self.navigationController tabBarItem];
     [SSThemeManager customizeTabBarItem:item1 forTab:SSThemeTabPower];
     
-    UITabBarItem *item2 = [navController tabBarItem];
-    [SSThemeManager customizeTabBarItem:item2 forTab:SSThemeTabDoor];
+//    UITabBarItem *item2 = [navController tabBarItem];
+//    [SSThemeManager customizeTabBarItem:item2 forTab:SSThemeTabDoor];
     
     UITabBarItem *item3 = [navController tabBarItem];
     [SSThemeManager customizeTabBarItem:item3 forTab:SSThemeTabControls];
