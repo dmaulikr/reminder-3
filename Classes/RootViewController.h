@@ -58,12 +58,14 @@
 
 @interface RootViewController : UITableViewController <UISearchDisplayDelegate, UISearchBarDelegate, CLLocationManagerDelegate, UITextFieldDelegate, UIAlertViewDelegate, EKEventEditViewDelegate, EKCalendarChooserDelegate, UIActionSheetDelegate> {
 	
+    CLLocationManager *locationManager;
+    UIBarButtonItem *addButton;
+    
     NSMutableArray *eventsArray;
     NSMutableArray	*filteredListContent;	// The content filtered as a result of a search.
 	NSManagedObjectContext *managedObjectContext;	    
 
-    CLLocationManager *locationManager;
-    UIBarButtonItem *addButton;
+    
 	
 	EventTableViewCell *__weak eventTableViewCell;
     

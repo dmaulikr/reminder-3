@@ -13,4 +13,5 @@
 #import <UIKit/UIKit.h>
 #import <CoreData/CoreData.h>
 #import "SSTheme.h"
+#import "SSMetalTheme.h"
 #endif

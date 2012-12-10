@@ -147,6 +147,20 @@ static NSString *kViewKey = @"viewKey";
  
     self.title = NSLocalizedString(@"Detail", @"Detail");
     
+    NSString *myDateString = @"24.11.2011 15:00";
+//    NSString *myDateString = @"tomorrow at noon";
+//    NSString *myDateString = @"next Monday at 7 pm";
+//    NSString *myDateString = @"15 minitutes later";
+    
+    NSError *error = nil;
+    NSDataDetector *detector = [NSDataDetector dataDetectorWithTypes:NSTextCheckingTypeDate error:&error];
+    NSArray *matches = [detector matchesInString:myDateString options:0 range:NSMakeRange(0, [myDateString length])];
+    for (NSTextCheckingResult *match in matches) {
+        NSLog(@"Detected Date: %@", match.date);           // => 2011-11-24 14:00:00 +0000
+        NSLog(@"Detected Time Zone: %@", match.timeZone);  // => (null)
+        NSLog(@"Detected Duration: %f", match.duration);   // => 0.000000
+    }
+    
     self.dataSourceArray = @[
                            [NSDictionary dictionaryWithObjectsAndKeys:
                              NSLocalizedString(@"What",@""), kTitleKey,
@@ -408,6 +422,36 @@ static NSString *kViewKey = @"viewKey";
         
     }
     
+    if (textField.tag == 12 || textField.tag == 13) {
+        UIToolbar *keyboardToolbar = [[UIToolbar alloc] initWithFrame:CGRectMake(0, 0.0, self.view.frame.size.width, 40)];
+        keyboardToolbar.barStyle = UIBarStyleBlackTranslucent;
+        keyboardToolbar.tintColor = [UIColor darkGrayColor];
+        
+//        UIBarButtonItem *prevItem = [[UIBarButtonItem alloc] initWithTitle:@"Previous" style:UIBarButtonItemStyleDone target:self action:@selector(onPrev:)];
+//        
+//        UIBarButtonItem *spaceItem1 = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFixedSpace target:self action:nil];
+//        spaceItem1.width = 10.0;
+//        
+//        UIBarButtonItem *nextItem = [[UIBarButtonItem alloc] initWithTitle:@"Next" style:UIBarButtonItemStyleDone target:self action:@selector(onNext:)];
+//        
+//        UIBarButtonItem *spaceItem2 = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFixedSpace target:self action:nil];
+//        spaceItem2.width = 130.0;
+        
+        UIBarButtonItem *dismissItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(onDismiss:)];
+        
+        NSArray *itemsArray =@[dismissItem];
+        keyboardToolbar.items = itemsArray;
+        textField.inputAccessoryView = keyboardToolbar;
+
+    }
+        
+}
+
+- (void)onDismiss:(id)sender
+{
+    NSIndexPath *indexPath = [NSIndexPath indexPathForRow:2 inSection:0];
+    CustomTableViewCell *cell = (CustomTableViewCell *)[self.tableView cellForRowAtIndexPath:indexPath];
+    [cell.textField resignFirstResponder];
 }
 
 #pragma mark - UITextView Delegate method
@@ -456,26 +500,26 @@ static NSString *kViewKey = @"viewKey";
 - (void)pickerView:(UIPickerView *)pickerView didSelectRow:(NSInteger)row inComponent:(NSInteger)component
 {
     // since we have only one textfield having a picker, so we hardcode where it is.
-    NSIndexPath *pickerIndexPath = [NSIndexPath indexPathForRow:3 inSection:0];
-    CustomTableViewCell *cell = (CustomTableViewCell *)[self.tableView cellForRowAtIndexPath:pickerIndexPath];
+//    NSIndexPath *pickerIndexPath = [NSIndexPath indexPathForRow:3 inSection:0];
+//    CustomTableViewCell *cell = (CustomTableViewCell *)[self.tableView cellForRowAtIndexPath:pickerIndexPath];
     // we need to update the UI
 //    cell.textField.text = self.eventInfoArray[row];
-    NSString *key = [howDataDictionary allKeys][component];
-    NSString *selected = ((NSArray *)howDataDictionary[key])[row];
-    
-    switch (component) {
-        case 0:
-            event.priority = selected;
-            break;
-        case 1:
-            event.inAdvance = selected;
-            break;
-        case 2:
-            event.geoFencingPreference = selected;
-            break;
-        default:
-            break;
-    }
+//    NSString *key = [howDataDictionary allKeys][component];
+//    NSString *mSelected = ((NSArray *)howDataDictionary[key])[row];
+//    
+//    switch (component) {
+//        case 0:
+//            event.priority = mSelected;
+//            break;
+//        case 1:
+//            event.inAdvance = mSelected;
+//            break;
+//        case 2:
+//            event.geoFencingPreference = mSelected;
+//            break;
+//        default:
+//            break;
+//    }
     
 }
 

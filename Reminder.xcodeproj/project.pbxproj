@@ -159,6 +159,8 @@
 		D651543A166FFF3300CCDCE4 /* DetailHeaderView.xib in Resources */ = {isa = PBXBuildFile; fileRef = D6515438166FFF3300CCDCE4 /* DetailHeaderView.xib */; };
 		D651543D166FFF6800CCDCE4 /* AboutViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D651543C166FFF6800CCDCE4 /* AboutViewController.m */; };
 		D65154541670EAC300CCDCE4 /* HistoryViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D65154521670EAC200CCDCE4 /* HistoryViewController.m */; };
+		D660D67B167640ED004AFC2B /* NSDateFormatter+ThreadSafe.m in Sources */ = {isa = PBXBuildFile; fileRef = D660D67A167640ED004AFC2B /* NSDateFormatter+ThreadSafe.m */; };
+		D660D680167642D6004AFC2B /* CustomAlertView.m in Sources */ = {isa = PBXBuildFile; fileRef = D660D67F167642D6004AFC2B /* CustomAlertView.m */; };
 		D6669F8C1671390000769D5D /* ItemDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D6669F8A1671390000769D5D /* ItemDetailViewController.m */; };
 		D6669F9B1671391900769D5D /* CustomTextField.m in Sources */ = {isa = PBXBuildFile; fileRef = D6669F901671391900769D5D /* CustomTextField.m */; };
 		D6669F9C1671391900769D5D /* HowCell.m in Sources */ = {isa = PBXBuildFile; fileRef = D6669F921671391900769D5D /* HowCell.m */; };
@@ -386,6 +388,10 @@
 		D651543C166FFF6800CCDCE4 /* AboutViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AboutViewController.m; sourceTree = "<group>"; };
 		D65154521670EAC200CCDCE4 /* HistoryViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HistoryViewController.m; sourceTree = "<group>"; };
 		D65154531670EAC200CCDCE4 /* HistoryViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HistoryViewController.h; sourceTree = "<group>"; };
+		D660D679167640ED004AFC2B /* NSDateFormatter+ThreadSafe.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSDateFormatter+ThreadSafe.h"; sourceTree = "<group>"; };
+		D660D67A167640ED004AFC2B /* NSDateFormatter+ThreadSafe.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSDateFormatter+ThreadSafe.m"; sourceTree = "<group>"; };
+		D660D67E167642D6004AFC2B /* CustomAlertView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CustomAlertView.h; sourceTree = "<group>"; };
+		D660D67F167642D6004AFC2B /* CustomAlertView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CustomAlertView.m; sourceTree = "<group>"; };
 		D6669F891671390000769D5D /* ItemDetailViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ItemDetailViewController.h; sourceTree = "<group>"; };
 		D6669F8A1671390000769D5D /* ItemDetailViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ItemDetailViewController.m; sourceTree = "<group>"; };
 		D6669F8F1671391900769D5D /* CustomTextField.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CustomTextField.h; sourceTree = "<group>"; };
@@ -778,6 +784,15 @@
 			path = Metal;
 			sourceTree = "<group>";
 		};
+		D660D67D167642D6004AFC2B /* CustomAlertView */ = {
+			isa = PBXGroup;
+			children = (
+				D660D67E167642D6004AFC2B /* CustomAlertView.h */,
+				D660D67F167642D6004AFC2B /* CustomAlertView.m */,
+			);
+			path = CustomAlertView;
+			sourceTree = "<group>";
+		};
 		D6669F861671390000769D5D /* Simplified */ = {
 			isa = PBXGroup;
 			children = (
@@ -865,6 +880,9 @@
 		D6972E951667CEB0002FD2AB /* ThirdParty */ = {
 			isa = PBXGroup;
 			children = (
+				D660D67D167642D6004AFC2B /* CustomAlertView */,
+				D660D679167640ED004AFC2B /* NSDateFormatter+ThreadSafe.h */,
+				D660D67A167640ED004AFC2B /* NSDateFormatter+ThreadSafe.m */,
 				D6FF80D8166BE42100D2DC4F /* FPPopover */,
 				D6FF80DF166BE42100D2DC4F /* SemiModal */,
 				D6FF80E2166BE42100D2DC4F /* TTTimerInterval */,
@@ -1205,6 +1223,8 @@
 				D6669F9F1671391900769D5D /* WhenCell.m in Sources */,
 				D6669FA01671391900769D5D /* WhereCell.m in Sources */,
 				D6669FA416713B0100769D5D /* EventDetailViewController.m in Sources */,
+				D660D67B167640ED004AFC2B /* NSDateFormatter+ThreadSafe.m in Sources */,
+				D660D680167642D6004AFC2B /* CustomAlertView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

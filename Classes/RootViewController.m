@@ -23,6 +23,8 @@
 #import "TTTTimeIntervalFormatter.h"
 #import "SVProgressHUD.h"
 #import "EventDetailViewController.h"
+#import "NSDateFormatter+ThreadSafe.h"
+#import "CustomAlertView.h"
 
 @implementation RootViewController
 
@@ -152,14 +154,6 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     
-	// A date formatter for the creation date.
-    static NSDateFormatter *dateFormatter = nil;
-	if (dateFormatter == nil) {
-		dateFormatter = [[NSDateFormatter alloc] init];
-		[dateFormatter setTimeStyle:NSDateFormatterShortStyle];
-		[dateFormatter setDateStyle:NSDateFormatterShortStyle];
-	}
-	
     static NSString *CellIdentifier = @"EventTableViewCell";
 
     EventTableViewCell *cell = (EventTableViewCell *)[tableView dequeueReusableCellWithIdentifier:CellIdentifier];
@@ -182,7 +176,7 @@
     }
 
  	cell.nameField.text = event.name;
-	cell.creationDateLabel.text = [dateFormatter stringFromDate:[event creationDate]];
+	cell.creationDateLabel.text = [[NSDateFormatter dateReader] stringFromDate:[event creationDate]];
     cell.expiredDateLabel.text = (event.expired !=nil)?event.expired:@"";
     
     NSDate *now = [NSDate date];
@@ -210,55 +204,8 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    Event *event = nil;
-	
-    if (tableView == self.searchDisplayController.searchResultsTableView)
-    {
-        event = (self.filteredListContent)[indexPath.row];
-    }
-    else
-    {
-        event = (Event *)eventsArray[indexPath.row];
-    }
-  
-    EKEventStore *store = [AppCalendar eventStore];
-    // we will target to ios 6 or above
-    if ([store respondsToSelector:@selector(requestAccessToEntityType:completion:)]) {
-        [store requestAccessToEntityType:EKEntityTypeEvent completion:^(BOOL granted, NSError *error) {
-            // handle access here
-            if (error != nil) {
-                [[[UIAlertView alloc] initWithTitle:@"Oops"
-                                            message:@"Unexpected Error:"
-                                           delegate:self
-                                  cancelButtonTitle:@"Okay"
-                                  otherButtonTitles:nil] show];
-                
-            } else {
-                if (granted) {
-                    EKCalendarChooser* chooseCal = [[EKCalendarChooser alloc] initWithSelectionStyle:EKCalendarChooserSelectionStyleSingle
-                                                                                        displayStyle:EKCalendarChooserDisplayWritableCalendarsOnly
-                                                                                          eventStore:store ];
-                    chooseCal.delegate = self;
-                    chooseCal.showsDoneButton = YES;
-                    
-                    // have to make it on main thread or very slow to load
-                    dispatch_async(dispatch_get_main_queue(), ^{
-                        [self.navigationController pushViewController:chooseCal animated:YES];
-                    });
-                } else {
-                    [[[UIAlertView alloc] initWithTitle:@"Oops"
-                                                message:@"The app needs to use your calendar"
-                                               delegate:self
-                                      cancelButtonTitle:@"Okay"
-                                      otherButtonTitles:nil] show];
-                    
-                }
-            }
-        }];
-    }
-    
-    
- 
+    //TODO: Probably I should make two different cases
+    [tableView deselectRowAtIndexPath:indexPath animated:NO];
 }
 
 
@@ -266,15 +213,6 @@
 
 -(void)addEvent:(Event*)reminder toEventStore:(EKEventStore *)store toCalendar:(EKCalendar*)calendar
 {
-    // we parse this event
-//    /* TODO: LONG WAY TO GO
-//    reminder.name = @"pick up kids at 4pm";
-//    NSDictionary *parsedQuestion = [self parsingLinguistic:reminder.name];
-//    reminder.what = parsedQuestion[@"what"];
-//    reminder.when = parsedQuestion[@"when"];
-//    reminder.where = parsedQuestion[@"where"];
-//    */
-    // I wish I can handle better on this based on the Linguistic
     EKEvent* event = [EKEvent eventWithEventStore:store];
     event.calendar = calendar;
     
@@ -286,9 +224,6 @@
     [frm setLocale:[[NSLocale alloc] initWithLocaleIdentifier:@"en_US"]];
     
     event.title = reminder.name;
-//    event.location = reminder.where;
-//    event.notes = reminder.how ;
-    
     
     // this is how we want to set up the "how",
     NSNumber* weekDay = [NSNumber numberWithInt:1];
@@ -401,16 +336,19 @@
     
     if (buttonIndex == alertView.cancelButtonIndex)
     {
-        // User cancels so we set the preference value
-        event.useGeoFencing = NO;
         [alertView dismissWithClickedButtonIndex:buttonIndex animated:YES];
     } else {
+        [self displayCalendarChooser];
+
+        //TODO: HANDLE GEO-FENCING
+        /*
         event.useGeoFencing = YES;
         UIStoryboard *storyBoard = [UIStoryboard storyboardWithName:@"LocationStoryboard" bundle:nil];
         UINavigationController *controller = [storyBoard instantiateInitialViewController];
         PlaceSearchViewController *searchViewController = (PlaceSearchViewController*)controller.viewControllers[0];
         searchViewController.searchString = event.where;
         [self presentViewController:controller animated:YES completion:nil];
+         */
     }
 }
 
@@ -511,9 +449,84 @@
 
     [super setEditing:editing animated:animated];
 	self.navigationItem.rightBarButtonItem.enabled = !editing;
+    
+    if (!editing) {
+      
+        // we will make sure that only the first row is allowed to edit (change content)
+        NSIndexPath *indexPath = [NSIndexPath indexPathForRow:0 inSection:0];
+        EventTableViewCell *cell = (EventTableViewCell *)[self.tableView cellForRowAtIndexPath:indexPath];
+                                                          
+        // we do allow exempty text field
+        if (cell.nameField.text.length > 0) {
+            NSString *text = cell.nameField.text;
+            NSError *error = nil;
+            NSDataDetector *detector = [NSDataDetector dataDetectorWithTypes:NSTextCheckingTypeDate error:&error];
+            NSArray *matches = [detector matchesInString:text options:0 range:NSMakeRange(0, [text length])];
+            
+            if (matches.count > 0) {
+                NSString *message = @"";
+                if (matches.count == 1) {
+                    NSTextCheckingResult *match = matches[0];
+                    message = [NSString stringWithFormat:@"%@", [[NSDateFormatter dateReader] stringFromDate:match.date]];
+                } else if (matches.count == 2) { // we can also handle "ending date"
+                    NSTextCheckingResult *start = matches[0];
+                    NSTextCheckingResult *end = matches[1];
+                    
+                    message = [NSString stringWithFormat:@"start: %@, end: %@", [[NSDateFormatter dateReader] stringFromDate:start.date], [[NSDateFormatter dateReader] stringFromDate:end.date]];
+                    
+                }
+                [[[CustomAlertView alloc] initWithTitle:@"Sounds you mentioned a date time"
+                                                message:message
+                                               delegate:self
+                                      cancelButtonTitle:@"No"
+                                      otherButtonTitles:@"Yes",nil] show];
+            }
+        }
+    }
 }
-	
 
+- (void)displayCalendarChooser
+{
+    // TODO : display the time selection
+    EKEventStore *store = [AppCalendar eventStore];
+    // we will target to ios 6 or above
+    if ([store respondsToSelector:@selector(requestAccessToEntityType:completion:)]) {
+        [store requestAccessToEntityType:EKEntityTypeEvent completion:^(BOOL granted, NSError *error) {
+            // handle access here
+            if (error != nil) {
+                [[[CustomAlertView alloc] initWithTitle:@"Oops"
+                                                message:@"Unexpected Error"
+                                               delegate:self
+                                      cancelButtonTitle:@"Okay"
+                                      otherButtonTitles:nil] show];
+                
+            } else {
+                if (granted) {
+                    EKCalendarChooser* chooseCal = [[EKCalendarChooser alloc] initWithSelectionStyle:EKCalendarChooserSelectionStyleSingle
+                                                                                        displayStyle:EKCalendarChooserDisplayWritableCalendarsOnly
+                                                                                          eventStore:store ];
+                    chooseCal.delegate = self;
+                    chooseCal.showsDoneButton = YES;
+                    
+                    // have to make it on main thread or very slow to load
+                    dispatch_async(dispatch_get_main_queue(), ^{
+                        [self.navigationController pushViewController:chooseCal animated:YES];
+                    });
+                } else {
+                    [[[CustomAlertView alloc] initWithTitle:@"Oops"
+                                                    message:@"The app needs to use your calendar"
+                                                   delegate:self
+                                          cancelButtonTitle:@"Okay"
+                                          otherButtonTitles:nil] show];
+                    
+                }
+            }
+        }];
+    }
+    
+}
+
+#pragma mark Tag Editing
 - (IBAction)editTags:(UIButton *)button {
 	
 	NSInteger row = button.tag;
@@ -555,42 +568,52 @@
 	// [event setCreationDate:[location timestamp]];
 	[event setCreationDate:[NSDate date]];
     
-  	EventDetailViewController *detailViewController = [[EventDetailViewController alloc] initWithNibName:@"EventDetailViewController" bundle:nil];
-    detailViewController.event = event;
+    [eventsArray insertObject:event atIndex:0];
+    NSIndexPath *indexPath = [NSIndexPath indexPathForRow:0 inSection:0];
     
-    [detailViewController setCancelBlock:^(EventDetailViewController *controller, Event *anEvent){
-        [self dismissViewControllerAnimated:YES completion:nil];
-    }];
+    [self.tableView insertRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
     
-    [detailViewController setSaveBlock:^(EventDetailViewController *controller, Event *anEvent) {
-        [self dismissViewControllerAnimated:YES completion:nil];
-        /*
-         Since this is a new event, and events are displayed with most recent events at the top of the list, add the new event to the beginning of the events array, then:
-         * Add a new row to the table view
-         * Scroll to make the row visible
-         * Start editing the name field
-         */
-        [eventsArray insertObject:event atIndex:0];
-        NSIndexPath *indexPath = [NSIndexPath indexPathForRow:0 inSection:0];
-        
-        [self.tableView insertRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
-        
-        [self updateRowTags];
-        
-        [self.tableView scrollToRowAtIndexPath:indexPath atScrollPosition:UITableViewScrollPositionTop animated:YES];
-        
-        [self setEditing:YES animated:YES];
-        EventTableViewCell *cell = (EventTableViewCell *)[self.tableView cellForRowAtIndexPath:indexPath];
-        [cell.nameField becomeFirstResponder];
-    }];
-
+    [self updateRowTags];
     
-    UINavigationController *navController = [[UINavigationController alloc] initWithRootViewController:detailViewController];
+    [self.tableView scrollToRowAtIndexPath:indexPath atScrollPosition:UITableViewScrollPositionTop animated:YES];
     
-    [self presentViewController:navController animated:YES completion:nil];
+    [self setEditing:YES animated:YES];
+    EventTableViewCell *cell = (EventTableViewCell *)[self.tableView cellForRowAtIndexPath:indexPath];
+    [cell.nameField becomeFirstResponder];
     
-	
-	
+//  	EventDetailViewController *detailViewController = [[EventDetailViewController alloc] initWithNibName:@"EventDetailViewController" bundle:nil];
+//    detailViewController.event = event;
+//    
+//    [detailViewController setCancelBlock:^(EventDetailViewController *controller, Event *anEvent){
+//        [self dismissViewControllerAnimated:YES completion:nil];
+//    }];
+//    
+//    [detailViewController setSaveBlock:^(EventDetailViewController *controller, Event *anEvent) {
+//        [self dismissViewControllerAnimated:YES completion:nil];
+//        /*
+//         Since this is a new event, and events are displayed with most recent events at the top of the list, add the new event to the beginning of the events array, then:
+//         * Add a new row to the table view
+//         * Scroll to make the row visible
+//         * Start editing the name field
+//         */
+//        [eventsArray insertObject:event atIndex:0];
+//        NSIndexPath *indexPath = [NSIndexPath indexPathForRow:0 inSection:0];
+//        
+//        [self.tableView insertRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
+//        
+//        [self updateRowTags];
+//        
+//        [self.tableView scrollToRowAtIndexPath:indexPath atScrollPosition:UITableViewScrollPositionTop animated:YES];
+//        
+//        [self setEditing:YES animated:YES];
+//        EventTableViewCell *cell = (EventTableViewCell *)[self.tableView cellForRowAtIndexPath:indexPath];
+//        [cell.nameField becomeFirstResponder];
+//    }];
+//
+//    
+//    UINavigationController *navController = [[UINavigationController alloc] initWithRootViewController:detailViewController];
+//    
+//    [self presentViewController:navController animated:YES completion:nil];
 }
 
 
@@ -781,87 +804,87 @@
     return [_timeIntervalFormatter stringForTimeInterval:timeInterval];
 }
 
-#pragma mark - Parsing Linguistic
-- (NSDictionary *)parsingLinguistic:(NSString *)title
-{
-
-    NSLinguisticTaggerOptions options = NSLinguisticTaggerOmitWhitespace | NSLinguisticTaggerOmitPunctuation | NSLinguisticTaggerJoinNames;
-    NSLinguisticTagger *tagger = [[NSLinguisticTagger alloc] initWithTagSchemes: [NSLinguisticTagger availableTagSchemesForLanguage:@"en"] options:options];
-    tagger.string = title;
-
-    // I need a better algorithm for this
-    __block NSMutableArray *tagArrays = [NSMutableArray array];
-    [tagger enumerateTagsInRange:NSMakeRange(0, [title length]) scheme:NSLinguisticTagSchemeNameTypeOrLexicalClass options:options usingBlock:^(NSString *tag, NSRange tokenRange, NSRange sentenceRange, BOOL *stop) {
-        NSString *token = [title substringWithRange:tokenRange];
-        NSDictionary *dict = @{@"tag":tag, @"token":token};
-        [tagArrays addObject:dict];
-    }];
-
-    NSLog(@"the tags array: %@",tagArrays);
-
-    // I know this is stupid
-    __block int16_t conjunctionIndex = 0;
-    __block int16_t particleIndex = 0;
-    __block int16_t prepositionIndex = 0;
-    [tagArrays enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
-        NSDictionary *dict = (NSDictionary *)obj;
-        if ([dict[@"tag"] isEqualToString:@"Particle"]) {
-            particleIndex = idx;
-        }
-        if ([dict[@"tag"] isEqualToString:@"Conjunction"]) {
-            conjunctionIndex = idx;
-        }
-        if ([dict[@"tag"] isEqualToString:@"Preposition"]) {
-            prepositionIndex = idx;
-        }
-        
-    }];
-
-    NSLog(@"par:%d, con:%d,  prep: %d",particleIndex, conjunctionIndex, prepositionIndex);
+//#pragma mark - Parsing Linguistic
+//- (NSDictionary *)parsingLinguistic:(NSString *)title
+//{
 //
+//    NSLinguisticTaggerOptions options = NSLinguisticTaggerOmitWhitespace | NSLinguisticTaggerOmitPunctuation | NSLinguisticTaggerJoinNames;
+//    NSLinguisticTagger *tagger = [[NSLinguisticTagger alloc] initWithTagSchemes: [NSLinguisticTagger availableTagSchemesForLanguage:@"en"] options:options];
+//    tagger.string = title;
 //
-    __block NSMutableString *whatString = [NSMutableString string];
-
-    if  ((conjunctionIndex - (particleIndex+1)) > 0)
-    {
-        NSRange whatRange = NSMakeRange(particleIndex+1, conjunctionIndex-(particleIndex+ 1));
-        NSArray *whatArray = [tagArrays objectsAtIndexes:[NSIndexSet indexSetWithIndexesInRange:whatRange]];
-        
-        if (whatArray.count>0) {
-            [whatArray enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
-                [whatString appendString:[NSString stringWithFormat:@"%@ ",((NSDictionary *)obj)[@"token"]]];
-            }];
-        }
-        NSLog(@"what :%@",whatString);
-    }
-
-    __block NSMutableString *whereString = [NSMutableString string];
-    if ((prepositionIndex-(conjunctionIndex+1)) > 0) {
-        NSRange whereRange = NSMakeRange(conjunctionIndex+1, prepositionIndex-(conjunctionIndex+ 1));
-        NSArray *whereArray = [tagArrays objectsAtIndexes:[NSIndexSet indexSetWithIndexesInRange:whereRange]];
-        if (whereArray.count>0) {
-            [whereArray enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
-                [whereString appendString:[NSString stringWithFormat:@"%@ ",((NSDictionary *)obj)[@"token"]]];
-            }];
-        }
-        NSLog(@"where :%@",whereString);
-
-    }
-
-    __block NSMutableString *whenString = [NSMutableString string];
-    if ((tagArrays.count-(prepositionIndex+1)) > 0) {
-        NSRange whenRange = NSMakeRange(prepositionIndex+1, tagArrays.count-(prepositionIndex+ 1));
-        NSArray *whenArray = [tagArrays objectsAtIndexes:[NSIndexSet indexSetWithIndexesInRange:whenRange]];
-        if (whenArray.count>0) {
-            [whenArray enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
-                [whenString appendString:[NSString stringWithFormat:@"%@ ",((NSDictionary *)obj)[@"token"]]];
-            }];
-        }
-        NSLog(@"when :%@",whenString);
-    }
-    
-    return @{@"what":whatString, @"where":whereString, @"when":whenString};
-}
+//    // I need a better algorithm for this
+//    __block NSMutableArray *tagArrays = [NSMutableArray array];
+//    [tagger enumerateTagsInRange:NSMakeRange(0, [title length]) scheme:NSLinguisticTagSchemeNameTypeOrLexicalClass options:options usingBlock:^(NSString *tag, NSRange tokenRange, NSRange sentenceRange, BOOL *stop) {
+//        NSString *token = [title substringWithRange:tokenRange];
+//        NSDictionary *dict = @{@"tag":tag, @"token":token};
+//        [tagArrays addObject:dict];
+//    }];
+//
+//    NSLog(@"the tags array: %@",tagArrays);
+//
+//    // I know this is stupid
+//    __block int16_t conjunctionIndex = 0;
+//    __block int16_t particleIndex = 0;
+//    __block int16_t prepositionIndex = 0;
+//    [tagArrays enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+//        NSDictionary *dict = (NSDictionary *)obj;
+//        if ([dict[@"tag"] isEqualToString:@"Particle"]) {
+//            particleIndex = idx;
+//        }
+//        if ([dict[@"tag"] isEqualToString:@"Conjunction"]) {
+//            conjunctionIndex = idx;
+//        }
+//        if ([dict[@"tag"] isEqualToString:@"Preposition"]) {
+//            prepositionIndex = idx;
+//        }
+//        
+//    }];
+//
+//    NSLog(@"par:%d, con:%d,  prep: %d",particleIndex, conjunctionIndex, prepositionIndex);
+////
+////
+//    __block NSMutableString *whatString = [NSMutableString string];
+//
+//    if  ((conjunctionIndex - (particleIndex+1)) > 0)
+//    {
+//        NSRange whatRange = NSMakeRange(particleIndex+1, conjunctionIndex-(particleIndex+ 1));
+//        NSArray *whatArray = [tagArrays objectsAtIndexes:[NSIndexSet indexSetWithIndexesInRange:whatRange]];
+//        
+//        if (whatArray.count>0) {
+//            [whatArray enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+//                [whatString appendString:[NSString stringWithFormat:@"%@ ",((NSDictionary *)obj)[@"token"]]];
+//            }];
+//        }
+//        NSLog(@"what :%@",whatString);
+//    }
+//
+//    __block NSMutableString *whereString = [NSMutableString string];
+//    if ((prepositionIndex-(conjunctionIndex+1)) > 0) {
+//        NSRange whereRange = NSMakeRange(conjunctionIndex+1, prepositionIndex-(conjunctionIndex+ 1));
+//        NSArray *whereArray = [tagArrays objectsAtIndexes:[NSIndexSet indexSetWithIndexesInRange:whereRange]];
+//        if (whereArray.count>0) {
+//            [whereArray enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+//                [whereString appendString:[NSString stringWithFormat:@"%@ ",((NSDictionary *)obj)[@"token"]]];
+//            }];
+//        }
+//        NSLog(@"where :%@",whereString);
+//
+//    }
+//
+//    __block NSMutableString *whenString = [NSMutableString string];
+//    if ((tagArrays.count-(prepositionIndex+1)) > 0) {
+//        NSRange whenRange = NSMakeRange(prepositionIndex+1, tagArrays.count-(prepositionIndex+ 1));
+//        NSArray *whenArray = [tagArrays objectsAtIndexes:[NSIndexSet indexSetWithIndexesInRange:whenRange]];
+//        if (whenArray.count>0) {
+//            [whenArray enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+//                [whenString appendString:[NSString stringWithFormat:@"%@ ",((NSDictionary *)obj)[@"token"]]];
+//            }];
+//        }
+//        NSLog(@"when :%@",whenString);
+//    }
+//    
+//    return @{@"what":whatString, @"where":whereString, @"when":whenString};
+//}
 
 
 #pragma mark -
