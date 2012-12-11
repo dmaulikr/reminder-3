@@ -12,6 +12,7 @@
 #import <MessageUI/MFMailComposeViewController.h>
 #import "CustomAlertView.h"
 #import "ScrollingViewController.h"
+#import "HomeViewController.h"
 
 #define kFont [UIFont boldSystemFontOfSize:14.0];
 
@@ -87,7 +88,7 @@
 {
     // Return the number of sections.
 //    return [[self.contentList allKeys] count];
-    return 3;
+    return 2;
     
 }
 
@@ -98,10 +99,10 @@
         case 0:
             return 1;
             break;
+//        case 1:
+//            return 1;
+//            break;
         case 1:
-            return 1;
-            break;
-        case 2:
             return 3;
             break;
             
@@ -148,7 +149,7 @@
         self.sliderCtl.value = inAdvanceMinute;
         [temp.contentView addSubview:self.sliderCtl];
         cell = temp;
-    } else if (section == 1 || section == 2)
+    } else if (section == 1 || section ==2)
     {
         UITableViewCell *aboutCell = [tableView dequeueReusableCellWithIdentifier:AboutCellIdentifier];
         if (aboutCell == nil) {
@@ -156,10 +157,11 @@
             aboutCell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
         }
         NSString *title = @"";
-        if (section == 1) {
-            title = @"Instruction";
-            
-        } else if (section == 2) {
+//        if (section == 1) {
+//            title = @"Instruction";
+//            
+//        } else
+            if (section == 1) {
             switch (row) {
                 case 0:
                     title = @"About Us";
@@ -187,11 +189,13 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     [tableView deselectRowAtIndexPath:indexPath animated:NO];
-    if (indexPath.section == 1) {
-        ScrollingViewController *instructionViewController = [[ScrollingViewController alloc] initWithNibName:@"ScrollingViewController" bundle:nil];
-        [self.navigationController pushViewController:instructionViewController animated:YES];
-        
-    } else if (indexPath.section == 2) {
+//    if (indexPath.section == 1) {
+//        HomeViewController *instructionViewController = [[HomeViewController alloc] initWithNibName:@"HomeViewController" bundle:nil];
+//        [self.navigationController pushViewController:instructionViewController animated:YES];
+//        
+//    } else
+    
+        if (indexPath.section == 1) {
         if (indexPath.row == 0) {
             AboutViewController *about = [[AboutViewController alloc] initWithStyle:UITableViewStyleGrouped];
             [self.navigationController pushViewController:about animated:YES];

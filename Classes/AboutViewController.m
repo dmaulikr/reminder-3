@@ -12,6 +12,7 @@
  */
 
 #import "AboutViewController.h"
+#import "ScrollingViewController.h"
 
 @implementation AboutViewController
 
@@ -43,14 +44,18 @@
     
     self.title = NSLocalizedString(@"About", @"About");
     
-    self.nameTextField.text = @"Reminder +";
-    self.overviewTextField.text = @"A better reminder app";
+    self.nameTextField.text = @"Smart Reminder";
+    self.overviewTextField.text = @"A smart reminder app";
     self.versionTextField.text = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"];
     
     NSDictionary *developer = @{@"name":@"Liangjun Jiang, Mi Zhang", @"title":@"Developers"};
     NSDictionary *creative= @{@"name":@"Leah Wang", @"title":@"Creative"};
     self.authors = @[developer, creative];
-    self.credits = @[@"Custome Alert", @"TTTimerInterval",@"SVProgressHUD"];
+    NSDictionary *credit1 = @{@"name":@"Custome Alert", @"title":@"by Aaron Crabtree"};
+    NSDictionary *credit2 = @{@"name":@"TTTimerInterval",@"title":@"by Mattt Thompson" };
+    NSDictionary *credit3 = @{@"name":@"SVProgressHUD", @"title":@"by Sam Vermette"};
+    
+    self.credits = @[credit1, credit2, credit3];
     self.instructions = @[@"How to use it"];
     
 }
@@ -83,7 +88,7 @@
 #pragma mark UITableView Delegate/Datasource
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
-    return 3;
+    return 2;
 }
 
 
@@ -97,10 +102,10 @@
         case 1:
             title = @"Credits";
             break;
-        case 2:
-            title = @"Instruction";
-            break;
-            
+//        case 2:
+//            title = @"Instruction";
+//            break;
+//            
         default:
             break;
     }
@@ -122,8 +127,8 @@
         case 1:
             return self.credits.count;
             break;
-        case 2:
-            return self.instructions.count;
+//        case 2:
+//            return self.instructions.count;
 		default:
             break;
     }
@@ -135,7 +140,7 @@
     UITableViewCell *cell = nil;
     
      // For the Ingredients section, if necessary create a new cell and configure it with an additional label for the amount.  Give the cell a different identifier from that used for cells in other sections so that it can be dequeued separately.
-    if (indexPath.section == 0) {
+//    if (indexPath.section == 0) {
 		
         static NSString *authorCellIdentifier = @"IngredientsCell";
         
@@ -146,37 +151,30 @@
             cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:authorCellIdentifier];
             cell.accessoryType = UITableViewCellAccessoryNone;
         }
-        
-        cell.textLabel.text = self.authors[indexPath.row][@"name"];
-        cell.detailTextLabel.text = self.authors[indexPath.row][@"title"];
-        
-    } else {
-         // If necessary create a new cell and configure it appropriately for the section.  Give the cell a different identifier from that used for cells in the Ingredients section so that it can be dequeued separately.
-        static NSString *MyIdentifier = @"GenericCell";
-        
-        cell = [tableView dequeueReusableCellWithIdentifier:MyIdentifier];
-        if (cell == nil) {
-            cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:MyIdentifier];
-            cell.accessoryType = UITableViewCellAccessoryNone;
-        }
-        
-        NSString *text = nil;
-        
-        switch (indexPath.section) {
-            case 1: 
-                text = self.credits[indexPath.row];
-                cell.accessoryType = UITableViewCellAccessoryNone;
-                break;
-            case 2: // instructions
-                text = self.instructions[indexPath.row];
-                cell.accessoryType = UITableViewCellAccessoryNone;
-                break;
-            default:
-                break;
-        }
-        
-        cell.textLabel.text = text;
-    }
+    
+    NSString *name = (indexPath.section == 0)?self.authors[indexPath.row][@"name"]:self.credits[indexPath.row][@"name"];
+    NSString *subtitle = (indexPath.section == 0)?self.authors[indexPath.row][@"title"]:self.credits[indexPath.row][@"title"];
+    
+    
+//
+        cell.textLabel.text = name;// self.authors[indexPath.row][@"name"];
+        cell.detailTextLabel.text = subtitle; //self.authors[indexPath.row][@"title"];
+    
+//    }
+//    
+//    else {
+//         // If necessary create a new cell and configure it appropriately for the section.  Give the cell a different identifier from that used for cells in the Ingredients section so that it can be dequeued separately.
+//        static NSString *MyIdentifier = @"GenericCell";
+//        
+//        cell = [tableView dequeueReusableCellWithIdentifier:MyIdentifier];
+//        if (cell == nil) {
+//            cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:MyIdentifier];
+//            cell.accessoryType = UITableViewCellAccessoryNone;
+//        }
+//        
+//        cell.textLabel.text = self.credits[indexPath.row][@"name"];
+//        cell.detailTextLabel.text = self.credits[indexPath.row][@"title"];
+//    }
     return cell;
 }
 
@@ -184,7 +182,11 @@
 #pragma mark - Delegate
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    [tableView deselectRowAtIndexPath:indexPath animated:NO];
+//    if (indexPath.section ==2) {
+//        
+//    } else {
+        [tableView deselectRowAtIndexPath:indexPath animated:NO];
+//    }
 }
 
 @end

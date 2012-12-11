@@ -17,6 +17,10 @@
 - (void)viewDidLoad 
 {
     self.title = NSLocalizedString(@"Guide", @"Guide");
+//    self.hidesBottomBarWhenPushed = YES;
+    
+    [SSThemeManager customizeView:self.view];
+    
 	[self setupPage];
     [super viewDidLoad];
 }
@@ -33,7 +37,7 @@
 - (void)setupPage
 {
 	scrollView.delegate = self;
-
+    scrollView.frame = CGRectMake(0.0, 44.0, 320.0, 316.0);
 	[self.scrollView setBackgroundColor:[UIColor blackColor]];
 	[scrollView setCanCancelContentTouches:NO];
 	
@@ -99,7 +103,7 @@
 	 */
     CGRect frame = scrollView.frame;
     frame.origin.x = frame.size.width * pageControl.currentPage;
-    frame.origin.y = 0;
+    frame.origin.y = 44.0;
 	
     [scrollView scrollRectToVisible:frame animated:YES];
 
