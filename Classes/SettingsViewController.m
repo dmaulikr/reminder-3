@@ -12,7 +12,6 @@
 #import <MessageUI/MFMailComposeViewController.h>
 #import "CustomAlertView.h"
 #import "ScrollingViewController.h"
-#import "HomeViewController.h"
 
 #define kFont [UIFont boldSystemFontOfSize:14.0];
 
