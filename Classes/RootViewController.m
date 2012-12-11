@@ -25,6 +25,7 @@
 #import "EventDetailViewController.h"
 #import "NSDateFormatter+ThreadSafe.h"
 #import "CustomAlertView.h"
+#import "TaggedLocationsAppDelegate.h"
 
 @implementation RootViewController
 
@@ -94,7 +95,6 @@
         [self.searchDisplayController setActive:self.searchWasActive];
         [self.searchDisplayController.searchBar setSelectedScopeButtonIndex:self.savedScopeButtonIndex];
         [self.searchDisplayController.searchBar setText:savedSearchTerm];
-        
         self.savedSearchTerm = nil;
     }
     
@@ -779,9 +779,11 @@ const float STRIKEOUT_THICKNESS = 2.0f;
 {
     if (motion == UIEventSubtypeMotionShake)
     {
-        UIActionSheet *actionSheet = [[UIActionSheet alloc] initWithTitle:@"Sort By" delegate:self cancelButtonTitle:@"Cancel" destructiveButtonTitle:nil otherButtonTitles:@"Name",@"Creatation Date", @"Starting Date", nil];
+        UIActionSheet *actionSheet = [[UIActionSheet alloc] initWithTitle:@"Sort By" delegate:self cancelButtonTitle:@"Cancel" destructiveButtonTitle:nil otherButtonTitles:@"Name",@"Creation Date", @"Start Date", nil];
         actionSheet.destructiveButtonIndex = 1; // Priority will be highlighted
-        [actionSheet showInView:self.tableView];
+        
+        id appDelegate = [[UIApplication sharedApplication] delegate];
+        [actionSheet showFromTabBar:((TaggedLocationsAppDelegate *)appDelegate).tabBarController.tabBar];
 
     }
 }

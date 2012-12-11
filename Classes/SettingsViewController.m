@@ -10,12 +10,12 @@
 #import "AboutViewController.h"
 #import  <MessageUI/MessageUI.h>
 #import <MessageUI/MFMailComposeViewController.h>
-#import "SSTheme.h"
 #import "CustomAlertView.h"
+#import "ScrollingViewController.h"
 
 #define kFont [UIFont boldSystemFontOfSize:14.0];
 
-@interface SettingsViewController ()<UITextFieldDelegate,MFMailComposeViewControllerDelegate>
+@interface SettingsViewController ()<MFMailComposeViewControllerDelegate>
 @property (nonatomic, retain, readonly) UISlider *sliderCtl;
 @end
 
@@ -87,17 +87,28 @@
 {
     // Return the number of sections.
 //    return [[self.contentList allKeys] count];
-    return 2;
+    return 3;
     
 }
 
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    // Return the number of rows in the section.
-//    NSString *key = [[self.contentList allKeys] objectAtIndex:section];
-//    return [[self.contentList objectForKey:key] count];
-    return (section == 0)?1:3;
+    switch (section) {
+        case 0:
+            return 1;
+            break;
+        case 1:
+            return 1;
+            break;
+        case 2:
+            return 3;
+            break;
+            
+        default:
+            break;
+    }
+    return 1;
     
 }
 
@@ -137,7 +148,7 @@
         self.sliderCtl.value = inAdvanceMinute;
         [temp.contentView addSubview:self.sliderCtl];
         cell = temp;
-    } else
+    } else if (section == 1 || section == 2)
     {
         UITableViewCell *aboutCell = [tableView dequeueReusableCellWithIdentifier:AboutCellIdentifier];
         if (aboutCell == nil) {
@@ -145,23 +156,27 @@
             aboutCell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
         }
         NSString *title = @"";
-        switch (row) {
-            case 0:
-                title = @"About Us";
-                break;
-            case 1:
-                title = @"Contact Us";
-                break;
-            case 2:
-                title = @"Privacy Policy";
-                break;
-            default:
-                break;
+        if (section == 1) {
+            title = @"Instruction";
+            
+        } else if (section == 2) {
+            switch (row) {
+                case 0:
+                    title = @"About Us";
+                    break;
+                case 1:
+                    title = @"Contact Us";
+                    break;
+                case 2:
+                    title = @"Privacy Policy";
+                    break;
+                default:
+                    break;
+            }
         }
         aboutCell.textLabel.text = title;
         cell = aboutCell;
     }
-    
     cell.textLabel.font = kFont;
     return cell;
 }
@@ -173,6 +188,10 @@
 {
     [tableView deselectRowAtIndexPath:indexPath animated:NO];
     if (indexPath.section == 1) {
+        ScrollingViewController *instructionViewController = [[ScrollingViewController alloc] initWithNibName:@"ScrollingViewController" bundle:nil];
+        [self.navigationController pushViewController:instructionViewController animated:YES];
+        
+    } else if (indexPath.section == 2) {
         if (indexPath.row == 0) {
             AboutViewController *about = [[AboutViewController alloc] initWithStyle:UITableViewStyleGrouped];
             [self.navigationController pushViewController:about animated:YES];

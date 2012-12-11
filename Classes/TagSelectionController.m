@@ -29,6 +29,8 @@
 	[super viewDidLoad];	
 	self.tableView.allowsSelectionDuringEditing = YES;
 	
+    [SSThemeManager customizeTableView:self.tableView];
+    
 	// Set up the navigation bar.
 	self.navigationItem.rightBarButtonItem = self.editButtonItem;
 	self.navigationItem.title = @"Tags";

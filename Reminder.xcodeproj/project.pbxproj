@@ -26,6 +26,8 @@
 		28C286E10D94DF7D0034E888 /* RootViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 28C286E00D94DF7D0034E888 /* RootViewController.m */; };
 		28C95C640F4FB4660037F30F /* Event.m in Sources */ = {isa = PBXBuildFile; fileRef = 28C95C630F4FB4660037F30F /* Event.m */; };
 		28FB88860FCCA80500EBA711 /* TagSelectionController.m in Sources */ = {isa = PBXBuildFile; fileRef = 28FB88850FCCA80500EBA711 /* TagSelectionController.m */; };
+		D630060516777A4A0034F4BF /* ScrollingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D630060416777A4A0034F4BF /* ScrollingViewController.m */; };
+		D630060816777A660034F4BF /* ScrollingViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = D630060716777A660034F4BF /* ScrollingViewController.xib */; };
 		D651530E166FE38200CCDCE4 /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = D651530D166FE38200CCDCE4 /* Default-568h@2x.png */; };
 		D6515319166FF06700CCDCE4 /* SwitchTableCell.m in Sources */ = {isa = PBXBuildFile; fileRef = D6515318166FF06700CCDCE4 /* SwitchTableCell.m */; };
 		D65153A3166FF16C00CCDCE4 /* backButton.png in Resources */ = {isa = PBXBuildFile; fileRef = D6515323166FF16C00CCDCE4 /* backButton.png */; };
@@ -227,7 +229,7 @@
 		1D30AB110D05D00D00671497 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		1D3623240D0F684500981E51 /* TaggedLocationsAppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TaggedLocationsAppDelegate.h; path = Classes/TaggedLocationsAppDelegate.h; sourceTree = "<group>"; };
 		1D3623250D0F684500981E51 /* TaggedLocationsAppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TaggedLocationsAppDelegate.m; path = Classes/TaggedLocationsAppDelegate.m; sourceTree = "<group>"; };
-		1D6058910D05DD3D006BFB54 /* Reminder.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Reminder.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		1D6058910D05DD3D006BFB54 /* Smart Reminder.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Smart Reminder.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		1DF5F4DF0D08C38300B7A737 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		283659CE0FD8513400B8A769 /* Tag.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Tag.h; path = Classes/Tag.h; sourceTree = "<group>"; };
 		283659CF0FD8513400B8A769 /* Tag.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Tag.m; path = Classes/Tag.m; sourceTree = "<group>"; };
@@ -248,6 +250,9 @@
 		28FB88850FCCA80500EBA711 /* TagSelectionController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TagSelectionController.m; sourceTree = "<group>"; };
 		29B97316FDCFA39411CA2CEA /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		8D1107310486CEB800E47090 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; plistStructureDefinitionIdentifier = "com.apple.xcode.plist.structure-definition.iphone.info-plist"; sourceTree = "<group>"; };
+		D630060316777A4A0034F4BF /* ScrollingViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ScrollingViewController.h; sourceTree = "<group>"; };
+		D630060416777A4A0034F4BF /* ScrollingViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ScrollingViewController.m; sourceTree = "<group>"; };
+		D630060716777A660034F4BF /* ScrollingViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ScrollingViewController.xib; sourceTree = "<group>"; };
 		D651530D166FE38200CCDCE4 /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x.png"; sourceTree = "<group>"; };
 		D6515317166FF06700CCDCE4 /* SwitchTableCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SwitchTableCell.h; sourceTree = "<group>"; };
 		D6515318166FF06700CCDCE4 /* SwitchTableCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SwitchTableCell.m; sourceTree = "<group>"; };
@@ -507,6 +512,8 @@
 		080E96DDFE201D6D7F000001 /* View Controllers */ = {
 			isa = PBXGroup;
 			children = (
+				D630060316777A4A0034F4BF /* ScrollingViewController.h */,
+				D630060416777A4A0034F4BF /* ScrollingViewController.m */,
 				D65154521670EAC200CCDCE4 /* HistoryViewController.m */,
 				D65154531670EAC200CCDCE4 /* HistoryViewController.h */,
 				D651543B166FFF6800CCDCE4 /* AboutViewController.h */,
@@ -531,7 +538,7 @@
 		19C28FACFE9D520D11CA2CBB /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				1D6058910D05DD3D006BFB54 /* Reminder.app */,
+				1D6058910D05DD3D006BFB54 /* Smart Reminder.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -605,6 +612,7 @@
 		29B97317FDCFA39411CA2CEA /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				D630060716777A660034F4BF /* ScrollingViewController.xib */,
 				D6515428166FFC9500CCDCE4 /* SimpleSettings.plist */,
 				D6FF80BC166BBAA100D2DC4F /* Icon.png */,
 				D6FF80BD166BBAA100D2DC4F /* Reminder_icon.png */,
@@ -980,7 +988,7 @@
 			);
 			name = Reminder;
 			productName = Locations;
-			productReference = 1D6058910D05DD3D006BFB54 /* Reminder.app */;
+			productReference = 1D6058910D05DD3D006BFB54 /* Smart Reminder.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -1166,6 +1174,7 @@
 				D651542F166FFD4900CCDCE4 /* SettingsViewController.xib in Resources */,
 				D651543A166FFF3300CCDCE4 /* DetailHeaderView.xib in Resources */,
 				D6669FA516713B0100769D5D /* EventDetailViewController.xib in Resources */,
+				D630060816777A660034F4BF /* ScrollingViewController.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1225,6 +1234,7 @@
 				D6669FA416713B0100769D5D /* EventDetailViewController.m in Sources */,
 				D660D67B167640ED004AFC2B /* NSDateFormatter+ThreadSafe.m in Sources */,
 				D660D680167642D6004AFC2B /* CustomAlertView.m in Sources */,
+				D630060516777A4A0034F4BF /* ScrollingViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1295,16 +1305,18 @@
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ENABLE_OBJC_ARC = YES;
+				CODE_SIGN_IDENTITY = "iPhone Developer: Liangjun Jiang (NLHVYBKJKH)";
 				COPY_PHASE_STRIP = NO;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = Reminder_Prefix.pch;
 				INFOPLIST_FILE = Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
-				PRODUCT_NAME = Reminder;
+				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
+				PRODUCT_NAME = "Smart Reminder";
+				PROVISIONING_PROFILE = "2B034DB9-0549-48EF-B111-38601C77699B";
 				SDKROOT = iphoneos;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Debug;
 		};
@@ -1313,14 +1325,16 @@
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ENABLE_OBJC_ARC = YES;
+				CODE_SIGN_IDENTITY = "iPhone Developer: Liangjun Jiang (NLHVYBKJKH)";
 				COPY_PHASE_STRIP = YES;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = Reminder_Prefix.pch;
 				INFOPLIST_FILE = Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
-				PRODUCT_NAME = Reminder;
+				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
+				PRODUCT_NAME = "Smart Reminder";
+				PROVISIONING_PROFILE = "2B034DB9-0549-48EF-B111-38601C77699B";
 				SDKROOT = iphoneos;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Release;
 		};
@@ -1328,12 +1342,14 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				CODE_SIGN_IDENTITY = "iPhone Developer: Liangjun Jiang (NLHVYBKJKH)";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				GCC_C_LANGUAGE_STANDARD = c99;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
 				ONLY_ACTIVE_ARCH = YES;
+				PROVISIONING_PROFILE = "2B034DB9-0549-48EF-B111-38601C77699B";
 				SDKROOT = iphoneos;
 			};
 			name = Debug;
@@ -1342,11 +1358,13 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				CODE_SIGN_IDENTITY = "iPhone Developer: Liangjun Jiang (NLHVYBKJKH)";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				GCC_C_LANGUAGE_STANDARD = c99;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
+				PROVISIONING_PROFILE = "2B034DB9-0549-48EF-B111-38601C77699B";
 				SDKROOT = iphoneos;
 			};
 			name = Release;
