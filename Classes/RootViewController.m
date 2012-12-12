@@ -41,7 +41,7 @@
     [super viewDidLoad];
 	
 	// Set the title.
-    self.title = NSLocalizedString(@"Reminders", @"Reminders");
+    self.title = NSLocalizedString(@"Reminder", @"Reminder");
     
 	self.tableView.rowHeight = 77;
 	

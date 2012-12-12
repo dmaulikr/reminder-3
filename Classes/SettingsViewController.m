@@ -163,13 +163,13 @@
             if (section == 1) {
             switch (row) {
                 case 0:
-                    title = @"About Us";
+                    title = NSLocalizedString(@"About Us",@"");
                     break;
                 case 1:
-                    title = @"Contact Us";
+                    title = NSLocalizedString(@"Contact Us",@"");
                     break;
                 case 2:
-                    title = @"Privacy Policy";
+                    title = NSLocalizedString(@"Privacy Policy",@"");
                     break;
                 default:
                     break;
@@ -201,10 +201,10 @@
         } else if (indexPath.row ==1) {
             [self displayComposerSheet];
         } else {
-            [[[CustomAlertView alloc] initWithTitle:@"Privacy Policy"
-                                                message:@"This app doesn't collect any user information."
+            [[[CustomAlertView alloc] initWithTitle:NSLocalizedString(@"Privacy Policy",@"")
+                                                message:NSLocalizedString(@"We don't collect any user information.", @"")
                                                delegate:self
-                                      cancelButtonTitle:@"Okay"
+                                      cancelButtonTitle:NSLocalizedString(@"Okay",@"")
                                       otherButtonTitles:nil] show];
             
             

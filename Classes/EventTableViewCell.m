@@ -35,7 +35,7 @@
 		expiredDateLabel.hidden = YES;
 		nameField.enabled = YES;
 		tagsButton.hidden = NO;
-		tagsField.placeholder = @"Tap to edit tags";
+		tagsField.placeholder = NSLocalizedString(@"Tap to edit tags",@"");
 	}
 }
 
