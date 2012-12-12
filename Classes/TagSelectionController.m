@@ -33,7 +33,7 @@
     
 	// Set up the navigation bar.
 	self.navigationItem.rightBarButtonItem = self.editButtonItem;
-	self.navigationItem.title = @"Tags";
+	self.navigationItem.title = NSLocalizedString(@"Tags",@"Tags");
 	
 	// Set up the header view
 	[[NSBundle mainBundle] loadNibNamed:@"TagsHeaderView" owner:self options:nil];
@@ -41,9 +41,9 @@
 	
 	NSString *eventName = event.name;
 	if (![eventName length] > 0) {
-		eventName = @"Unnamed event";
+		eventName = NSLocalizedString(@"Unnamed event",@"Unnamed event");
 	}
-	headerLabel.text = [NSString stringWithFormat:@"Tags for \"%@\" are indicated by a check mark.", eventName];
+	headerLabel.text = [NSString stringWithFormat:NSLocalizedString(@"Tags for \"%@\" are indicated by a check mark.",@""), eventName];
 
 	// Display all the tags, so fetch then using the event's context.
 	// Put the fetched tags into a mutable array.
@@ -111,7 +111,7 @@
 		UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:InsertionCellIdentifier];
 		if (cell == nil) {		
 			cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:InsertionCellIdentifier];
-			cell.textLabel.text = @"Add Tag";
+			cell.textLabel.text = NSLocalizedString(@"Add Tag", @"");
 			cell.accessoryType = UITableViewCellAccessoryNone;
 		}
 		return cell;

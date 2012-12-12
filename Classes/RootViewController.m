@@ -267,7 +267,7 @@ const float STRIKEOUT_THICKNESS = 2.0f;
     NSError* error = nil;
     if([store saveEvent:event span:EKSpanFutureEvents commit:YES error:&error])
     {
-        [SVProgressHUD showSuccessWithStatus:@"Saved"];
+        [SVProgressHUD showSuccessWithStatus:NSLocalizedString(@"Saved", @"saved")];
     } else {
         [SVProgressHUD showErrorWithStatus:[error localizedDescription]];
     };
@@ -466,7 +466,7 @@ const float STRIKEOUT_THICKNESS = 2.0f;
                                           }];
         if (targetEvent != nil) {
             if ([[AppCalendar eventStore] removeEvent:targetEvent span:EKSpanFutureEvents error:&error]) {
-                [SVProgressHUD showSuccessWithStatus:@"Success"];
+                [SVProgressHUD showSuccessWithStatus:NSLocalizedString(@"Success", @"Success") ];
             } else {
                 [SVProgressHUD showErrorWithStatus:error.localizedDescription];
             }
@@ -511,10 +511,10 @@ const float STRIKEOUT_THICKNESS = 2.0f;
                         [self.navigationController pushViewController:chooseCal animated:YES];
                     });
                 } else {
-                    [[[CustomAlertView alloc] initWithTitle:@"Oops"
-                                                    message:@"The app needs to use your calendar"
+                    [[[CustomAlertView alloc] initWithTitle:NSLocalizedString(@"",@"Oops")
+                                                    message:NSLocalizedString(@"The app needs to use your calendar", @"")
                                                    delegate:self
-                                          cancelButtonTitle:@"Okay"
+                                        cancelButtonTitle:NSLocalizedString(@"Okay",@"OK")
                                           otherButtonTitles:nil] show];
                     
                 }
@@ -646,11 +646,11 @@ const float STRIKEOUT_THICKNESS = 2.0f;
                 message = [NSString stringWithFormat:@"start: %@, end: %@", [[NSDateFormatter dateWriter] stringFromDate:start.date], [[NSDateFormatter dateWriter] stringFromDate:end.date]];
                 
             }
-            [[[CustomAlertView alloc] initWithTitle:@"Sounds you mentioned a date time"
+            [[[CustomAlertView alloc] initWithTitle:NSLocalizedString(@"Sounds you mentioned a date time",@"")
                                             message:message
                                            delegate:self
-                                  cancelButtonTitle:@"No"
-                                  otherButtonTitles:@"Yes",nil] show];
+                                  cancelButtonTitle:NSLocalizedString(@"No", @"No")
+                                  otherButtonTitles:NSLocalizedString(@"Yes", @"Yes"),nil] show];
         }
     }
     
@@ -785,7 +785,7 @@ const float STRIKEOUT_THICKNESS = 2.0f;
 {
     if (motion == UIEventSubtypeMotionShake)
     {
-        UIActionSheet *actionSheet = [[UIActionSheet alloc] initWithTitle:@"Sort By" delegate:self cancelButtonTitle:@"Cancel" destructiveButtonTitle:nil otherButtonTitles:@"Name",@"Creation Date", @"Start Date", nil];
+        UIActionSheet *actionSheet = [[UIActionSheet alloc] initWithTitle:@"Sort By" delegate:self cancelButtonTitle:@"Cancel" destructiveButtonTitle:nil otherButtonTitles:NSLocalizedString(@"Title",@"Title"),NSLocalizedString(@"Creation Date",@"Creation Date"), NSLocalizedString(@"Start Date",@"Start Date"), nil];
         actionSheet.destructiveButtonIndex = 1; // Priority will be highlighted
         
         id appDelegate = [[UIApplication sharedApplication] delegate];
