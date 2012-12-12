@@ -253,12 +253,6 @@
 		D630060316777A4A0034F4BF /* ScrollingViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ScrollingViewController.h; sourceTree = "<group>"; };
 		D630060416777A4A0034F4BF /* ScrollingViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ScrollingViewController.m; sourceTree = "<group>"; };
 		D630060716777A660034F4BF /* ScrollingViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ScrollingViewController.xib; sourceTree = "<group>"; };
-		D630066F1677867F0034F4BF /* instruction1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = instruction1.png; sourceTree = "<group>"; };
-		D63006701677867F0034F4BF /* instruction2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = instruction2.png; sourceTree = "<group>"; };
-		D63006711677867F0034F4BF /* instruction3.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = instruction3.png; sourceTree = "<group>"; };
-		D63006721677867F0034F4BF /* instruction4.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = instruction4.png; sourceTree = "<group>"; };
-		D63006731677867F0034F4BF /* instruction5.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = instruction5.png; sourceTree = "<group>"; };
-		D63006741677867F0034F4BF /* instruction6.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = instruction6.png; sourceTree = "<group>"; };
 		D630069016779A290034F4BF /* ja */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = ja; path = ja.lproj/RootViewController.xib; sourceTree = "<group>"; };
 		D630069116779A290034F4BF /* ja */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = ja; path = ja.lproj/MainWindow.xib; sourceTree = "<group>"; };
 		D630069216779A290034F4BF /* ja */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = ja; path = ja.lproj/EditableTableViewCell.xib; sourceTree = "<group>"; };
@@ -653,12 +647,6 @@
 		29B97317FDCFA39411CA2CEA /* Resources */ = {
 			isa = PBXGroup;
 			children = (
-				D630066F1677867F0034F4BF /* instruction1.png */,
-				D63006701677867F0034F4BF /* instruction2.png */,
-				D63006711677867F0034F4BF /* instruction3.png */,
-				D63006721677867F0034F4BF /* instruction4.png */,
-				D63006731677867F0034F4BF /* instruction5.png */,
-				D63006741677867F0034F4BF /* instruction6.png */,
 				D630060716777A660034F4BF /* ScrollingViewController.xib */,
 				D6515428166FFC9500CCDCE4 /* SimpleSettings.plist */,
 				D6FF80BC166BBAA100D2DC4F /* Icon.png */,
