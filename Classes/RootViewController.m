@@ -185,6 +185,12 @@ const float STRIKEOUT_THICKNESS = 2.0f;
     //The receiver, now, is later in time than anotherDate, NSOrderedDescending
     if ([now compare:event.startDate] == NSOrderedDescending) {
         cell.creationDateLabel.textColor = [UIColor redColor];
+        NSMutableAttributedString *attributedSring = [[NSMutableAttributedString alloc] initWithString:cell.nameField.text];
+        // we only need to add a strike through
+        [attributedSring addAttribute:NSStrikethroughStyleAttributeName
+    value:[NSNumber numberWithInt:2]
+    range:NSMakeRange(0, cell.nameField.text.length)];
+        [cell.nameField setAttributedText:attributedSring];
     }
 	
     NSMutableArray *eventTagNames = [NSMutableArray array];
