@@ -194,6 +194,7 @@
 		D69C2E2F166A696900A68729 /* MainWindow-iPad.xib in Resources */ = {isa = PBXBuildFile; fileRef = D69C2E2D166A696900A68729 /* MainWindow-iPad.xib */; };
 		D6B52B231662805B002A339D /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D6B52B221662805B002A339D /* MapKit.framework */; };
 		D6BCFC151678E7F7006C1A84 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = D6BCFC171678E7F7006C1A84 /* Localizable.strings */; };
+		D6BCFC261678FF0A006C1A84 /* Icon-Small-50.png in Resources */ = {isa = PBXBuildFile; fileRef = D6BCFC251678FF0A006C1A84 /* Icon-Small-50.png */; };
 		D6BEA96716596B7400D05AFC /* RootViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = D6BEA96516596B7400D05AFC /* RootViewController.xib */; };
 		D6CCB3331660370400A1B361 /* ItemDetailViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = D6CCB32E1660370300A1B361 /* ItemDetailViewController.xib */; };
 		D6CCB33B1660387500A1B361 /* EventDetail.plist in Resources */ = {isa = PBXBuildFile; fileRef = D6CCB33A1660387500A1B361 /* EventDetail.plist */; };
@@ -497,6 +498,7 @@
 		D6BCFC221678FCE3006C1A84 /* fr */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = fr; path = fr.lproj/EditableTableViewCell.xib; sourceTree = "<group>"; };
 		D6BCFC231678FCE3006C1A84 /* fr */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = fr; path = fr.lproj/EventTableViewCell.xib; sourceTree = "<group>"; };
 		D6BCFC241678FCE3006C1A84 /* fr */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = fr; path = fr.lproj/TagsHeaderView.xib; sourceTree = "<group>"; };
+		D6BCFC251678FF0A006C1A84 /* Icon-Small-50.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Icon-Small-50.png"; path = "images/Icon-Small-50.png"; sourceTree = "<group>"; };
 		D6BEA96616596B7400D05AFC /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/RootViewController.xib; sourceTree = "<group>"; };
 		D6CCB32E1660370300A1B361 /* ItemDetailViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ItemDetailViewController.xib; sourceTree = "<group>"; };
 		D6CCB33A1660387500A1B361 /* EventDetail.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = EventDetail.plist; sourceTree = "<group>"; };
@@ -663,6 +665,7 @@
 		29B97317FDCFA39411CA2CEA /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				D6BCFC251678FF0A006C1A84 /* Icon-Small-50.png */,
 				D630060716777A660034F4BF /* ScrollingViewController.xib */,
 				D6515428166FFC9500CCDCE4 /* SimpleSettings.plist */,
 				D6FF80BC166BBAA100D2DC4F /* Icon.png */,
@@ -1235,6 +1238,7 @@
 				D6669FA516713B0100769D5D /* EventDetailViewController.xib in Resources */,
 				D630060816777A660034F4BF /* ScrollingViewController.xib in Resources */,
 				D6BCFC151678E7F7006C1A84 /* Localizable.strings in Resources */,
+				D6BCFC261678FF0A006C1A84 /* Icon-Small-50.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1421,7 +1425,7 @@
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ENABLE_OBJC_ARC = YES;
-				CODE_SIGN_IDENTITY = "iPhone Developer: Liangjun Jiang (NLHVYBKJKH)";
+				CODE_SIGN_IDENTITY = "iPhone Distribution: Liangjun Jiang";
 				COPY_PHASE_STRIP = NO;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_OPTIMIZATION_LEVEL = 0;
@@ -1430,7 +1434,7 @@
 				INFOPLIST_FILE = Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
 				PRODUCT_NAME = "Smart Reminder";
-				PROVISIONING_PROFILE = "2B034DB9-0549-48EF-B111-38601C77699B";
+				PROVISIONING_PROFILE = "C2FA0DBF-D598-4BDE-9D10-0FC322886C32";
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = 1;
 			};
@@ -1441,14 +1445,14 @@
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ENABLE_OBJC_ARC = YES;
-				CODE_SIGN_IDENTITY = "iPhone Developer: Liangjun Jiang (NLHVYBKJKH)";
+				CODE_SIGN_IDENTITY = "iPhone Distribution: Liangjun Jiang";
 				COPY_PHASE_STRIP = YES;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = Reminder_Prefix.pch;
 				INFOPLIST_FILE = Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
 				PRODUCT_NAME = "Smart Reminder";
-				PROVISIONING_PROFILE = "2B034DB9-0549-48EF-B111-38601C77699B";
+				PROVISIONING_PROFILE = "C2FA0DBF-D598-4BDE-9D10-0FC322886C32";
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = 1;
 			};
