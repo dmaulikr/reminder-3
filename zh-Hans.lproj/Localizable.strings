@@ -1,0 +1,22 @@
+/* 
+  Localizable.strings
+  Reminder
+
+  Created by LIANGJUN JIANG on 12/12/12.
+
+*/
+"Reminder" ="提醒";
+"Saved" ="保存";
+"Success" ="成功";
+"Cancel" ="取消";
+"This app needs to access your calendar" ="这个程序需要访问您的日历";
+"Sounds you mentioned a date time" ="听起来你提到的日期和时间";
+"Yes" ="是";
+"No" ="否";
+"Sort By" ="排序依据";
+"Creation Date" ="创建日期";
+"Start Date" ="开始日期";
+"Title" ="标题";
+"Add Tag" ="添加标签";
+"Tags" ="标签";
+"Tags for \"%@\" are indicated by a check mark." ="标签\"％@\"的复选标记表示。";

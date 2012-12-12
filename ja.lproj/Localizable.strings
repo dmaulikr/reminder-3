@@ -1,0 +1,22 @@
+/* 
+  Localizable.strings
+  Reminder
+
+  Created by LIANGJUN JIANG on 12/12/12.
+
+*/
+"Reminder" ="リマインダー";
+"Saved" ="を保存しました";
+"Success" ="成功";
+"Cancel" = "を取り消し";
+"This app needs to access your calendar" ="このアプリは、あなたのカレンダーにアクセスする必要がある";
+"Sounds you mentioned a date time" ="は日付時刻を記載サウンズ";
+"Yes" ="はい";
+"No" ="いいえ";
+"Sort By" ="並べ替え";
+"Creation Date" ="作成日";
+"Start Date" ="を開始日";
+"Title" ="タイトル";
+"Add Tag" ="をタグを追加";
+"Tags" ="タグ";
+"Tags for \"%@\" are indicated by a check mark." = "のためのタグ\"％@\"にチェックマークが表示されます。";

@@ -1,0 +1,22 @@
+/* 
+  Localizable.strings
+  Reminder
+
+  Created by LIANGJUN JIANG on 12/12/12.
+
+*/
+"Reminder" =	"알림";
+"Saved" =	"를 저장된";
+"Success" =	"성공";
+"Cancel"=	 "를취소";
+"This app needs to access your calendar"=	 "를이 앱은 캘린더에 액세스 할 필요가";
+"Sounds you mentioned a date time "=	"당신은 날짜 또는 시간을 언급 소리";
+"Yes"="예";
+"No" =	"아니오";
+"Sort By" =	"정렬 기준";
+"Creation Date" =	"만든 날짜";
+"Start Date" =	"를 날짜 시작";
+"Title"=	"제목";
+"Add Tag" =	 "를 태그를 추가";
+"Tags" =	"태그";
+"Tags for \%@\" are indicated by a check mark." =	"에 대한 태그\"%@ \"에 체크 표시가 표시됩니다.";

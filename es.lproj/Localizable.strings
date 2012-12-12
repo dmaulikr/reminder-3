@@ -1,0 +1,22 @@
+/* 
+  Localizable.strings
+  Reminder
+
+  Created by LIANGJUN JIANG on 12/12/12.
+
+*/
+"Reminder" =	"Recordatorio";
+"Saved" =	"Saved";
+"Success" =	"El \"éxito\"";
+"Cancel" =	"Cancelar";
+"This app needs to access your calendar" =	"Esta aplicación necesita acceder a su calendario";
+"Sounds you mentioned a date time" =	"Me parece que usted ha mencionado una fecha y hora";
+"Yes" =	"Sí";
+"No" =	"No";
+"Sort By" =	"Ordenar por";
+"Creation Date" =	"Creation Date";
+"Start Date" =	"Fecha de Inicio";
+"Title" =	"Título";
+"Add Tag" =	"Añadir etiqueta";
+"Tags" ="Etiquetas";
+"Tags for \"%@\" are indicated by a check mark." =	"Etiquetas para \"%@\"se indican mediante una marca de verificación.";
